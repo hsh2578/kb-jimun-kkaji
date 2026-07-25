@@ -1,6 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { formatAuditLog, formatMoney } from "../src/ui/format.js";
+import {
+  formatAuditLog,
+  formatMoney,
+  formatPlanSummary,
+  formatActionResult,
+} from "../src/ui/format.js";
 
 test("금액에 천 단위 구분이 들어간다", () => {
   assert.equal(formatMoney(52000), "52,000원");
@@ -35,4 +40,32 @@ test("PII가 없으면 검사 결과 0건이라고 정직하게 표시한다 —
 test("인증 전 차단된 호출을 표시한다", () => {
   const lines = formatAuditLog({ sentToLLM: "x", piiRemoved: [], candidates: [], toolCalls: [], blockedCalls: ["cancel_autopay"] });
   assert.ok(lines.some((l) => l.includes("⛔") && l.includes("cancel_autopay")));
+});
+
+// C4 — 인증 버튼을 누르기 전에 대상과 동작이 문장으로 보여야 한다.
+test("formatPlanSummary: 자동이체 해지 계획은 대상 이름과 금액, 동작을 문장으로 보여준다", () => {
+  const s = formatPlanSummary({ tool: "cancel_autopay", args: { name_hint: "통신비" } });
+  assert.match(s, /KT 통신요금/);
+  assert.match(s, /52,000원/);
+  assert.match(s, /해지/);
+});
+
+test("formatPlanSummary: 확인할 수 없는 대상이면 그래도 빈 문자열이 아니다", () => {
+  const s = formatPlanSummary({ tool: "cancel_autopay", args: { name_hint: "존재하지않는것" } });
+  assert.ok(s.length > 0);
+});
+
+test("formatPlanSummary: 이체한도 변경은 금액을 보여준다", () => {
+  const s = formatPlanSummary({ tool: "change_transfer_limit", args: { amount: 5_000_000 } });
+  assert.match(s, /5,000,000원/);
+});
+
+test("formatActionResult: 원시 JSON이 아니라 읽는 문장을 준다", () => {
+  const s = formatActionResult(
+    { tool: "cancel_autopay" },
+    { cancelled: { id: "ap1", name: "KT 통신요금", amount: 52_000 } }
+  );
+  assert.match(s, /KT 통신요금/);
+  assert.match(s, /완료/);
+  assert.ok(!/\{/.test(s), "중괄호가 남아있으면 안 된다 — JSON을 그대로 보여주면 안 된다");
 });

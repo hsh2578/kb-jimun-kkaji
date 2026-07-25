@@ -19,29 +19,43 @@ function longestCommonSubstringLength(a, b) {
   return max;
 }
 
+// 매칭 인정 최소 기준. 둘 다 만족해야 한다.
+//   MIN_SCORE  — 우연한 한 글자 겹침을 배제한다.
+//   MIN_RATIO  — 힌트/등록명 중 짧은 쪽 대비 겹치는 비중. "전기요금"↔"KT통신요금"처럼
+//                끝의 "요금" 두 글자만 우연히 겹치는 경우(비중 0.5)를 걸러내기 위함이다.
+const MIN_SCORE = 2;
+const MIN_RATIO = 0.6;
+
 // LLM은 내부 ID를 알 수 없다. 이름 힌트를 실제 항목으로 바꾸는 일은
 // 개인정보를 다루므로 LLM 경계 밖(여기)에서 한다.
 export function resolveAutopay({ autopay_id, name_hint } = {}) {
   const list = KB_DATA.bank.autopays;
+
+  // 명시적 id가 주어졌다면 그것만 신뢰한다. 존재하지 않는 id는 여기서 바로 실패해야 한다 —
+  // name_hint로 슬쩍 폴백하면 "잘못된 id인데 그럴듯한 이름이라 우연히 맞았다"는 사고가 난다.
   if (autopay_id) {
-    const byId = list.find((a) => a.id === autopay_id);
-    if (byId) return byId;
+    return list.find((a) => a.id === autopay_id) ?? null;
   }
+
   if (name_hint) {
     const hint = String(name_hint).replace(/\s+/g, "");
     if (!hint) return null;
-    let best = null;
-    let bestScore = 0;
-    for (const a of list) {
-      const name = a.name.replace(/\s+/g, "");
-      const score = longestCommonSubstringLength(hint, name);
-      if (score > bestScore) {
-        bestScore = score;
-        best = a;
-      }
-    }
-    // 2글자 미만의 우연한 일치는 오해를 부를 수 있어 매칭으로 인정하지 않는다.
-    return bestScore >= 2 ? best : null;
+
+    const scored = list.map((a) => ({
+      a,
+      score: longestCommonSubstringLength(hint, a.name.replace(/\s+/g, "")),
+    }));
+    const bestScore = scored.reduce((m, s) => Math.max(m, s.score), 0);
+    if (bestScore < MIN_SCORE) return null;
+
+    const top = scored.filter((s) => s.score === bestScore);
+    if (top.length !== 1) return null; // 동점이면 어느 쪽인지 확신할 수 없다 — 진행하지 않는다
+
+    const best = top[0].a;
+    const minLen = Math.min(hint.length, best.name.replace(/\s+/g, "").length);
+    if (bestScore / minLen < MIN_RATIO) return null;
+
+    return best;
   }
   return null;
 }

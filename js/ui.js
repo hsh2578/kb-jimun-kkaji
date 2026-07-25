@@ -1,6 +1,6 @@
 // 화면 렌더링. 보안 규칙: 사용자 입력·도구 결과·메뉴 이름·LLM 출력은
 // 반드시 textContent로만 꽂는다. innerHTML은 아래의 정적 골격(보간 없음)에만 쓴다.
-import { formatAuditLog, formatMoney } from "../src/ui/format.js";
+import { formatAuditLog, formatMoney, formatActionResult, formatPlanSummary } from "../src/ui/format.js";
 
 export function createUI(root, { onSend, onConfirm }) {
   root.innerHTML = `
@@ -64,6 +64,12 @@ export function createUI(root, { onSend, onConfirm }) {
     }
 
     if (r.layer === "L3" && r.plan) {
+      // (C4) 인증 버튼을 누르기 전에 무엇을, 어디에 할 것인지 반드시 보여준다.
+      const summary = document.createElement("div");
+      summary.className = "plan-summary";
+      summary.textContent = formatPlanSummary(r.plan);
+      log.appendChild(summary);
+
       for (const w of r.warnings ?? []) append("warn", `⚠️ ${w}`);
       const btn = document.createElement("button");
       btn.className = "auth";
@@ -72,9 +78,9 @@ export function createUI(root, { onSend, onConfirm }) {
         btn.disabled = true;
         try {
           const out = await onConfirm(r.plan.planId);
-          append("bot", `완료했습니다. ${JSON.stringify(out)}`);
+          append("bot", formatActionResult(r.plan, out));
         } catch (err) {
-          append("warn", `실패했습니다: ${err.message}`);
+          append("warn", `실패했습니다: ${err?.message ?? "알 수 없는 오류"}`);
           btn.disabled = false;
         }
       });

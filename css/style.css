@@ -12,6 +12,7 @@ main { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; }
 .msg.warn { background: #ff525233; }
 .notice { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; background: #42a5f533; font-size: .9rem; }
 .menus, .data { margin: .3rem 0 .3rem 1rem; }
+.plan-summary { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; background: #42a5f51a; font-weight: 600; }
 button.auth { display: block; margin: .5rem 0; padding: .6rem 1rem; font-size: 1rem; cursor: pointer; }
 #composer { display: flex; gap: .5rem; margin-top: .5rem; }
 #composer input { flex: 1; padding: .6rem; font-size: 1rem; }
