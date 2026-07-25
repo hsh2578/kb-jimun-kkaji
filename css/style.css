@@ -3,3 +3,18 @@ body { font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; margi
 header { padding: 1rem; }
 main { padding: 1rem; }
 footer { padding: 1rem; opacity: .7; }
+
+main { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; }
+.log { min-height: 50vh; max-height: 60vh; overflow-y: auto; border: 1px solid #8884; border-radius: 8px; padding: .75rem; }
+.msg { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; max-width: 80%; }
+.msg.user { background: #ffd54f33; margin-left: auto; }
+.msg.bot { background: #8884; }
+.msg.warn { background: #ff525233; }
+.notice { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; background: #42a5f533; font-size: .9rem; }
+.menus, .data { margin: .3rem 0 .3rem 1rem; }
+button.auth { display: block; margin: .5rem 0; padding: .6rem 1rem; font-size: 1rem; cursor: pointer; }
+#composer { display: flex; gap: .5rem; margin-top: .5rem; }
+#composer input { flex: 1; padding: .6rem; font-size: 1rem; }
+.audit { border: 1px solid #8884; border-radius: 8px; padding: .75rem; font-size: .85rem; }
+.audit pre { white-space: pre-wrap; word-break: break-all; }
+@media (max-width: 840px) { main { grid-template-columns: 1fr; } }
