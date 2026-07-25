@@ -58,11 +58,24 @@ export function parseMenuHtml(html, affiliate) {
   return nodes;
 }
 
+const NAMED_ENTITIES = {
+  nbsp: " ",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  middot: "·",
+};
+
 function text(fragment) {
   return fragment
     .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#47;/g, "/")
+    // 숫자 문자 참조: 십진(&#39;)과 16진(&#x27;) 모두 처리.
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
+    // 알려진 named entity. &amp;는 다른 항목을 모두 처리한 뒤 마지막에 디코딩해
+    // 이중 디코딩(예: "&amp;middot;" -> "&middot;" -> "·")을 방지한다.
+    .replace(/&(nbsp|lt|gt|quot|apos|middot);/g, (_, name) => NAMED_ENTITIES[name])
     .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
