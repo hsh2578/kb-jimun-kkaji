@@ -4,8 +4,9 @@
 import { cosine, dequantizeVector } from "../menu/quantize.js";
 import { splitKeywords } from "../menu/normalize.js";
 
-const VECTOR_WEIGHT = 0.7;
-const LEXICAL_WEIGHT = 0.3;
+// 기본 가중치. 실측으로 정한 값이며 근거는 docs/tuning.md 참조.
+// createRouter({ vectorWeight }) 로 덮어쓸 수 있어 튜닝 실험이 가능하다.
+export const DEFAULT_VECTOR_WEIGHT = 0.7;
 
 export function lexicalScore(utterance, node) {
   const words = new Set(splitKeywords(utterance));
@@ -21,7 +22,9 @@ export function lexicalScore(utterance, node) {
   return hit / keys.length;
 }
 
-export function createRouter({ items, dim, embedFn }) {
+export function createRouter({ items, dim, embedFn, vectorWeight = DEFAULT_VECTOR_WEIGHT }) {
+  const VECTOR_WEIGHT = vectorWeight;
+  const LEXICAL_WEIGHT = 1 - vectorWeight;
   // 양자화된 int8을 미리 복원해 둔다. 검색마다 풀면 느리다.
   const vectors = items.map((it) =>
     dequantizeVector({ q: Int8Array.from(it.q), scale: it.scale })
