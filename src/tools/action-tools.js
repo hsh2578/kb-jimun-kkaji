@@ -7,7 +7,9 @@ const a = (description, parameters, run) => ({ description, parameters, requires
 
 export const ACTION_TOOLS = {
   cancel_autopay: a(
-    "자동이체·자동납부·자동송금을 해지한다. 고객이 '통신비', '케이블' 처럼 이름만 말하면 name_hint에 넣는다",
+    "자동이체·자동납부·자동송금을 해지한다. 고객이 '통신비', '케이블' 처럼 이름만 말하면 name_hint에 넣는다. " +
+      "'매달 빠져나가는 통신비 그만하고 싶다', '통신비 자동으로 나가는 거 어떻게 막냐', " +
+      "'돈이 계속 새는 것 같아 통신 쪽부터 막아줘' 처럼 특정 항목을 막연히 끊고 싶어해도 이 도구를 쓴다.",
     { autopay_id: "string", name_hint: "string" },
     async (args) => {
       const ap = resolveAutopay(args);

@@ -8,10 +8,17 @@ export const QUERY_TOOLS = {
     items: KB_DATA.bank.accounts.map(({ id, name, balance, type }) => ({ id, name, balance, type })),
   })),
 
-  list_autopays: q("자동이체·자동납부·자동송금 전체 목록을 조회한다", {}, async () => ({
-    items: KB_DATA.bank.autopays.map(({ id, name, amount, day, kind }) => ({ id, name, amount, day, kind })),
-    total: KB_DATA.bank.autopays.reduce((s, a) => s + a.amount, 0),
-  })),
+  list_autopays: q(
+    "자동이체·자동납부·자동송금 전체 목록을 조회한다. " +
+      "'통장에서 자꾸 뭔가 빠져나가는데 뭔지 모르겠다', '요즘 잔액이 자꾸 줄어든다', " +
+      "'쓴 것도 없는데 돈이 없다', '이번 달에 왜 이렇게 나갔지', '내 돈 어디로 새는지 봐줘' 처럼 " +
+      "막연히 돈이 새는 것을 걱정하는 말에도 이 도구로 원인을 보여준다.",
+    {},
+    async () => ({
+      items: KB_DATA.bank.autopays.map(({ id, name, amount, day, kind }) => ({ id, name, amount, day, kind })),
+      total: KB_DATA.bank.autopays.reduce((s, a) => s + a.amount, 0),
+    })
+  ),
 
   get_loan_status: q("대출 잔액과 금리를 조회한다", {}, async () => ({
     items: KB_DATA.bank.loans,
@@ -28,7 +35,10 @@ export const QUERY_TOOLS = {
   })),
 
   get_card_benefit_progress: q(
-    "카드 혜택 실적 충족 현황과 다음 구간까지 남은 금액을 조회한다",
+    "카드 혜택 실적 충족 현황과 다음 구간까지 남은 금액을 조회한다. " +
+      "'할인 받으려면 얼마나 더 써야 하냐', '이번 달 혜택 못 받는 거 아니냐', " +
+      "'카드 쓰는 김에 뭐 챙길 거 있냐' 처럼 물어도 이 도구로 답한다. " +
+      "어떤 카드인지 모르면 되묻지 말고 card_id를 빈 문자열로 두고 먼저 호출한다 — 대표 카드 기준으로 조회된다.",
     { card_id: "string" },
     async ({ card_id }) => {
       const b = KB_DATA.card.benefits.find((x) => x.cardId === card_id) ?? KB_DATA.card.benefits[0];
@@ -41,7 +51,13 @@ export const QUERY_TOOLS = {
   get_sec_holdings: q("증권 보유 종목을 조회한다", {}, async () => ({ items: KB_DATA.sec.holdings })),
 
   // 계열사를 가로지르는 조회 — 이 서비스의 핵심
-  list_pensions: q("은행·증권·보험에 흩어진 연금을 한 번에 조회한다", {}, async () => ({
+  list_pensions: q(
+    "은행·증권·보험에 흩어진 연금을 한 번에 조회한다. " +
+      "'나중에 받을 돈이 얼마나 되나', '은퇴하면 뭐 나오는 거 있나', " +
+      "'노후 준비 되고 있는 건지 모르겠다', '회사에서 넣어준 퇴직금 어디 있냐' 처럼 물어도 이 도구로 답한다. " +
+      "이 도구는 파라미터가 필요 없다 — 어느 계열사인지 되묻지 말고 바로 호출해 전체를 보여준다.",
+    {},
+    async () => ({
     items: [
       ...KB_DATA.bank.accounts
         .filter((a) => a.type === "퇴직연금")
@@ -52,7 +68,11 @@ export const QUERY_TOOLS = {
   })),
 
   find_tax_documents: q(
-    "세금 신고 유형에 필요한 금융 서류를 은행·증권에서 함께 찾는다",
+    "세금 신고 유형에 필요한 금융 서류를 은행·증권에서 함께 찾는다. " +
+      "'세무서에서 금융자료 가져오라던데', '주식 팔았는데 나중에 문제되는 거 아니냐', " +
+      "'5월에 신고하라던데 은행에서 뭐 떼야 하냐' 처럼 물어도 이 도구로 서류를 찾아준다. " +
+      "filing_type은 '해외주식양도소득세' / '종합소득세' / '연말정산' 중 문맥상 가장 가까운 값으로 채워 " +
+      "되묻지 말고 먼저 호출한다 (예: 주식 매도 언급 → 해외주식양도소득세). 전혀 짐작할 수 없으면 빈 문자열로 호출해 안내를 받는다.",
     { filing_type: "string" },
     async ({ filing_type }) => {
       const map = {
