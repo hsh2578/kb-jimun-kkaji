@@ -35,13 +35,25 @@ test("발급된 토큰으로는 실행된다", async () => {
   assert.deepEqual(out, { cancelled: "ap1" });
 });
 
-test("토큰은 1회용이다", async () => {
+test("토큰은 1회용이다 — 실행된 계획은 다시 실행되지 않는다", async () => {
   const gate = createAuthGate();
   const ex = createExecutor({ authGate: gate, tools });
   const plan = await ex.prepare("cancel_autopay", { id: "ap1" });
   const token = gate.issue(plan.planId);
   await ex.execute(plan.planId, token);
-  await assert.rejects(() => ex.execute(plan.planId, token), /인증/);
+  // 실행된 계획이므로 '이미 실행' 가드가 먼저 걸린다. 토큰 소진보다 정확한 설명이다.
+  await assert.rejects(() => ex.execute(plan.planId, token), /이미 실행/);
+});
+
+test("소진된 토큰은 아직 실행되지 않은 계획에도 통하지 않는다", async () => {
+  const gate = createAuthGate();
+  const ex = createExecutor({ authGate: gate, tools });
+  const p1 = await ex.prepare("cancel_autopay", { id: "ap1" });
+  const p2 = await ex.prepare("cancel_autopay", { id: "ap2" });
+  const t1 = gate.issue(p1.planId);
+  await ex.execute(p1.planId, t1);           // t1 소진
+  // p2는 실행된 적이 없으므로 '이미 실행'이 아니라 인증 가드에 걸려야 한다
+  await assert.rejects(() => ex.execute(p2.planId, t1), /인증/);
 });
 
 test("다른 계획의 토큰은 통하지 않는다", async () => {
