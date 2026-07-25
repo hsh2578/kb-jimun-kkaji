@@ -20,6 +20,27 @@ test("휴대폰번호를 가린다", () => {
   assert.ok(r.removed.includes("phone"));
 });
 
+test("하이픈 없는 16자리 카드번호를 가린다", () => {
+  const r = scrubPII("1234567812345678 로 결제해줘");
+  assert.ok(!r.text.includes("1234567812345678"));
+  assert.ok(r.removed.includes("card"));
+});
+
+test("띄어쓰기로 구분된 휴대폰번호를 가린다", () => {
+  const r = scrubPII("010 1234 5678 로 연락해줘");
+  assert.ok(!r.text.includes("010 1234 5678"));
+  assert.ok(r.removed.includes("phone"));
+});
+
+test("하이픈 없는 주민등록번호를 rrn으로 완전히 가린다 (phone으로 오분류되면 안 된다)", () => {
+  const r = scrubPII("9001011234567 인데 잔액 알려줘");
+  assert.ok(!r.text.includes("9001011234567"));
+  assert.ok(!/\d/.test(r.text.match(/9001[^\s]*/)?.[0] ?? ""), "숫자 잔여물이 남으면 안 된다");
+  assert.deepEqual(r.removed, ["rrn"]);
+  assert.ok(r.text.includes("[rrn]"));
+  assert.ok(!r.text.includes("[phone]"), "phone 패턴으로 잘못 분류되면 안 된다");
+});
+
 test("일반 발화는 그대로 둔다", () => {
   const r = scrubPII("통신비 자동으로 나가는 거 그만하고 싶어");
   assert.equal(r.text, "통신비 자동으로 나가는 거 그만하고 싶어");
