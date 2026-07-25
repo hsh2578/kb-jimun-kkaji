@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>지문까지 — 전화 채널 (KB 어르신전용 1644-3308)</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="phone">
+    <div class="phone-head">
+      <strong>KB국민은행</strong>
+      <span>어르신전용 1644-3308</span>
+      <small>※ 채널 시뮬레이션 — 실제 전화망에 연결되지 않습니다</small>
+    </div>
+    <div id="transcript" class="transcript" aria-live="polite"></div>
+    <div class="phone-controls">
+      <button id="mic">🎙 말하기</button>
+      <input id="say" placeholder="음성 대신 입력해도 됩니다" />
+    </div>
+  </div>
+  <script src="./config.local.js" onerror="window.KB_CONFIG={mode:'rules'}"></script>
+  <script type="module" src="./js/phone.js"></script>
+</body>
+</html>
