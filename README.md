@@ -19,11 +19,45 @@
 python -m http.server 8000
 ```
 
+### LLM을 붙여서 실행하기 (L2/L3 데모에 필수)
+
+`config.local.js`는 비밀이라 커밋되지 않습니다(`.gitignore` 참조). 클론 직후에는
+이 파일이 없으므로 **자동으로 오프라인(stub) 모드로 떨어집니다** — 아래 "오프라인 모드" 절을 보세요.
+L2 조회·L3 실행 데모(카드 혜택, 연금 통합 조회, 자동이체 해지 등)를 보여주려면 반드시 다음을 설정해야 합니다.
+
+1. `api/`(Vercel 서버리스 프록시)를 배포하고 `OPENAI_KEY` 환경변수를 설정합니다.
+   (`.env`의 `OPENAI_KEY`를 Vercel 프로젝트의 환경변수로 등록 — 절대 커밋하지 않습니다.)
+2. `config.example.js`를 `config.local.js`로 복사합니다.
+   ```
+   cp config.example.js config.local.js
+   ```
+3. `config.local.js`를 열어 아래처럼 채웁니다.
+   ```js
+   window.KB_CONFIG = {
+     mode: "proxy",
+     proxyUrl: "https://<your-vercel-project>.vercel.app/api",
+   };
+   ```
+4. 새로고침하면 LLM 프록시로 도구 호출·임베딩 라우팅이 살아납니다.
+
+### 오프라인(stub) 모드 — `config.local.js`가 없거나 `mode`가 `"proxy"`가 아닐 때
+
+화면은 죽지 않지만 아래 두 가지가 그대로 죽어 있습니다. 심사 전 반드시 위 설정을 마치세요.
+
+- **L2 조회·L3 실행이 전부 불가능합니다.** LLM이 도구를 호출하지 못하므로 모든 발화가 L1(메뉴 위치 안내)로만 응답합니다.
+- **메뉴 라우팅이 키워드 검색만으로 동작합니다.** `llm.embed`가 없어 2.8MB 벡터 인덱스는 쓰이지 않고,
+  형태가 다른 구어체 표현(예: "돈이 자꾸 새는 것 같아")은 놓칠 수 있습니다.
+
+이 상태에서도 화면은 항상 "○○에 있습니다" 형태로 메뉴 위치를 안내합니다 — L1은 오프라인에서도 지켜지는 최소 약속입니다.
+
 ## 테스트
 
 ```
 npm test
 ```
+
+주의: `node --test tests/` 형태로 디렉터리를 지정하면 Node 24 + Windows 조합에서 크래시합니다.
+반드시 `npm test`(= 인자 없는 `node --test`)로 실행하세요.
 
 ## 고지
 

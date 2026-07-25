@@ -31,7 +31,12 @@ export function createUI(root, { onSend, onConfirm }) {
     if (!text) return;
     input.value = "";
     append("user", text);
-    await onSend(text);
+    // (I6) 렌더링·처리 중 어디서든 예외가 나면 대화가 조용히 죽는 대신 화면에 남긴다.
+    try {
+      await onSend(text);
+    } catch (err) {
+      append("warn", `문제가 발생했습니다: ${err?.message ?? "알 수 없는 오류"}`);
+    }
   });
 
   function append(who, text) {

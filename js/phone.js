@@ -47,28 +47,34 @@ function speak(text) {
 
 async function handle(text) {
   line("user", text);
-  const r = await orch.handle(text, []);
+  // (I6) keydown/음성 인식 콜백은 await하지 않고 handle()을 부른다 — 여기서 던진 예외는
+  // 잡아주지 않으면 조용한 미응답 상태로 남는다. 반드시 화면·음성으로 실패를 알린다.
+  try {
+    const r = await orch.handle(text, []);
 
-  if (r.layer === "L2" && r.data?.items?.length) {
-    speak(`${r.data.items.length}건이 나갔습니다. 하나씩 말씀드릴게요. 괜찮으실까요?`); // ③ 동의
-    for (const l of chunkOneAtATime(r.data.items)) { // ① 하나씩 ④ 숫자 두 번
-      await new Promise((res) => setTimeout(res, SILENCE_TOLERANCE_MS)); // ② 기다림
-      speak(l);
+    if (r.layer === "L2" && r.data?.items?.length) {
+      speak(`${r.data.items.length}건이 나갔습니다. 하나씩 말씀드릴게요. 괜찮으실까요?`); // ③ 동의
+      for (const l of chunkOneAtATime(r.data.items)) { // ① 하나씩 ④ 숫자 두 번
+        await new Promise((res) => setTimeout(res, SILENCE_TOLERANCE_MS)); // ② 기다림
+        speak(l);
+      }
+      return;
     }
-    return;
-  }
 
-  if (r.layer === "L3" && r.plan) {
-    speak(buildConfirmation({ // ⑤ 되풀이 확인
-      verb: "멈추",
-      target: r.plan.args.autopay_id ?? "요청하신 항목",
-      effect: r.warnings?.[0] ?? "다음 달부터 반영됩니다",
-    }));
-    speak("확인을 위해 문자로 보내드린 번호를 눌러주세요."); // ⑥ 기존 인증
-    return;
-  }
+    if (r.layer === "L3" && r.plan) {
+      speak(buildConfirmation({ // ⑤ 되풀이 확인
+        verb: "멈추",
+        target: r.plan.args.autopay_id ?? "요청하신 항목",
+        effect: r.warnings?.[0] ?? "다음 달부터 반영됩니다",
+      }));
+      speak("확인을 위해 문자로 보내드린 번호를 눌러주세요."); // ⑥ 기존 인증
+      return;
+    }
 
-  speak(toSeniorSpeech(r.message ?? "다시 말씀해 주시겠어요?"));
+    speak(toSeniorSpeech(r.message ?? "다시 말씀해 주시겠어요?"));
+  } catch (err) {
+    speak("죄송합니다, 처리 중 문제가 발생했습니다. 다시 한번 말씀해 주시겠어요?");
+  }
 }
 
 sayInput.addEventListener("keydown", (e) => {

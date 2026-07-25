@@ -36,10 +36,13 @@ export function createLLMAdapter({ kind = "stub", proxyUrl = "", fetchImpl } = {
   return { chat, embed, kind };
 }
 
-// LLM 없이도 화면이 죽지 않게 하는 최소 응답
-function stubChat({ utterance }) {
+// (C2) LLM 없이도 화면이 죽지 않게 하는 최소 응답.
+// "처리할 준비가 되지 않았습니다"는 마치 일시적 오류처럼 읽혀서 정직하지 않다 —
+// 이 모드는 config.local.js가 없거나 mode:"proxy"가 아니면 항상 켜지는, 의도된 저하 모드다.
+// L2 조회·L3 실행은 이 모드에서 절대 불가능하다는 사실을 그대로 말한다.
+function stubChat() {
   return {
-    message: `"${utterance}" 를 처리할 준비가 되지 않았습니다. 메뉴에서 찾아드릴게요.`,
+    message: "오프라인 모드입니다. AI 조회·실행 없이 메뉴 위치만 안내해 드릴게요.",
     toolCalls: [],
   };
 }

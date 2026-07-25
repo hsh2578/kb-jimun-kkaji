@@ -54,9 +54,14 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
 
     const call = res.toolCalls?.[0];
 
-    // L1 — 실행할 도구가 없다. 그래도 위치는 안내한다.
+    // L1 — 실행할 도구가 없다. 그래도 위치는 반드시 안내한다.
+    // (C2) stub 어댑터는 res.message를 항상 비어있지 않게 채워 보낸다 — 예전에는 그 때문에
+    // "|| describeMenus(menus)"가 한 번도 걸리지 않아 위치 안내(L1의 핵심)가 통째로 빠졌다.
+    // LLM이 텍스트를 만들었든 안 만들었든 위치 한 줄은 항상 붙는다.
     if (!call) {
-      return { layer: "L1", message: res.message || describeMenus(menus), menus, audit };
+      const location = describeMenus(menus);
+      const message = res.message ? `${res.message} ${location}` : location;
+      return { layer: "L1", message, menus, audit };
     }
 
     const tool = tools[call.name];

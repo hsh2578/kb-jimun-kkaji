@@ -22,6 +22,21 @@ test("도구 호출이 없으면 L1으로 메뉴를 안내한다", async () => {
   assert.ok(/자동납부/.test(r.message));
 });
 
+// C2 — stub 어댑터는 도구 호출 없이도 항상 비어있지 않은 message를 준다.
+// 예전 코드는 `res.message || describeMenus(menus)`라서 이 경우 위치 안내가 한 번도 나오지 않았다.
+test("LLM이 텍스트를 냈어도 도구 호출이 없으면 메뉴 위치를 반드시 덧붙인다", async () => {
+  const o = createOrchestrator({
+    router,
+    llm: llmWith([], "무슨 말씀인지 알겠습니다"),
+    tools,
+    authGate: createAuthGate(),
+  });
+  const r = await o.handle("통신비 그만 나가게 해줘", []);
+  assert.equal(r.layer, "L1");
+  assert.ok(/무슨 말씀인지 알겠습니다/.test(r.message), "LLM 텍스트도 남아있어야 한다");
+  assert.ok(/자동납부/.test(r.message), "위치 안내가 항상 붙어야 한다 (L1의 핵심)");
+});
+
 test("조회 도구는 L2로 바로 답한다", async () => {
   const o = createOrchestrator({ router, llm: llmWith([{ name: "list_autopays", args: {} }]), tools, authGate: createAuthGate() });
   const r = await o.handle("자동이체 뭐 있어?", []);
