@@ -1,0 +1,10 @@
+{
+  "name": "kb-jimun-kkaji",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "지문까지 — 메뉴를 대신 걷는 실행형 AI 에이전트",
+  "scripts": {
+    "test": "node --test"
+  }
+}
