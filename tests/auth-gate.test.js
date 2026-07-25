@@ -64,3 +64,29 @@ test("없는 도구는 prepare 단계에서 거부된다", async () => {
   const ex = createExecutor({ authGate: createAuthGate(), tools });
   await assert.rejects(() => ex.prepare("존재하지않음", {}), /알 수 없는 도구/);
 });
+
+test("새 토큰을 발급받아도 같은 계획을 두 번 실행할 수 없다", async () => {
+  const gate = createAuthGate();
+  let runs = 0;
+  const ex = createExecutor({
+    authGate: gate,
+    tools: { t: { requiresAuth: true, run: async () => { runs++; return { ok: true }; } } },
+  });
+  const plan = await ex.prepare("t", {});
+  await ex.execute(plan.planId, gate.issue(plan.planId));
+  // 화면에서 인증 버튼을 두 번 누른 상황
+  await assert.rejects(() => ex.execute(plan.planId, gate.issue(plan.planId)), /이미 실행/);
+  assert.equal(runs, 1, "도구가 두 번 실행되면 안 된다");
+});
+
+test("인증이 필요 없는 도구도 두 번 실행되지 않는다", async () => {
+  let runs = 0;
+  const ex = createExecutor({
+    authGate: createAuthGate(),
+    tools: { q: { requiresAuth: false, run: async () => { runs++; return { ok: true }; } } },
+  });
+  const plan = await ex.prepare("q", {});
+  await ex.execute(plan.planId, null);
+  await assert.rejects(() => ex.execute(plan.planId, null), /이미 실행/);
+  assert.equal(runs, 1);
+});
