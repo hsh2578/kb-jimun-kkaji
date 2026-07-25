@@ -4,9 +4,9 @@
 import { cosine, dequantizeVector } from "../menu/quantize.js";
 import { splitKeywords } from "../menu/normalize.js";
 
-// 기본 가중치. 실측으로 정한 값이며 근거는 docs/tuning.md 참조.
+// 기본 가중치 0.9 — 0.5·0.7·0.9 실측 비교로 정했다. 근거: docs/tuning.md
 // createRouter({ vectorWeight }) 로 덮어쓸 수 있어 튜닝 실험이 가능하다.
-export const DEFAULT_VECTOR_WEIGHT = 0.7;
+export const DEFAULT_VECTOR_WEIGHT = 0.9;
 
 export function lexicalScore(utterance, node) {
   const words = new Set(splitKeywords(utterance));
