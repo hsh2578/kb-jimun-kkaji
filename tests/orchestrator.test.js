@@ -56,6 +56,34 @@ test("LLM에 개인정보가 나가지 않고 감사 로그에 남는다", async
   assert.ok(r.audit.piiRemoved.includes("account"));
 });
 
+test("history에 남아있던 원본 개인정보도 orchestrator가 다시 스크럽한다 (2턴 유출 재현)", async () => {
+  let turn = 0;
+  let capturedHistoryOnTurn2 = null;
+  const llm = {
+    chat: async (payload) => {
+      turn++;
+      if (turn === 2) capturedHistoryOnTurn2 = payload.history;
+      return { message: "", toolCalls: [] };
+    },
+  };
+  const o = createOrchestrator({ router, llm, tools, authGate: createAuthGate() });
+
+  // js/main.js는 오늘 스크럽 전 원본 발화를 history에 그대로 push한다 — 그 실제 동작을 재현한다.
+  const history = [];
+  const turn1Text = "주민번호 900101-1234567 인데 잔액 알려줘";
+  const r1 = await o.handle(turn1Text, history);
+  history.push({ role: "user", content: turn1Text }); // 원본(pre-scrub) 텍스트 — 버그의 원인
+  if (r1.message) history.push({ role: "assistant", content: r1.message });
+
+  await o.handle("그럼 자동이체는?", history);
+
+  assert.ok(capturedHistoryOnTurn2, "2번째 턴에서 llm.chat이 호출되어야 한다");
+  assert.ok(
+    !JSON.stringify(capturedHistoryOnTurn2).includes("900101-1234567"),
+    "history를 통해 원본 주민등록번호가 2번째 턴의 LLM 페이로드로 새어나가면 안 된다"
+  );
+});
+
 test("영향 분석이 막으면 계획을 세우지 않는다", async () => {
   const o = createOrchestrator({
     router,

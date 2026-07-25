@@ -34,3 +34,18 @@ test("assertNoPII는 금지 필드가 있으면 throw", () => {
 test("assertNoPII는 허용 필드만 있으면 통과", () => {
   assert.doesNotThrow(() => assertNoPII({ utterance: "안녕", history: [] }));
 });
+
+test("assertNoPII는 utterance 값에 남은 개인정보도 잡아낸다", () => {
+  assert.throws(() => assertNoPII({ utterance: "900101-1234567 잔액 알려줘", history: [] }), /utterance/);
+});
+
+test("assertNoPII는 history[].content에 남은 개인정보도 잡아낸다 (키 이름만 보는 걸로는 못 잡는다)", () => {
+  assert.throws(
+    () =>
+      assertNoPII({
+        utterance: "그럼 자동이체는?",
+        history: [{ role: "user", content: "주민번호 900101-1234567 인데 잔액 알려줘" }],
+      }),
+    /history/
+  );
+});

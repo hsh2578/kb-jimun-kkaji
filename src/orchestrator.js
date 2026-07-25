@@ -14,6 +14,13 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
   async function handle(utterance, history = []) {
     const { text, removed } = scrubPII(utterance);
 
+    // history는 호출자가 이미 스크럽했다고 믿지 않는다 — 여기서 다시 한번 걷어낸다.
+    // (예: js/main.js는 오늘 스크럽 전 원본 발화를 history에 push한다. 그래도 여기를 통과하면 안전해야 한다.)
+    const cleanHistory = history.map((turn) => {
+      if (!turn || typeof turn.content !== "string") return turn;
+      return { ...turn, content: scrubPII(turn.content).text };
+    });
+
     // 라우터가 죽어도 대화는 계속된다 — 후보 없이 진행한다.
     let menus = [];
     try {
@@ -35,7 +42,7 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     try {
       res = await llm.chat({
         utterance: text,
-        history,
+        history: cleanHistory,
         tools: toOpenAITools(tools),
         menuCandidates: menus,
       });
