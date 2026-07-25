@@ -89,8 +89,14 @@ export function formatQueryItem(item) {
     "항목";
 
   const parts = [];
-  const money = item.amount ?? item.balance ?? item.monthly;
-  if (money != null) parts.push(formatMoney(money));
+  // monthly 는 잔액이 아니라 매월 납입액이다. 연금 통합 조회에서
+  // 은행 퇴직연금 잔액과 보험 월납입액이 나란히 놓이므로 구분해야 한다.
+  if (item.monthly != null && item.amount == null && item.balance == null) {
+    parts.push(`월 ${formatMoney(item.monthly)} 납입`);
+  } else {
+    const money = item.amount ?? item.balance;
+    if (money != null) parts.push(formatMoney(money));
+  }
   if (item.qty != null) parts.push(`${item.qty}주${item.currency ? `(${item.currency})` : ""}`);
   if (item.day != null) parts.push(`매월 ${item.day}일`);
   if (item.dueDate) parts.push(`납부기한 ${item.dueDate}`);

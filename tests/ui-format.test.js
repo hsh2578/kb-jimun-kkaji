@@ -115,3 +115,19 @@ test("formatQueryResult: 빈 배열이면 그냥 아무것도 안 그리지 않�
   const lines = formatQueryResult({ items: [], note: "안내 문구" });
   assert.deepEqual(lines, ["안내 문구"]);
 });
+
+test("연금 통합 조회는 3사 이름을 한글로, 월납입은 잔액과 구분해 보여준다", async () => {
+  const { formatQueryResult } = await import("../src/ui/format.js");
+  const lines = formatQueryResult({
+    items: [
+      { affiliate: "bank", name: "KB 퇴직연금 DC", balance: 48_200_000, instruction: "없음" },
+      { affiliate: "sec", name: "KB증권 IRP", balance: 11_500_000, instruction: "없음" },
+      { affiliate: "insurance", name: "KB라이프 연금보험", monthly: 300_000 },
+    ],
+  });
+  assert.ok(lines.some((l) => l.includes("KB국민은행")));
+  assert.ok(lines.some((l) => l.includes("KB증권")));
+  assert.ok(lines.some((l) => l.includes("KB라이프")), "보험 계열사가 코드명으로 노출되면 안 된다");
+  assert.ok(!lines.join(" ").includes("insurance"));
+  assert.ok(lines.some((l) => l.includes("월 300,000원 납입")), "월납입을 잔액처럼 보이면 안 된다");
+});

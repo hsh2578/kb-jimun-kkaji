@@ -2,6 +2,8 @@ export const AFFILIATE_NAME = {
   bank: "KB국민은행",
   card: "KB국민카드",
   sec: "KB증권",
+  // 크롤링 대상은 아니지만 연금 통합 조회가 보험 계열사 자산을 함께 돌려준다.
+  insurance: "KB라이프",
 };
 
 // 학습용과 시험용을 겹치지 않게 반으로 가른다.
