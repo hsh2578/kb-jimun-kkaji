@@ -9,10 +9,12 @@ export function formatMoney(n) {
 export function formatAuditLog(audit) {
   const lines = [];
   lines.push(`LLM 전송 페이로드: "${audit.sentToLLM}"`);
+  // 실제로 검사한 것만 주장한다 — 성명·주소 등은 정규식으로 걸러내지 않으므로
+  // "미전송"이라 단정하지 않는다. I3에서도 이 패턴 목록(주민번호·계좌번호·카드번호·전화번호)만 다룬다.
   lines.push(
     audit.piiRemoved.length
       ? `⚠ 개인정보 마스킹: ${audit.piiRemoved.join(", ")}`
-      : "⚠ 계좌번호·잔액·성명 미전송 (0건)"
+      : "⚠ 주민번호·계좌번호·카드번호·전화번호 패턴 검사: 검출 0건 (성명 등은 정규식 검사 대상 아님)"
   );
   if (audit.candidates.length) lines.push(`후보 메뉴 ${audit.candidates.length}건`);
   for (const t of audit.toolCalls) lines.push(`도구 호출: ${t}()`);

@@ -10,6 +10,8 @@ import { AFFILIATE_NAME } from "./menu/utterance.js";
 
 export function createOrchestrator({ router, llm, tools, authGate, impactFn = defaultImpact }) {
   const executor = createExecutor({ authGate, tools });
+  const planTools = new Map(); // planId -> 도구 이름. confirm()에서 감사 로그를 남기기 위함.
+  const executionAudit = []; // 실제로 실행된 도구 호출의 기록. 은행이 남겨야 하는 단 하나의 로그.
 
   async function handle(utterance, history = []) {
     const { text, removed } = scrubPII(utterance);
@@ -85,15 +87,20 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
       return { layer: "L3", message: impact.reason, menus, audit };
     }
     const plan = await executor.prepare(call.name, call.args);
+    planTools.set(plan.planId, call.name);
     audit.blockedCalls.push(call.name); // 인증 전이라 아직 호출되지 않았음을 남긴다
     return { layer: "L3", message: res.message, plan, warnings: impact.warnings, menus, audit };
   }
 
   async function confirm(planId, token) {
-    return await executor.execute(planId, token);
+    const data = await executor.execute(planId, token);
+    // 실행된 것만 여기 온다 — execute()가 인증 실패나 중복 실행이면 위에서 throw로 끝난다.
+    const entry = { tool: planTools.get(planId) ?? null, planId };
+    executionAudit.push(entry);
+    return { ...data, audit: entry };
   }
 
-  return { handle, confirm };
+  return { handle, confirm, executionAudit };
 }
 
 function describeMenus(menus) {

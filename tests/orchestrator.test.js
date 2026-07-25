@@ -84,6 +84,19 @@ test("history에 남아있던 원본 개인정보도 orchestrator가 다시 스�
   );
 });
 
+test("confirm은 실행 내역을 감사 로그에 남긴다", async () => {
+  const gate = createAuthGate();
+  const o = createOrchestrator({ router, llm: llmWith([{ name: "cancel_autopay", args: { autopay_id: "ap1" } }]), tools, authGate: gate });
+  const r = await o.handle("끊어줘", []);
+  const out = await o.confirm(r.plan.planId, gate.issue(r.plan.planId));
+  assert.equal(out.audit.tool, "cancel_autopay");
+  assert.equal(out.audit.planId, r.plan.planId);
+  assert.ok(
+    o.executionAudit.some((e) => e.tool === "cancel_autopay" && e.planId === r.plan.planId),
+    "orchestrator는 실행된 계획을 감사 로그에 남겨야 한다"
+  );
+});
+
 test("영향 분석이 막으면 계획을 세우지 않는다", async () => {
   const o = createOrchestrator({
     router,
