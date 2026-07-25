@@ -1,6 +1,11 @@
 // 화면 렌더링. 보안 규칙: 사용자 입력·도구 결과·메뉴 이름·LLM 출력은
 // 반드시 textContent로만 꽂는다. innerHTML은 아래의 정적 골격(보간 없음)에만 쓴다.
-import { formatAuditLog, formatMoney, formatActionResult, formatPlanSummary } from "../src/ui/format.js";
+import {
+  formatAuditLog,
+  formatActionResult,
+  formatPlanSummary,
+  formatQueryResult,
+} from "../src/ui/format.js";
 
 export function createUI(root, { onSend, onConfirm }) {
   root.innerHTML = `
@@ -52,15 +57,18 @@ export function createUI(root, { onSend, onConfirm }) {
       log.appendChild(ul);
     }
 
-    if (r.layer === "L2" && r.data?.items) {
-      const ul = document.createElement("ul");
-      ul.className = "data";
-      for (const it of r.data.items) {
-        const li = document.createElement("li");
-        li.textContent = it.amount != null ? `${it.name} — ${formatMoney(it.amount)}` : `${it.name ?? JSON.stringify(it)}`;
-        ul.appendChild(li);
+    if (r.layer === "L2" && r.data) {
+      const lines = formatQueryResult(r.data);
+      if (lines.length) {
+        const ul = document.createElement("ul");
+        ul.className = "data";
+        for (const line of lines) {
+          const li = document.createElement("li");
+          li.textContent = line;
+          ul.appendChild(li);
+        }
+        log.appendChild(ul);
       }
-      log.appendChild(ul);
     }
 
     if (r.layer === "L3" && r.plan) {

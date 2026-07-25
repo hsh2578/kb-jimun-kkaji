@@ -5,6 +5,8 @@ import {
   formatMoney,
   formatPlanSummary,
   formatActionResult,
+  formatQueryItem,
+  formatQueryResult,
 } from "../src/ui/format.js";
 
 test("금액에 천 단위 구분이 들어간다", () => {
@@ -68,4 +70,48 @@ test("formatActionResult: 원시 JSON이 아니라 읽는 문장을 준다", () 
   assert.match(s, /KT 통신요금/);
   assert.match(s, /완료/);
   assert.ok(!/\{/.test(s), "중괄호가 남아있으면 안 된다 — JSON을 그대로 보여주면 안 된다");
+});
+
+// C3 — 도구마다 필드 이름이 다른 결과를 하나의 읽을 수 있는 줄로 바꾼다.
+test("formatQueryItem: balance 필드를 금액으로 보여준다 (list_accounts)", () => {
+  const s = formatQueryItem({ id: "b1", name: "KB My通장", balance: 3_240_500, type: "입출금" });
+  assert.match(s, /KB My通장/);
+  assert.match(s, /3,240,500원/);
+});
+
+test("formatQueryItem: monthly 필드를 금액으로 보여준다 (연금보험)", () => {
+  const s = formatQueryItem({ affiliate: "insurance", name: "KB라이프 연금보험", monthly: 300_000 });
+  assert.match(s, /300,000원/);
+});
+
+test("formatQueryItem: name이 없는 카드 명세서 항목도 undefined를 보이지 않는다", () => {
+  const s = formatQueryItem({ cardId: "c1", month: "2026-07", amount: 842_000, dueDate: "2026-08-14" });
+  assert.ok(!/undefined/.test(s));
+  assert.match(s, /842,000원/);
+});
+
+test("formatQueryItem: affiliate가 있으면 계열사를 표시한다 (연금 통합 조회)", () => {
+  const s = formatQueryItem({ affiliate: "sec", name: "KB증권 IRP", balance: 11_500_000, instruction: "없음" });
+  assert.match(s, /KB증권/);
+  assert.match(s, /11,500,000원/);
+  assert.match(s, /운용지시 없음/);
+});
+
+test("formatQueryResult: items 배열을 줄 목록으로 바꾼다", () => {
+  const lines = formatQueryResult({ items: [{ name: "a", amount: 1000 }, { name: "b", amount: 2000 }] });
+  assert.equal(lines.length, 2);
+  assert.match(lines[0], /1,000원/);
+});
+
+test("formatQueryResult: items 키 자체가 없어도(get_card_benefit_progress) 빈 화면이 아니다", () => {
+  const lines = formatQueryResult({ spent: 420_000, nextTier: 500_000, remaining: 80_000, rewards: ["커피 10% 할인"] });
+  assert.ok(lines.length > 0);
+  assert.match(lines[0], /420,000원/);
+  assert.match(lines[0], /80,000원/);
+  assert.match(lines[0], /커피 10% 할인/);
+});
+
+test("formatQueryResult: 빈 배열이면 그냥 아무것도 안 그리지 않고 note가 있으면 보여준다", () => {
+  const lines = formatQueryResult({ items: [], note: "안내 문구" });
+  assert.deepEqual(lines, ["안내 문구"]);
 });
