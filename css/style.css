@@ -387,6 +387,37 @@ button.auth:disabled::after { animation: scan 1.15s linear infinite; }
 
 @keyframes scan { to { translate: 110% 0; } }
 
+/* 자동 시연 자막 — 지금 무엇을 보고 있는지 발표 없이도 전달된다 */
+.caption {
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0 1rem;
+  font-size: .78rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  background: linear-gradient(180deg, #fffaef, #fff6e2);
+  border-top: 1px solid #f2dfae;
+  transition: max-height .35s var(--ease), opacity .25s var(--ease), padding .35s var(--ease);
+}
+
+.caption.is-on {
+  max-height: 9rem;
+  opacity: 1;
+  padding: .65rem 1rem;
+}
+
+/* 자동 시연이 인증 앞에서 멈췄을 때 지문 버튼을 부른다 */
+button.auth.is-calling {
+  animation: call 1.3s var(--ease) infinite;
+}
+
+@keyframes call {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 188, 0, .55); }
+  60%      { box-shadow: 0 0 0 9px rgba(255, 188, 0, 0); }
+}
+
 /* 제안 칩 */
 .suggest {
   display: flex;
@@ -481,6 +512,38 @@ button.auth:disabled::after { animation: scan 1.15s linear infinite; }
   content: "";
   position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, var(--kb-yellow), transparent 72%);
+}
+
+.audit__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .4rem;
+}
+
+/* 자동 시연 버튼 — 발표자가 타이핑하지 않아도 시나리오가 돈다 */
+.autodemo {
+  margin-left: auto;
+  flex: none;
+  border: 1px solid #3a332b;
+  background: #1c1916;
+  color: var(--kb-yellow);
+  border-radius: 999px;
+  padding: .3rem .8rem;
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: background .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease);
+}
+
+.autodemo:hover { border-color: var(--kb-yellow); background: #241f19; }
+
+.autodemo.is-running {
+  background: var(--kb-yellow);
+  border-color: var(--kb-yellow);
+  color: #2a2016;
 }
 
 .audit h2 {

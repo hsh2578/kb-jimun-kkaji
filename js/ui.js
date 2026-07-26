@@ -7,6 +7,7 @@ import {
   formatQueryResult,
   formatAuthEvent,
 } from "../src/ui/format.js";
+import { createAutoDemo } from "./autodemo.js";
 
 // 시연용 제안 발화. 심사위원이 무엇부터 눌러야 할지 헤매지 않게 한다.
 // (docs/demo-script.md 의 시연 순서와 같다.)
@@ -30,6 +31,7 @@ export function createUI(root, { onSend, onConfirm }) {
           <span class="env">Demo</span>
         </div>
         <div id="log" class="log" aria-live="polite"></div>
+        <p id="caption" class="caption" aria-live="polite"></p>
         <div id="suggest" class="suggest"></div>
         <form id="composer">
           <input id="input" autocomplete="off" placeholder="말씀하세요. 메뉴는 제가 찾습니다." />
@@ -38,7 +40,10 @@ export function createUI(root, { onSend, onConfirm }) {
       </div>
     </div>
     <aside class="audit">
-      <h2>AI 판단 로그</h2>
+      <div class="audit__head">
+        <h2>AI 판단 로그</h2>
+        <button type="button" id="autodemo" class="autodemo">▶ 자동 시연</button>
+      </div>
       <p class="audit__lede">
         미리 짜둔 대본이 아닙니다. <b>AI가 어떤 기능을 호출할지 스스로 판단하는 과정</b>과,
         <b>LLM으로 무엇이 전송됐는지</b>를 그대로 보여줍니다.
@@ -50,6 +55,17 @@ export function createUI(root, { onSend, onConfirm }) {
   const auditEl = root.querySelector("#audit");
   const input = root.querySelector("#input");
   const suggest = root.querySelector("#suggest");
+
+  // 자동 시연 — 발표자가 타이핑하지 않아도 시나리오가 순서대로 돈다.
+  const demo = createAutoDemo({
+    input,
+    form: root.querySelector("#composer"),
+    button: root.querySelector("#autodemo"),
+    caption: root.querySelector("#caption"),
+  });
+
+  // 사용자가 직접 입력하기 시작하면 자동 시연을 멈춘다 — 두 손이 겹치면 안 된다.
+  input.addEventListener("keydown", () => { if (demo.isRunning()) demo.stop(); });
 
   // 제안 칩 — 정적 문자열이지만 규칙대로 textContent 로 꽂는다.
   for (const text of SUGGESTIONS) {
