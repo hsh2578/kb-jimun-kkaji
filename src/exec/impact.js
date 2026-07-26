@@ -119,6 +119,14 @@ export function resolveSubsidy({ subsidy_id, name_hint } = {}) {
   return null;
 }
 
+// 카드 해석. 고객은 내부 id 를 모르고 "톡톡카드"처럼 부른다.
+export function resolveCard({ card_id, name_hint } = {}) {
+  const list = KB_DATA.card.cards;
+  if (card_id) return list.find((c) => c.id === card_id) ?? null;
+  if (name_hint) return matchByName(name_hint, list, (c) => [c.name, `****${c.last4}`]);
+  return null;
+}
+
 // 이체 출금 계좌. 지정이 없으면 주거래 입출금 계좌를 쓴다.
 export function fromAccount(accountId) {
   const list = KB_DATA.bank.accounts;
@@ -234,6 +242,17 @@ export async function analyzeImpact(toolName, args) {
       reason: elsewhere
         ? `${wanted}은(는) ${elsewhere}에서 발급하는 서류입니다. 그쪽으로 신청해 드릴까요?`
         : `${wanted}은(는) 발급 목록에서 찾지 못했습니다. 어떤 서류인지 다시 말씀해 주세요.`,
+    };
+  }
+
+  if (toolName === "report_lost_card") {
+    const c = resolveCard(args);
+    if (!c) {
+      return { warnings: [], blocked: true, reason: "어느 카드인지 확인할 수 없습니다. 카드 이름을 말씀해 주세요." };
+    }
+    return {
+      warnings: [`${c.name} 사용이 즉시 정지됩니다. 이 카드로 걸어둔 자동납부도 함께 실패할 수 있습니다.`],
+      blocked: false,
     };
   }
 

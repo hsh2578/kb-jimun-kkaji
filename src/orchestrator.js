@@ -240,9 +240,11 @@ export function looksLikeToolCall(text) {
   return /\b[a-z][a-z0-9_]{3,}\s*\(\s*[{"']/i.test(text);
 }
 
+// "○○ 에 있습니다"는 챗봇이 하는 말이다. 우리는 대신 걷겠다고 했으므로
+// 열어주겠다고 말하고, 화면에는 실제로 누르면 열리는 버튼을 함께 그린다(js/ui.js).
 function describeMenus(menus) {
   if (!menus.length) return "지금은 찾지 못했습니다. 조금 더 구체적으로 말씀해 주시겠어요?";
   const m = menus[0];
   const where = [AFFILIATE_NAME[m.affiliate] ?? m.affiliate, ...m.path, m.name].join(" > ");
-  return `${where} 에 있습니다.`;
+  return `${where} 화면을 열어드릴게요. 아래에서 눌러주세요.`;
 }

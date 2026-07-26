@@ -12,9 +12,11 @@ import {
   followUpForAction,
   formatPlanCard,
   quickReplies,
+  formatMenuTarget,
 } from "../src/ui/format.js";
 import { createAutoDemo } from "./autodemo.js";
 import { createVoiceInput } from "./voice.js";
+import { buildArtifact } from "../src/ui/artifact.js";
 
 // 첫 화면의 제안. 단순한 예시 목록이 아니라 "이 AI가 어디까지 하는가"를
 // 가르치는 자리다.
@@ -74,8 +76,12 @@ export function createUI(root, { onSend, onConfirm }) {
         </div>
       </div>
     </div>
-    <!-- 해설 자막. 폰 안에 있으면 앱 UI 를 어지럽힌다 — 화면 밖 캡션 자리로 뺀다. -->
-    <p id="caption" class="caption" aria-live="polite"></p>
+    <!-- 해설 자막. 폰 안에 있으면 앱 UI 를 어지럽힌다 — 폰 밖 아래로 완전히 뺀다.
+         내용은 '챗봇이라면 여기서 끝' vs '우리는 여기까지'의 대비다. -->
+    <div id="caption" class="caption" aria-live="polite">
+      <p class="caption__bot"><span class="caption__tag">챗봇이라면</span><span id="captionBot"></span></p>
+      <p class="caption__ours"><span class="caption__tag">지문까지</span><span id="captionOurs"></span></p>
+    </div>
     </div>
     <aside class="audit">
       <div class="audit__head">
@@ -99,7 +105,13 @@ export function createUI(root, { onSend, onConfirm }) {
     input,
     form: root.querySelector("#composer"),
     button: root.querySelector("#autodemo"),
-    caption: root.querySelector("#caption"),
+    // 자막은 폰 밖 아래 자리에만 쓴다 — 앱 화면과 겹치지 않는다.
+    setCaption: (bot, ours) => {
+      const box = root.querySelector("#caption");
+      root.querySelector("#captionBot").textContent = bot ?? "";
+      root.querySelector("#captionOurs").textContent = ours ?? "";
+      box.classList.toggle("is-on", Boolean(bot || ours));
+    },
   });
 
   // 사용자가 직접 입력하기 시작하면 자동 시연을 멈춘다 — 두 손이 겹치면 안 된다.
@@ -303,20 +315,110 @@ export function createUI(root, { onSend, onConfirm }) {
     authTitle.textContent = "지문을 눌러주세요";
   }
 
+  // 메뉴를 실제로 연다.
+  //
+  // 실제 앱에서는 KB스타뱅킹 내부 메뉴 코드로 화면을 여는 딥링크다(스펙 6-7절).
+  // 프로토타입에는 그 앱이 없으므로, 열리는 척하지 않고 "무엇이 열리는지"를
+  // 화면으로 보여준다 — 경로·딥링크 주소를 그대로 드러낸다.
+  function openMenu(t) {
+    const box = document.createElement("div");
+    box.className = "opened";
+
+    const head = document.createElement("div");
+    head.className = "opened__head";
+    head.textContent = "화면을 열었습니다";
+
+    const crumb = document.createElement("div");
+    crumb.className = "opened__crumb";
+    crumb.textContent = [t.affiliate, ...t.path].join("  ›  ");
+
+    const link = document.createElement("code");
+    link.className = "opened__link";
+    link.textContent = t.link;
+
+    const note = document.createElement("p");
+    note.className = "opened__note";
+    note.textContent =
+      "실제 KB스타뱅킹에서는 이 주소로 해당 화면이 바로 열립니다. 시연 환경에는 앱이 없어 주소만 보여드립니다.";
+
+    box.append(head, crumb, link, note);
+    log.appendChild(box);
+    log.scrollTop = log.scrollHeight;
+    logAuthEvent(`↗ 화면 열기: ${t.link}`);
+  }
+
+  // 실행 결과물을 손에 쥐어준다.
+  //
+  // 챗봇도 "명세서를 만들었습니다 (파일명.xlsx)" 라고 말할 수는 있다.
+  // 다른 점은 실제로 내려받아 열어볼 수 있다는 것이다. 파일 만들기는 전부
+  // 브라우저 안에서 끝난다 — 명세서 내용이 서버로 나가지 않는다.
+  function renderArtifact(file) {
+    if (!file) return;
+    const box = document.createElement("div");
+    box.className = "artifact";
+
+    const meta = document.createElement("div");
+    meta.className = "artifact__meta";
+    const nm = document.createElement("span");
+    nm.className = "artifact__name";
+    nm.textContent = file.name;
+    const sm = document.createElement("span");
+    sm.className = "artifact__sum";
+    sm.textContent = file.summary;
+    meta.append(nm, sm);
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "artifact__dl";
+    btn.textContent = "내려받기";
+    btn.addEventListener("click", () => {
+      const url = URL.createObjectURL(new Blob([file.body], { type: file.type }));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      // 즉시 해제하면 사파리 등에서 다운로드가 취소된다 — 한 틱 뒤에 정리한다.
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      logAuthEvent(`⬇ 파일 생성: ${file.name} (브라우저 내에서 생성, 서버 전송 없음)`);
+    });
+
+    box.append(meta, btn);
+    log.appendChild(box);
+    log.scrollTop = log.scrollHeight;
+  }
+
   function renderResult(r) {
     // 새 턴이 시작되면 지난 턴의 빠른 답장은 걷어낸다.
     root.querySelector(".quick")?.remove();
     if (r.message) append("bot", r.message);
 
+    // L1 — '어디 있다'고 알려주기만 하면 그건 챗봇이다. 눌러서 바로 여는 것까지 준다.
     if (r.layer === "L1" && r.menus?.length) {
-      const ul = document.createElement("ul");
-      ul.className = "menus";
+      const wrap = document.createElement("div");
+      wrap.className = "menus";
       for (const m of r.menus.slice(0, 3)) {
-        const li = document.createElement("li");
-        li.textContent = [...m.path, m.name].join(" > ");
-        ul.appendChild(li);
+        const t = formatMenuTarget(m);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "menus__go";
+
+        const where = document.createElement("span");
+        where.className = "menus__where";
+        where.textContent = `${t.affiliate} · ${t.path.slice(0, -1).join(" > ") || "메인"}`;
+
+        const what = document.createElement("span");
+        what.className = "menus__what";
+        what.textContent = t.name;
+
+        const go = document.createElement("span");
+        go.className = "menus__cta";
+        go.textContent = "열기";
+
+        b.append(where, what, go);
+        b.addEventListener("click", () => openMenu(t));
+        wrap.appendChild(b);
       }
-      log.appendChild(ul);
+      log.appendChild(wrap);
     }
 
     if (r.layer === "L2" && r.data) {
@@ -389,6 +491,8 @@ export function createUI(root, { onSend, onConfirm }) {
           btn.remove();
           await hideAuthOverlay(true);
           append("bot", formatActionResult(r.plan, out));
+          // 파일이 나오는 실행이면 실제로 내려받게 해준다 — 말만 하면 챗봇이다.
+          renderArtifact(buildArtifact(r.plan.tool, out));
           // 실행 하나로 대화가 끝나면 안 된다 — 다음 걸음을 열어둔다.
           const next = followUpForAction(r.plan.tool);
           if (next) append("bot", next);

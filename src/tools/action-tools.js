@@ -1,7 +1,7 @@
 // L3 — 실행. 전부 인증이 필요하다.
 // 더미 데이터를 조작하지만, 실제 서비스에서는 이 함수 본문만 은행 API로 바뀐다.
 import { KB_DATA } from "../data/kb-data.js";
-import { resolveAutopay, resolveRecipient, resolveSubsidy, fromAccount } from "../exec/impact.js";
+import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, fromAccount } from "../exec/impact.js";
 
 const a = (description, parameters, run) => ({ description, parameters, requiresAuth: true, run });
 
@@ -135,13 +135,17 @@ export const ACTION_TOOLS = {
     }
   ),
 
+  // 고객은 카드 내부 id 를 모른다 — "톡톡카드", "체크카드" 처럼 부른다.
+  // 예전에는 card_id 만 받아서, 모델이 id 를 지어내면 계획은 만들어지고
+  // 실행에서 터졌다(서류 발급과 같은 사고였다). 이름 힌트를 받는다.
   report_lost_card: a(
-    "카드 분실을 신고한다",
-    { card_id: "string" },
-    async ({ card_id }) => {
-      const c = KB_DATA.card.cards.find((x) => x.id === card_id);
+    "카드 분실·도난을 신고해 사용을 정지한다. 고객이 '톡톡카드', '체크카드'처럼 이름으로 부르면 name_hint에 그대로 넣는다. " +
+      "'지갑을 잃어버렸어', '카드가 없어졌어' 처럼 말해도 이 도구를 쓴다.",
+    { card_id: "string", name_hint: "string" },
+    async (args) => {
+      const c = resolveCard(args);
       if (!c) throw new Error("해당 카드를 확인할 수 없습니다");
-      return { reported: { id: c.id, name: c.name } };
+      return { reported: { id: c.id, name: c.name, last4: c.last4 } };
     }
   ),
 };

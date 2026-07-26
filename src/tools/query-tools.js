@@ -157,6 +157,26 @@ export const QUERY_TOOLS = {
     }
   ),
 
+  // "환율 우대 어디서 받아?"는 위치가 아니라 숫자를 묻는 말이다.
+  // 위치만 답하면 그건 챗봇이다.
+  get_fx_rates: q(
+    "환율과 환전 우대율을 조회한다. " +
+      "'환율 얼마야', '환율 우대 어디서 받아', '달러 지금 얼마', '엔화 싸?' 처럼 물을 때 쓴다.",
+    {},
+    async () => {
+      const { rates, asOf, note } = KB_DATA.bank.fx;
+      return {
+        items: rates.map((r) => ({
+          affiliate: "bank",
+          name: r.name,
+          amount: r.sell,
+          note: `우대 ${r.preferential * 100}%`,
+        })),
+        note: `${asOf} 기준 · ${note}`,
+      };
+    }
+  ),
+
   list_subsidies: q(
     "신청 가능한 지원금·환급·캐시백을 조회한다. " +
       "'받을 수 있는 지원금 있어?', '고유가 지원금 되나', '나 뭐 환급받을 거 없어?' 처럼 물을 때 쓴다.",

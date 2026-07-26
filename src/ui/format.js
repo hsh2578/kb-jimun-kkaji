@@ -1,7 +1,7 @@
 // 화면 포맷터. 값 자체는 여기서 만들지만, DOM에 꽂는 책임은 js/ui.js에 있다.
 // (거기서는 반드시 textContent로만 꽂는다 — innerHTML 금지.)
 import { KB_DATA } from "../data/kb-data.js";
-import { resolveAutopay, resolveRecipient, resolveSubsidy, fromAccount } from "../exec/impact.js";
+import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, fromAccount } from "../exec/impact.js";
 import { AFFILIATE_NAME } from "../menu/utterance.js";
 
 export function formatMoney(n) {
@@ -61,8 +61,8 @@ export function formatPlanSummary(plan) {
     case "issue_sec_tax_document":
       return `${args.name} 발급을 진행합니다.`;
     case "report_lost_card": {
-      const card = KB_DATA.card.cards.find((c) => c.id === args.card_id);
-      return card ? `${card.name} 분실 신고를 접수합니다.` : "카드 분실 신고를 접수합니다.";
+      const card = resolveCard(args);
+      return card ? `${card.name}(****${card.last4}) 분실 신고를 접수하고 사용을 정지합니다.` : "카드 분실 신고를 접수합니다.";
     }
     default:
       return "요청하신 작업을 진행합니다.";
@@ -182,7 +182,7 @@ export function formatActionResult(plan, out) {
     case "issue_sec_tax_document":
       return `${val.name} 발급을 완료했습니다. (${val.fileName})`;
     case "report_lost_card":
-      return `${val.name} 분실 신고를 접수했습니다.`;
+      return `${val.name}(****${val.last4}) 분실 신고를 접수했습니다. 사용이 정지되었습니다.`;
     default:
       return "완료했습니다.";
   }
@@ -217,6 +217,24 @@ const SPOKEN = {
 
 export function speakForQuery(toolName) {
   return SPOKEN[toolName] ?? "";
+}
+
+// L1 — 메뉴를 '어디 있다'고 알려주는 것은 챗봇이 하는 일이다.
+// 우리는 대신 걷겠다고 했으므로, 눌러서 바로 여는 것까지 준다.
+//
+// 실제 앱에서 이 버튼은 KB스타뱅킹 내부 메뉴 코드로 화면을 여는 딥링크가 된다
+// (스펙 6-7절 네이티브 브릿지). 프로토타입에는 그 앱이 없으므로, 눌렀을 때
+// 무엇이 열리는지를 화면으로 보여준다 — 열리는 척하지 않고, 열 준비가 끝났다는
+// 사실을 정직하게 보여준다.
+export function formatMenuTarget(menu) {
+  if (!menu) return null;
+  return {
+    affiliate: AFFILIATE_NAME[menu.affiliate] ?? menu.affiliate,
+    path: [...(menu.path ?? []), menu.name],
+    name: menu.name,
+    // 딥링크 자리. 실제 앱에서는 KB가 이미 갖고 있는 메뉴 코드가 여기 들어간다.
+    link: `kbstarbanking://menu/${encodeURIComponent(menu.id ?? menu.name)}`,
+  };
 }
 
 // 결과를 내놓은 다음에 상담원이 잇는 말.

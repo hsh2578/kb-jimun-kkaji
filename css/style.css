@@ -339,8 +339,83 @@ body {
   animation: pop .34s var(--ease) both;
 }
 
-.menus li { color: var(--ink-soft); font-family: var(--mono); font-size: .78rem; letter-spacing: -.01em; }
-.menus li::before { content: "📍 "; }
+/* 메뉴는 '여기 있습니다' 목록이 아니라 눌러서 여는 버튼이다.
+   위치만 알려주면 그건 챗봇이고, 우리는 대신 걷겠다고 했다. */
+.menus { padding: .55rem; }
+
+.menus__go {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .1rem .6rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+  border-radius: 10px;
+  padding: .5rem .6rem .55rem .7rem;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: border-color .16s var(--ease), background .16s var(--ease);
+}
+
+.menus__go:hover { border-color: var(--kb-yellow); background: #fffdf5; }
+
+.menus__where { grid-column: 1; font-size: .68rem; color: var(--ink-faint); }
+.menus__what  { grid-column: 1; font-size: .86rem; font-weight: 500; color: var(--ink); }
+
+.menus__cta {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  flex: none;
+  font-size: .74rem;
+  font-weight: 600;
+  color: #2a2016;
+  background: var(--kb-yellow);
+  border-radius: 999px;
+  padding: .22rem .62rem;
+}
+
+/* 열린 화면 — 열리는 척하지 않는다. 무엇이 열리는지를 그대로 보여준다. */
+.opened {
+  align-self: stretch;
+  border: 1px solid var(--rule);
+  background: #14120f;
+  border-radius: 12px;
+  padding: .7rem .85rem .75rem;
+  animation: pop .3s var(--ease) both;
+}
+
+.opened__head {
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--kb-yellow);
+  margin-bottom: .35rem;
+}
+
+.opened__crumb {
+  font-size: .86rem;
+  font-weight: 500;
+  color: #fffdf8;
+  line-height: 1.5;
+  margin-bottom: .45rem;
+}
+
+.opened__link {
+  display: block;
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: #9c927f;
+  overflow-wrap: anywhere;
+}
+
+.opened__note {
+  margin: .5rem 0 0;
+  font-size: .68rem;
+  line-height: 1.55;
+  color: #7d7466;
+}
 
 .data li { color: var(--ink); position: relative; padding-left: .85rem; }
 .data li::before {
@@ -401,18 +476,36 @@ button.auth:disabled::after { animation: scan 1.15s linear infinite; }
    예전에는 대화창과 입력창 사이에 끼워 넣었다. 앱 UI 한가운데 해설이 박혀 있으니
    "이게 앱의 일부인가?" 싶고 화면이 어지러웠다. 영화 자막처럼 밖으로 뺀다. */
 .caption {
-  margin: .85rem 0 0;
-  min-height: 3.4rem;
-  padding: 0 .2rem;
-  font-size: .8rem;
-  line-height: 1.6;
-  color: var(--ink-faint);
-  text-align: center;
+  margin: 1rem 0 0;
+  min-height: 4.6rem;
+  padding: .7rem .85rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper-raised);
+  display: grid;
+  gap: .3rem;
   opacity: 0;
   transition: opacity .3s var(--ease);
 }
 
 .caption.is-on { opacity: 1; }
+
+.caption p { margin: 0; font-size: .8rem; line-height: 1.5; display: flex; gap: .55rem; }
+
+.caption__tag {
+  flex: none;
+  width: 4.4rem;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  padding-top: .12rem;
+}
+
+.caption__bot  { color: var(--ink-faint); }
+.caption__bot .caption__tag { color: #b9ae9d; }
+
+.caption__ours { color: var(--ink); font-weight: 500; }
+.caption__ours .caption__tag { color: var(--kb-yellow-deep); }
 
 /* 자동 시연이 인증 앞에서 멈췄을 때 지문 버튼을 부른다 */
 button.auth.is-calling {
@@ -893,3 +986,45 @@ button.auth.is-calling {
   .phone__screen { border-radius: 19px; }
   .stat { flex-basis: 100%; border-right: 0; padding-left: 0 !important; }
 }
+
+/* ── 산출물 ───────────────────────────────────────────────
+   챗봇도 "명세서를 만들었습니다"라고 말할 수는 있다. 다른 점은 손에 쥐어주는
+   것이다. 파일 생성은 전부 브라우저 안에서 끝난다 — 내용이 서버로 나가지 않는다. */
+.artifact {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  border: 1px solid var(--kb-yellow);
+  background: #fffdf5;
+  border-radius: 12px;
+  padding: .6rem .65rem .6rem .8rem;
+  animation: pop .3s var(--ease) both;
+}
+
+.artifact__meta { flex: 1; min-width: 0; display: grid; gap: .1rem; }
+
+.artifact__name {
+  font-family: var(--mono);
+  font-size: .76rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.artifact__sum { font-size: .7rem; color: var(--ink-faint); }
+
+.artifact__dl {
+  flex: none;
+  border: 0;
+  background: var(--kb-yellow);
+  color: #2a2016;
+  border-radius: 999px;
+  padding: .42rem .85rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: .78rem;
+  cursor: pointer;
+  transition: background .16s var(--ease);
+}
+
+.artifact__dl:hover { background: var(--kb-yellow-deep); }

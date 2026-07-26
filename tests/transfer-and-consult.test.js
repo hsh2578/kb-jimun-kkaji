@@ -438,7 +438,7 @@ test("뜻을 묻는 말에는 답만 하고 메뉴를 붙이지 않는다", asyn
   assert.equal(r.menus.length, 0, "후보 메뉴 목록도 그리지 않는다");
 });
 
-test("어디서 하는지 묻는 말에는 위치를 반드시 붙인다 — L1의 약속이다", async () => {
+test("무엇을 하려는 말에는 열어줄 화면을 반드시 붙인다 — L1의 약속이다", async () => {
   const guiding = {
     chat: async () => ({ message: "환율 우대는 외환 거래 시 적용됩니다.", toolCalls: [] }),
   };
@@ -449,6 +449,48 @@ test("어디서 하는지 묻는 말에는 위치를 반드시 붙인다 — L1�
     authGate: createAuthGate({ verifyProof: () => true }),
   });
   const r = await o.handle("환율 우대는 어디서 받아?");
-  assert.match(r.message, /있습니다/);
-  assert.ok(r.menus.length > 0);
+  // "○○ 에 있습니다"는 챗봇이 하는 말이다. 우리는 열어주겠다고 말하고
+  // 화면에는 실제로 누르면 열리는 버튼을 그린다(js/ui.js).
+  assert.match(r.message, /열어드릴게요/);
+  assert.doesNotMatch(r.message, /에 있습니다/);
+  assert.ok(r.menus.length > 0, "누를 대상이 있어야 열 수 있다");
+});
+
+// ── 안내로 끝내지 않는다: 열어줄 대상과 주소를 준다 ─────────────────────
+
+test("formatMenuTarget은 경로와 딥링크 주소를 함께 준다", async () => {
+  const { formatMenuTarget } = await import("../src/ui/format.js");
+  const t = formatMenuTarget({
+    id: "bank:개인뱅킹 서비스 메뉴>환전신청",
+    affiliate: "bank",
+    path: ["개인뱅킹 서비스 메뉴"],
+    name: "환전신청",
+  });
+  assert.equal(t.affiliate, "KB국민은행");
+  assert.deepEqual(t.path, ["개인뱅킹 서비스 메뉴", "환전신청"]);
+  assert.match(t.link, /^kbstarbanking:\/\/menu\//, "누르면 실제 앱에서 열릴 주소가 있어야 한다");
+  assert.equal(formatMenuTarget(null), null);
+});
+
+test("환율은 위치가 아니라 숫자로 답한다", async () => {
+  const out = await QUERY_TOOLS.get_fx_rates.run({});
+  assert.ok(out.items.length >= 3);
+  const usd = out.items.find((i) => /달러/.test(i.name));
+  assert.ok(usd.amount > 0, "환율 숫자가 있어야 한다");
+  assert.match(usd.note, /우대/);
+  assert.match(out.note, /기준/, "언제 기준인지 밝혀야 한다");
+});
+
+test("분실신고: 카드 이름으로 찾고, 못 찾으면 계획을 만들지 않는다", async () => {
+  const { resolveCard } = await import("../src/exec/impact.js");
+  assert.equal(resolveCard({ name_hint: "톡톡카드" })?.id, "c1");
+  assert.equal(resolveCard({ name_hint: "노리체크" })?.id, "c2");
+  assert.equal(resolveCard({}), null);
+
+  const blocked = await analyzeImpact("report_lost_card", {});
+  assert.equal(blocked.blocked, true, "어느 카드인지 모르면 정지시키면 안 된다");
+
+  const ok = await analyzeImpact("report_lost_card", { name_hint: "톡톡카드" });
+  assert.equal(ok.blocked, false);
+  assert.ok(ok.warnings.some((w) => /자동납부/.test(w)), "카드를 막으면 자동납부도 막힌다는 것을 알려야 한다");
 });

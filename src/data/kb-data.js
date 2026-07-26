@@ -36,6 +36,17 @@ export const KB_DATA = {
       { id: "t2", contactId: "r1", amount: 300_000, at: "2026-07-05" },
       { id: "t3", contactId: "r2", amount: 500_000, at: "2026-07-01" },
     ],
+    // 환율·우대율. "환율 우대 어디서 받아?"는 위치가 아니라 숫자를 묻는 말이다.
+    // 위치만 answering 하면 그건 챗봇이다.
+    fx: {
+      asOf: "2026-07-27 09:00",
+      rates: [
+        { code: "USD", name: "미국 달러", sell: 1_384.20, preferential: 0.9 },
+        { code: "JPY", name: "일본 엔 (100엔)", sell: 892.40, preferential: 0.8 },
+        { code: "EUR", name: "유럽 유로", sell: 1_498.60, preferential: 0.7 },
+      ],
+      note: "인터넷·모바일 환전 시 우대율이 적용됩니다. 공항 수령도 가능합니다.",
+    },
     certificates: [
       { name: "예금잔액증명서", purpose: "비자·재산 증명", english: true },
       { name: "부채증명서", purpose: "대출 잔액 증명", english: false },
@@ -53,6 +64,18 @@ export const KB_DATA = {
     statements: [
       { cardId: "c1", month: "2026-07", amount: 842_000, dueDate: "2026-08-14" },
       { cardId: "c2", month: "2026-07", amount: 213_500, dueDate: "즉시출금" },
+    ],
+    // 명세서에 실제로 찍힐 거래 내역. 파일명만 보여주고 끝내면 "만들었다"는 말을
+    // 믿어달라는 것이다 — 내려받아 열어볼 수 있어야 만든 것이다.
+    transactions: [
+      { cardId: "c1", date: "2026-07-03", merchant: "GS25 역삼점", category: "편의점", amount: 8_400, installment: "일시불" },
+      { cardId: "c1", date: "2026-07-05", merchant: "스타벅스 강남", category: "커피", amount: 12_800, installment: "일시불" },
+      { cardId: "c1", date: "2026-07-09", merchant: "SK주유소 서초", category: "주유", amount: 78_000, installment: "일시불" },
+      { cardId: "c1", date: "2026-07-11", merchant: "전자랜드", category: "가전", amount: 1_800_000, installment: "3개월" },
+      { cardId: "c1", date: "2026-07-18", merchant: "이마트 성수", category: "마트", amount: 142_300, installment: "일시불" },
+      { cardId: "c1", date: "2026-07-22", merchant: "CGV 왕십리", category: "문화", amount: 28_000, installment: "일시불" },
+      { cardId: "c2", date: "2026-07-07", merchant: "카카오T", category: "교통", amount: 14_200, installment: "체크" },
+      { cardId: "c2", date: "2026-07-15", merchant: "배달의민족", category: "외식", amount: 32_500, installment: "체크" },
     ],
     benefits: [
       { cardId: "c1", spentThisMonth: 420_000, nextTier: 500_000,
