@@ -14,6 +14,11 @@ const tools = {
 };
 const llmWith = (toolCalls, message = "") => ({ chat: async () => ({ message, toolCalls }) });
 
+// 실제 검증기(WebAuthn)는 src/auth/webauthn.test.js가 다룬다. orchestrator 테스트는
+// "confirm에 유효한 토큰을 넘기면 실행된다"는 계약만 확인하면 되므로 스텁으로 충분하다.
+const okVerify = (proof, planId) => Boolean(proof) && proof.planId === planId;
+const stubProof = (planId) => ({ planId });
+
 test("도구 호출이 없으면 L1으로 메뉴를 안내한다", async () => {
   const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
   const r = await o.handle("아무거나 물어봄", []);
@@ -54,11 +59,11 @@ test("실행 도구는 L3 계획만 만들고 실행하지 않는다", async () 
 });
 
 test("confirm은 토큰이 있어야 실행한다", async () => {
-  const gate = createAuthGate();
+  const gate = createAuthGate({ verifyProof: okVerify });
   const o = createOrchestrator({ router, llm: llmWith([{ name: "cancel_autopay", args: { autopay_id: "ap1" } }]), tools, authGate: gate });
   const r = await o.handle("끊어줘", []);
   await assert.rejects(() => o.confirm(r.plan.planId, null), /인증/);
-  const out = await o.confirm(r.plan.planId, gate.issue(r.plan.planId));
+  const out = await o.confirm(r.plan.planId, gate.issue(r.plan.planId, stubProof(r.plan.planId)));
   assert.deepEqual(out.cancelled, { id: "ap1" });
 });
 
@@ -100,10 +105,10 @@ test("history에 남아있던 원본 개인정보도 orchestrator가 다시 스�
 });
 
 test("confirm은 실행 내역을 감사 로그에 남긴다", async () => {
-  const gate = createAuthGate();
+  const gate = createAuthGate({ verifyProof: okVerify });
   const o = createOrchestrator({ router, llm: llmWith([{ name: "cancel_autopay", args: { autopay_id: "ap1" } }]), tools, authGate: gate });
   const r = await o.handle("끊어줘", []);
-  const out = await o.confirm(r.plan.planId, gate.issue(r.plan.planId));
+  const out = await o.confirm(r.plan.planId, gate.issue(r.plan.planId, stubProof(r.plan.planId)));
   assert.equal(out.audit.tool, "cancel_autopay");
   assert.equal(out.audit.planId, r.plan.planId);
   assert.ok(

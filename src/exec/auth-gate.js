@@ -1,13 +1,29 @@
 // AI는 실행할 수 없다. "조심한다"가 아니라 호출할 함수 자체가 없다.
 // prepare()는 계획만 만들고, execute()는 사람이 인증해 받은 토큰이 있어야만 돈다.
+//
+// issue()는 예전에는 planId만 받아 아무 증거 없이 토큰을 찍어냈다 — 그러면
+// "누가 인증했는가"를 검증할 자리가 UI에 아예 없다는 뜻이다(js/main.js가
+// onConfirm에서 발급과 소비를 한 번에 처리하던 문제). 이제 issue()는 proof를
+// 요구하고, verifyProof(proof, planId)가 참을 반환할 때만 토큰을 낸다.
+//
+// 기본 verifyProof는 모든 것을 거부한다 — fail closed. 토큰을 받고 싶은 호출자는
+// 반드시 실제 검증기(예: src/auth/webauthn.js의 verifyAuthProof)를 주입해야 한다.
+// "검증기를 안 넣었으니 일단 통과시켜준다"는 선택지는 없다.
 
 let counter = 0;
 
-export function createAuthGate() {
+function rejectEverything() {
+  return false; // fail closed — 검증기를 주입하지 않으면 어떤 proof도 통과하지 못한다
+}
+
+export function createAuthGate({ verifyProof = rejectEverything } = {}) {
   const issued = new Map(); // planId -> token
 
   return {
-    issue(planId) {
+    issue(planId, proof) {
+      if (!verifyProof(proof, planId)) {
+        throw new Error("본인 인증이 필요합니다 (AuthGate: 증명 검증 실패)");
+      }
       const token = `tok_${planId}_${++counter}`;
       issued.set(planId, token);
       return token;
