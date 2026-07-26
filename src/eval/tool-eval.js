@@ -15,5 +15,5 @@ export async function evaluateToolSelection({ cases, orchestrator }) {
     if (ok) byLevel[c.level].ok++;
   }
 
-  return { total: cases.length, intentOk: toolOk, toolOk, byLevel };
+  return { total: cases.length, toolOk, byLevel };
 }
