@@ -37,6 +37,7 @@ export function createUI(root, { onSend, onConfirm }) {
   // innerHTML 은 이 정적 골격에만 쓴다 — 보간되는 값이 하나도 없다.
   // 사용자 입력·도구 결과·LLM 출력은 아래에서 전부 textContent 로만 꽂는다.
   root.innerHTML = `
+    <div class="stage">
     <div class="phone">
       <div class="phone__screen">
         <div class="phone__bar">
@@ -53,7 +54,6 @@ export function createUI(root, { onSend, onConfirm }) {
             <div id="suggest" class="suggest"></div>
           </div>
         </div>
-        <p id="caption" class="caption" aria-live="polite"></p>
         <form id="composer">
           <button type="button" id="mic" class="mic" aria-label="음성으로 말하기" title="음성으로 말하기">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z"/><path d="M18 11a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.94V22h2v-3.06A8 8 0 0 0 20 11Z"/></svg>
@@ -73,6 +73,9 @@ export function createUI(root, { onSend, onConfirm }) {
           </div>
         </div>
       </div>
+    </div>
+    <!-- 해설 자막. 폰 안에 있으면 앱 UI 를 어지럽힌다 — 화면 밖 캡션 자리로 뺀다. -->
+    <p id="caption" class="caption" aria-live="polite"></p>
     </div>
     <aside class="audit">
       <div class="audit__head">

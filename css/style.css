@@ -397,25 +397,22 @@ button.auth:disabled::after { animation: scan 1.15s linear infinite; }
 @keyframes scan { to { translate: 110% 0; } }
 
 /* 자동 시연 자막 — 지금 무엇을 보고 있는지 발표 없이도 전달된다 */
+/* 해설 자막 — 폰 밖, 화면 아래 자막 자리.
+   예전에는 대화창과 입력창 사이에 끼워 넣었다. 앱 UI 한가운데 해설이 박혀 있으니
+   "이게 앱의 일부인가?" 싶고 화면이 어지러웠다. 영화 자막처럼 밖으로 뺀다. */
 .caption {
-  margin: 0;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  padding: 0 1rem;
-  font-size: .78rem;
+  margin: .85rem 0 0;
+  min-height: 3.4rem;
+  padding: 0 .2rem;
+  font-size: .8rem;
   line-height: 1.6;
-  color: var(--ink-soft);
-  background: linear-gradient(180deg, #fffaef, #fff6e2);
-  border-top: 1px solid #f2dfae;
-  transition: max-height .35s var(--ease), opacity .25s var(--ease), padding .35s var(--ease);
+  color: var(--ink-faint);
+  text-align: center;
+  opacity: 0;
+  transition: opacity .3s var(--ease);
 }
 
-.caption.is-on {
-  max-height: 9rem;
-  opacity: 1;
-  padding: .65rem 1rem;
-}
+.caption.is-on { opacity: 1; }
 
 /* 자동 시연이 인증 앞에서 멈췄을 때 지문 버튼을 부른다 */
 button.auth.is-calling {
@@ -596,7 +593,11 @@ button.auth.is-calling {
 }
 
 .plan-card__k { flex: none; width: 4.6rem; color: var(--ink-faint); font-size: .78rem; }
-.plan-card__v { flex: 1; min-width: 0; color: var(--ink); word-break: break-all; }
+
+/* word-break:break-all 이었다. 계좌번호가 넘칠까 봐 넣었는데, 한국어까지
+   아무 데서나 부숴놨다("KB국민은/행", "고유가 유류비 지/원금").
+   overflow-wrap:anywhere 는 넘칠 때만 끊는다 — 평소에는 낱말을 지킨다. */
+.plan-card__v { flex: 1; min-width: 0; color: var(--ink); overflow-wrap: anywhere; }
 
 .plan-card__row.is-strong .plan-card__v {
   font-family: var(--serif);
