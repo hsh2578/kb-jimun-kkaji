@@ -1,7 +1,7 @@
 // 화면 포맷터. 값 자체는 여기서 만들지만, DOM에 꽂는 책임은 js/ui.js에 있다.
 // (거기서는 반드시 textContent로만 꽂는다 — innerHTML 금지.)
 import { KB_DATA } from "../data/kb-data.js";
-import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, fromAccount } from "../exec/impact.js";
+import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, resolveInstallment, fromAccount } from "../exec/impact.js";
 import { AFFILIATE_NAME } from "../menu/utterance.js";
 
 export function formatMoney(n) {
@@ -28,9 +28,9 @@ export function formatPlanSummary(plan) {
       return "자동이체 출금계좌 변경을 진행합니다.";
     }
     case "change_installment": {
-      const inst = KB_DATA.card.installments.find((i) => i.id === args.installment_id);
+      const inst = resolveInstallment(args);
       return inst
-        ? `${inst.merchant} 할부를 ${args.months}개월로 변경합니다.`
+        ? `${inst.merchant} 할부(${formatMoney(inst.amount)})를 ${args.months}개월로 변경합니다.`
         : "할부 기간 변경을 진행합니다.";
     }
     // 이체는 되돌릴 수 없다 — 받는 분·계좌·금액·출금계좌를 전부 눈으로 확인시킨 뒤

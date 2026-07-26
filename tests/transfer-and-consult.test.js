@@ -520,3 +520,28 @@ test("명세서: 화면에 적힌 확장자와 실제로 내려주는 파일이 
   assert.match(file.body, /가맹점/, "실제 거래 내역이 들어 있어야 한다");
   assert.ok(file.body.startsWith("\uFEFF"), "BOM 이 없으면 엑셀이 한글을 깨뜨린다");
 });
+
+test("증명서: 말한 확장자와 준 파일이 같다", async () => {
+  const { buildArtifact } = await import("../src/ui/artifact.js");
+  for (const [tool, args] of [
+    ["issue_certificate", { name: "연말정산증명서" }],
+    ["issue_sec_tax_document", { name: "잔고증명서" }],
+  ]) {
+    const out = await ACTION_TOOLS[tool].run(args);
+    const file = buildArtifact(tool, out);
+    assert.equal(
+      out.issued.fileName.split(".").pop(),
+      file.name.split(".").pop(),
+      `${tool}: 말한 확장자와 준 파일이 다르다`
+    );
+  }
+});
+
+test("할부 변경: 가맹점 이름으로 찾고, 못 찾으면 계획을 만들지 않는다", async () => {
+  const { resolveInstallment } = await import("../src/exec/impact.js");
+  assert.equal(resolveInstallment({ name_hint: "노트북" })?.id, "i1");
+  assert.equal(resolveInstallment({ name_hint: "가전" })?.id, "i2");
+  assert.equal(resolveInstallment({ name_hint: "없는가맹점xyz" }), null);
+  const blocked = await analyzeImpact("change_installment", { name_hint: "없는가맹점xyz" });
+  assert.equal(blocked.blocked, true);
+});

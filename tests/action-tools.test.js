@@ -28,7 +28,7 @@ test("제증명 발급은 영문 여부를 반영한다", async () => {
   const out = await ACTION_TOOLS.issue_certificate.run({ name: "예금잔액증명서", english: true });
   assert.equal(out.issued.name, "예금잔액증명서");
   assert.equal(out.issued.english, true);
-  assert.ok(out.issued.fileName.endsWith(".pdf"));
+  assert.ok(out.issued.fileName.endsWith(".html"));
 });
 
 test("발급 불가능한 서류는 거부한다", async () => {
@@ -38,7 +38,7 @@ test("발급 불가능한 서류는 거부한다", async () => {
 test("증권 세금 서류를 발급한다", async () => {
   const out = await ACTION_TOOLS.issue_sec_tax_document.run({ name: "해외주식양도소득내역" });
   assert.equal(out.issued.affiliate, "sec");
-  assert.ok(out.issued.fileName.endsWith(".pdf"));
+  assert.ok(out.issued.fileName.endsWith(".html"));
 });
 
 test("할부 기간을 변경한다", async () => {

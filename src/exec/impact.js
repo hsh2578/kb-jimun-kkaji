@@ -127,6 +127,15 @@ export function resolveCard({ card_id, name_hint } = {}) {
   return null;
 }
 
+// 할부 해석. 고객은 "노트북 할부"처럼 가맹점 이름으로 부른다.
+export function resolveInstallment({ installment_id, name_hint } = {}) {
+  const list = KB_DATA.card.installments;
+  if (installment_id) return list.find((i) => i.id === installment_id) ?? null;
+  if (name_hint) return matchByName(name_hint, list, (i) => [i.merchant]);
+  // 진행 중인 할부가 하나뿐이면 그것을 가리킨 것이 분명하다.
+  return list.length === 1 ? list[0] : null;
+}
+
 // 이체 출금 계좌. 지정이 없으면 주거래 입출금 계좌를 쓴다.
 export function fromAccount(accountId) {
   const list = KB_DATA.bank.accounts;
@@ -154,9 +163,9 @@ export async function analyzeImpact(toolName, args) {
   }
 
   if (toolName === "change_installment") {
-    const inst = KB_DATA.card.installments.find((i) => i.id === args.installment_id);
+    const inst = resolveInstallment(args);
     if (!inst) {
-      return { warnings: [], blocked: true, reason: "해당 할부 건을 확인할 수 없어 진행하지 않습니다." };
+      return { warnings: [], blocked: true, reason: "어느 할부 건인지 확인할 수 없습니다. 가맹점 이름을 말씀해 주세요." };
     }
     return {
       warnings: [`할부 기간을 늘리면 수수료가 추가됩니다. 현재 적용 요율 ${inst.feeRate}.`],

@@ -1,7 +1,7 @@
 // L3 — 실행. 전부 인증이 필요하다.
 // 더미 데이터를 조작하지만, 실제 서비스에서는 이 함수 본문만 은행 API로 바뀐다.
 import { KB_DATA } from "../data/kb-data.js";
-import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, fromAccount } from "../exec/impact.js";
+import { resolveAutopay, resolveRecipient, resolveSubsidy, resolveCard, resolveInstallment, fromAccount } from "../exec/impact.js";
 
 const a = (description, parameters, run) => ({ description, parameters, requiresAuth: true, run });
 
@@ -40,7 +40,10 @@ export const ACTION_TOOLS = {
       const c = KB_DATA.bank.certificates.find((x) => x.name === name);
       if (!c) throw new Error(`${name}은(는) KB국민은행에서 발급할 수 없습니다`);
       if (english && !c.english) throw new Error(`${name}은(는) 영문 발급을 지원하지 않습니다`);
-      return { issued: { name: c.name, english, fileName: `${c.name}${english ? "_EN" : ""}.pdf` } };
+      // 실제로 내려주는 파일은 HTML 문서다(src/ui/artifact.js) — 인쇄하면 PDF 가 된다.
+      // 한글 PDF 는 글꼴 임베딩이 필요해 외부 라이브러리 없이는 깨진다.
+      // 화면에 .pdf 라고 적고 .html 을 주면 말과 파일이 어긋난다.
+      return { issued: { name: c.name, english, fileName: `${c.name}${english ? "_EN" : ""}.html` } };
     }
   ),
 
@@ -53,16 +56,21 @@ export const ACTION_TOOLS = {
     async ({ name }) => {
       const d = KB_DATA.sec.taxDocs.find((x) => x.name === name);
       if (!d) throw new Error(`${name}은(는) KB증권에서 발급할 수 없습니다`);
-      return { issued: { affiliate: "sec", name: d.name, fileName: `${d.name}.pdf`, deadline: d.deadline } };
+      return { issued: { affiliate: "sec", name: d.name, fileName: `${d.name}.html`, deadline: d.deadline } };
     }
   ),
 
+  // 고객은 내부 id 를 모른다 — "노트북 할부"처럼 가맹점 이름으로 부른다.
   change_installment: a(
-    "카드 할부 기간을 변경한다",
-    { installment_id: "string", months: "number" },
-    async ({ installment_id, months }) => {
-      const i = KB_DATA.card.installments.find((x) => x.id === installment_id);
+    "카드 할부 개월 수를 바꾼다. 고객이 '노트북', '가전' 처럼 가맹점 이름으로 부르면 name_hint에 넣는다. " +
+      "'○○ 할부 6개월로 늘려줘', '할부 기간 좀 늘려줘', '매달 부담을 줄여줘' 는 전부 이 도구다. " +
+      "바꿔달라는 말이면 list_installments 로 목록만 보여주지 마라 — 목록은 '얼마야'라고 물을 때만 쓴다.",
+    { installment_id: "string", name_hint: "string", months: "number" },
+    async (args) => {
+      const i = resolveInstallment(args);
       if (!i) throw new Error("해당 할부 건을 확인할 수 없습니다");
+      const months = Number(args.months);
+      if (!Number.isFinite(months) || months <= 0) throw new Error("변경할 개월 수를 확인할 수 없습니다");
       return { changed: { id: i.id, merchant: i.merchant, months } };
     }
   ),
@@ -80,7 +88,9 @@ export const ACTION_TOOLS = {
       "'최근에 이체한 계좌에 보내줘', '지난번 거기로 또 보내줘' 처럼 지시대명사로 부르면 use_last_recipient를 true로 한다. " +
       "출금 계좌는 비워 두면 주거래 입출금 계좌가 자동으로 쓰인다 — 어느 계좌에서 뺄지 묻지 마라. " +
       "list_accounts 로 계좌 목록을 보여줄 필요도 없다. " +
-      "금액을 못 들었다면 이 도구를 부르지 말고 ask_clarification 도구로 '얼마를 보낼까요?' 만 묻는다.",
+      "금액을 못 들었다면 이 도구를 부르지 말고 ask_clarification 도구로 '얼마를 보낼까요?' 만 묻는다. " +
+      "amount 는 원 단위 숫자로 넣는다: '30만원'=300000, '5만원'=50000, '천만원'=10000000, '1억'=100000000. " +
+      "고객이 금액을 말했으면 아무리 큰 금액이라도 그대로 넣는다 — 잔액을 넘는지는 시스템이 따로 판단한다.",
     { recipient_hint: "string", contact_id: "string", use_last_recipient: "boolean", amount: "number", account_id: "string" },
     async (args) => {
       const to = resolveRecipient(args);
