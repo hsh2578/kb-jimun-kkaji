@@ -109,6 +109,78 @@ export function formatActionResult(plan, out) {
   }
 }
 
+// L2 — 조회 결과를 내놓기 전에 상담원이 하는 말.
+//
+// 왜 여기서 만드는가: 도구를 호출할 때 LLM은 content 를 비워 보낸다. 그래서
+// 조회 결과가 숫자 목록만 덩그러니 놓였고, 상담이 아니라 조회기처럼 보였다.
+// 보통은 도구 결과를 LLM에 되돌려 보내 문장을 받지만, 그러면 잔액·계좌번호가
+// LLM으로 나간다 — 이 제품이 하지 않겠다고 한 바로 그 일이다.
+// 그래서 문장은 기기에서 만든다. 숫자는 한 번도 밖으로 나가지 않는다.
+const SPOKEN = {
+  list_autopays: "매달 빠져나가는 돈을 모아봤어요.",
+  get_monthly_outflow: "이번 달 나가는 돈을 은행·카드 합쳐서 모았어요.",
+  list_pensions: "은행·증권·보험에 흩어져 있던 연금을 한자리에 모았어요.",
+  list_accounts: "보유하신 계좌예요.",
+  list_cards: "보유하신 카드예요.",
+  get_card_bill_total: "이번 달 카드값을 카드별로 나눠봤어요.",
+  get_monthly_installment: "이번 달 청구되는 할부금이에요.",
+  get_card_benefit_progress: "이번 달 카드 실적이에요.",
+  list_installments: "진행 중인 할부예요.",
+  list_subsidies: "받으실 수 있는 지원금이에요.",
+  find_tax_documents: "신고에 필요한 서류를 계열사별로 찾았어요.",
+  list_certificates: "발급해 드릴 수 있는 서류예요.",
+  list_transfer_contacts: "자주 보내시는 곳이에요.",
+  list_recent_transfers: "최근에 보내신 내역이에요.",
+  get_sec_holdings: "보유하신 종목이에요.",
+  get_loan_status: "대출 현황이에요.",
+  list_maturities: "곧 만기가 오는 상품이에요.",
+};
+
+export function speakForQuery(toolName) {
+  return SPOKEN[toolName] ?? "";
+}
+
+// 결과를 내놓은 다음에 상담원이 잇는 말.
+//
+// 이게 없으면 한 턴이 답 하나로 닫힌다 — 물어보면 답이 나오는 자판기다.
+// 상담은 여러 번 주고받으면서 그 사람이 정말 원하는 걸 좁혀가는 일이다.
+// 그래서 결과 뒤에 반드시 다음 걸음을 하나 열어둔다.
+const FOLLOW_UP = {
+  list_autopays: "이 중에 안 쓰시는 게 있으면 말씀만 하세요. 바로 정리해 드릴게요.",
+  get_monthly_outflow: "줄이고 싶은 항목이 있으면 말씀해 주세요.",
+  list_pensions: "운용지시가 없는 계좌가 있어요. 어떻게 할지 같이 볼까요?",
+  get_card_bill_total: "할부로 나가는 금액도 따로 보시겠어요?",
+  get_monthly_installment: "기간을 늘리면 매달 부담이 줄어요. 바꿔 드릴까요?",
+  get_card_benefit_progress: "다음 구간까지 채우실 계획이면 알려 드릴게요.",
+  list_subsidies: "신청해 드릴까요?",
+  find_tax_documents: "필요한 서류를 말씀하시면 바로 발급해 드릴게요.",
+  list_certificates: "필요한 걸 말씀하시면 바로 떼 드릴게요.",
+  list_transfer_contacts: "누구에게 보내드릴까요?",
+  list_recent_transfers: "같은 곳으로 또 보내드릴까요?",
+  list_maturities: "만기 이후를 어떻게 할지 같이 정할까요?",
+};
+
+export function followUpForQuery(toolName) {
+  return FOLLOW_UP[toolName] ?? "";
+}
+
+// 실행이 끝난 다음에 잇는 말. 실행 하나로 대화가 끝나면 안 된다.
+const AFTER_ACTION = {
+  cancel_autopay: "다른 것도 정리해 드릴까요?",
+  change_autopay_account: "다른 자동이체도 손볼까요?",
+  transfer_money: "더 도와드릴 일 있으세요?",
+  export_card_statement: "다른 달도 필요하시면 말씀해 주세요.",
+  apply_subsidy: "받으실 수 있는 지원금이 더 있어요. 같이 볼까요?",
+  issue_certificate: "다른 서류도 필요하세요?",
+  issue_sec_tax_document: "다른 서류도 필요하세요?",
+  change_installment: "다른 할부도 조정해 드릴까요?",
+  report_lost_card: "재발급도 같이 신청해 드릴까요?",
+};
+
+export function followUpForAction(toolName) {
+  return AFTER_ACTION[toolName] ?? "";
+}
+
 // L2 — 조회 결과 한 항목을 한 줄로 읽는다.
 // (C3) query-tools.js가 돌려주는 도구마다 필드 이름이 다르다(balance/monthly/amount, name 없는 항목 등).
 // 여기서 그 다양성을 흡수해 js/ui.js는 순수 문자열만 textContent로 꽂으면 되게 한다.

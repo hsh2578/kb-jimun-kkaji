@@ -347,3 +347,34 @@ test("질문이 아닌 안내에는 메뉴 위치가 그대로 붙는다", async
   assert.equal(r.layer, "L1");
   assert.match(r.message, /있습니다/);
 });
+
+// ── 상담 느낌: 숫자를 내놓기 전에 사람처럼 한마디 한다 ──────────────────
+
+test("조회 도구마다 상담원의 한마디가 있다", async () => {
+  const { speakForQuery } = await import("../src/ui/format.js");
+  for (const name of ["list_autopays", "list_pensions", "get_card_bill_total",
+                      "get_monthly_installment", "list_subsidies", "find_tax_documents"]) {
+    assert.ok(speakForQuery(name).length > 0, `${name}에 할 말이 없다 — 목록만 던지면 상담이 아니다`);
+  }
+  assert.equal(speakForQuery("없는도구"), "");
+  assert.equal(speakForQuery(undefined), "");
+});
+
+test("상담원의 한마디에는 금액이 박혀 있지 않다 — 숫자는 도구 결과에서만 온다", async () => {
+  const { speakForQuery } = await import("../src/ui/format.js");
+  for (const name of ["list_autopays", "get_card_bill_total", "list_subsidies"]) {
+    assert.doesNotMatch(speakForQuery(name), /\d/, `${name}의 문구에 숫자가 박혀 있다`);
+  }
+});
+
+test("관찰과 제안이 같은 말을 하지 않는다 — 같으면 화면에 두 번 나온다", async () => {
+  const { speakForQuery, followUpForQuery } = await import("../src/ui/format.js");
+  for (const name of ["list_autopays", "list_subsidies", "find_tax_documents", "get_card_bill_total"]) {
+    const said = speakForQuery(name);
+    const next = followUpForQuery(name);
+    assert.ok(said && next, `${name}: 관찰과 제안이 둘 다 있어야 한다`);
+    assert.notEqual(said, next);
+    // 뒷문장이 앞문장을 통째로 되풀이하는 경우도 막는다.
+    assert.ok(!said.includes(next) && !next.includes(said), `${name}: 한쪽이 다른 쪽을 그대로 품고 있다`);
+  }
+});

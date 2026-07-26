@@ -6,6 +6,9 @@ import {
   formatPlanSummary,
   formatQueryResult,
   formatAuthEvent,
+  speakForQuery,
+  followUpForQuery,
+  followUpForAction,
 } from "../src/ui/format.js";
 import { createAutoDemo } from "./autodemo.js";
 import { createVoiceInput } from "./voice.js";
@@ -187,6 +190,12 @@ export function createUI(root, { onSend, onConfirm }) {
     }
 
     if (r.layer === "L2" && r.data) {
+      // 숫자를 내놓기 전에 사람처럼 한마디 한다. 목록만 툭 던지면 상담이 아니라
+      // 조회기다. 이 문장은 기기에서 만들어진다 — 금액은 LLM에 가지 않는다.
+      if (!r.message) {
+        const said = speakForQuery(r.audit?.toolCalls?.[0]);
+        if (said) append("bot", said);
+      }
       const lines = formatQueryResult(r.data);
       if (lines.length) {
         const ul = document.createElement("ul");
@@ -197,6 +206,12 @@ export function createUI(root, { onSend, onConfirm }) {
           ul.appendChild(li);
         }
         log.appendChild(ul);
+      }
+      // 결과 뒤에 다음 걸음을 하나 열어둔다. 이게 없으면 한 턴이 답 하나로 닫혀서
+      // 상담이 아니라 자판기가 된다 — 물어보면 답이 나오고 거기서 끝난다.
+      if (!r.message) {
+        const next = followUpForQuery(r.audit?.toolCalls?.[0]);
+        if (next) append("bot", next);
       }
     }
 
@@ -230,7 +245,15 @@ export function createUI(root, { onSend, onConfirm }) {
               logAuthEvent(authLine);
             }
           }
+          // 실행이 끝났으면 버튼을 치운다.
+          // 예전에는 "인증을 기다리는 중…" 이라고 적힌 검은 막대가 disabled 인 채로
+          // 대화 한가운데 영구히 남았다. 실행은 이미 끝났는데 화면은 아직 기다리는
+          // 것처럼 보여서, 인증이 실패한 줄 알게 된다(실측 지적).
+          btn.remove();
           append("bot", formatActionResult(r.plan, out));
+          // 실행 하나로 대화가 끝나면 안 된다 — 다음 걸음을 열어둔다.
+          const next = followUpForAction(r.plan.tool);
+          if (next) append("bot", next);
         } catch (err) {
           // 실패했을 때 조용히 원래 상태로 돌아가지 않는다 — 무엇이 왜 실패했는지
           // 화면에 남기고, 다시 시도할 수 있게 버튼을 되살린다.
