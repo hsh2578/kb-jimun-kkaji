@@ -7,6 +7,7 @@ import {
   formatActionResult,
   formatQueryItem,
   formatQueryResult,
+  formatAuthEvent,
 } from "../src/ui/format.js";
 
 test("금액에 천 단위 구분이 들어간다", () => {
@@ -114,6 +115,25 @@ test("formatQueryResult: items 키 자체가 없어도(get_card_benefit_progress
 test("formatQueryResult: 빈 배열이면 그냥 아무것도 안 그리지 않고 note가 있으면 보여준다", () => {
   const lines = formatQueryResult({ items: [], note: "안내 문구" });
   assert.deepEqual(lines, ["안내 문구"]);
+});
+
+// 인증 방식 표시 — 실제 WebAuthn과 데모 대체 인증이 화면에서 절대 같은 말로
+// 보이면 안 된다. 착각하면 시연이 "진짜 보안"을 증명한 것처럼 오해를 산다.
+test("formatAuthEvent: webauthn은 실제 인증기를 확인했다고 말한다", () => {
+  const s = formatAuthEvent({ method: "webauthn", planId: "p1", credentialId: "c", signature: "s", challenge: "ch" });
+  assert.match(s, /WebAuthn/);
+  assert.ok(!/실제 인증 아님/.test(s));
+});
+
+test("formatAuthEvent: demo-fallback은 실제 인증이 아니라고 눈에 띄게 경고한다", () => {
+  const s = formatAuthEvent({ method: "demo-fallback", planId: "p1" });
+  assert.match(s, /⚠️/);
+  assert.match(s, /실제 인증 아님/);
+});
+
+test("formatAuthEvent: proof가 없거나 method를 모르면 빈 문자열이다 (조용히 지어내지 않는다)", () => {
+  assert.equal(formatAuthEvent(null), "");
+  assert.equal(formatAuthEvent({ method: "알수없음" }), "");
 });
 
 test("연금 통합 조회는 3사 이름을 한글로, 월납입은 잔액과 구분해 보여준다", async () => {

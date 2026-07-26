@@ -148,6 +148,21 @@ export function formatQueryResult(data) {
   return [];
 }
 
+// L3 — 인증 방식을 화면에 정직하게 밝힌다. proof.method가 "webauthn"인지
+// "demo-fallback"인지에 따라 완전히 다른 문구를 낸다 — 둘을 비슷한 말로 뭉개면
+// 심사위원(또는 실제 사용자)이 데모 대체 인증을 실제 인증으로 착각할 수 있다.
+// (src/auth/webauthn.js 상단의 정직 고지 참고: 이 화면 표시가 그 정직성의 마지막 지점이다.)
+export function formatAuthEvent(proof) {
+  if (!proof || typeof proof !== "object") return "";
+  if (proof.method === "webauthn") {
+    return "✅ WebAuthn 인증기 확인 완료 (기기 지문/PIN 인증기로 서명된 응답을 확인했습니다)";
+  }
+  if (proof.method === "demo-fallback") {
+    return "⚠️ WebAuthn 미지원 — 시연 대체 인증 (실제 인증 아님)";
+  }
+  return "";
+}
+
 // 보안 질문이 나오기 전에 화면이 먼저 답하게 한다.
 export function formatAuditLog(audit) {
   const lines = [];

@@ -3,6 +3,7 @@ import { createOrchestrator } from "../src/orchestrator.js";
 import { createRouter } from "../src/router/menu-router.js";
 import { createLLMAdapter } from "../src/llm/adapter.js";
 import { createAuthGate } from "../src/exec/auth-gate.js";
+import { createWebAuthnProvider, verifyAuthProof, createFallbackProof } from "../src/auth/webauthn.js";
 import { QUERY_TOOLS } from "../src/tools/query-tools.js";
 import { ACTION_TOOLS } from "../src/tools/action-tools.js";
 import { createUI } from "./ui.js";
@@ -33,7 +34,10 @@ async function embedFn(text) {
 }
 
 const router = createRouter({ items: index.items ?? [], dim: index.dim, embedFn });
-const authGate = createAuthGate();
+// AuthGate는 기본값이 fail-closed다 — verifyAuthProof를 명시적으로 주입해야만
+// (그리고 그 검증을 통과하는 proof를 받아야만) 토큰을 낸다.
+const authGate = createAuthGate({ verifyProof: verifyAuthProof });
+const webauthn = createWebAuthnProvider();
 const orchestrator = createOrchestrator({
   router, llm, authGate,
   tools: { ...QUERY_TOOLS, ...ACTION_TOOLS },
@@ -47,7 +51,18 @@ const ui = createUI(document.getElementById("app"), {
     if (r.message) history.push({ role: "assistant", content: r.message });
     ui.renderResult(r);
   },
-  onConfirm: async (planId) => orchestrator.confirm(planId, authGate.issue(planId)),
+  // 🔒 버튼이 부르는 지점. 발급(issue)과 소비(confirm) 사이에 실제 인증 세리머니가
+  // 끼어 있다 — 예전에는 이 한 줄이 발급과 소비를 동시에 해서 인증을 검사할 자리가
+  // 아예 없었다. isAvailable()이 거짓이면(심사 노트북 등) 대체 인증으로 정직하게
+  // 넘어간다 — src/auth/webauthn.js 상단 고지 참고.
+  onConfirm: async (planId) => {
+    const proof = webauthn.isAvailable()
+      ? await webauthn.authenticate(planId)
+      : createFallbackProof(planId);
+    const token = authGate.issue(planId, proof);
+    const result = await orchestrator.confirm(planId, token);
+    return { ...result, authProof: proof };
+  },
 });
 
 if (!indexReady) {
