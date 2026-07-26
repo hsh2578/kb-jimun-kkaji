@@ -8,7 +8,8 @@ import { createAuthGate } from "../src/exec/auth-gate.js";
 import { QUERY_TOOLS } from "../src/tools/query-tools.js";
 import { ACTION_TOOLS } from "../src/tools/action-tools.js";
 import { evaluateToolSelection } from "../src/eval/tool-eval.js";
-import { AFFILIATE_NAME } from "../src/menu/utterance.js";
+import { CLARIFY, CLARIFY_TOOL } from "../src/tools/clarify.js";
+import { buildSystemPrompt } from "../src/llm/system-prompt.js";
 
 const KEY = process.env.OPENAI_KEY;
 if (!KEY) throw new Error("OPENAI_KEY 환경변수가 필요합니다");
@@ -40,17 +41,9 @@ const embedFn = async (t) => cache.get(t) ?? (await embedBatch([t]))[0];
 
 const router = createRouter({ items: index.items, dim: index.dim, embedFn });
 
-// api/chat.js가 실제로 반환하는 모양을 그대로 흉내내는 어댑터.
-// api/chat.js의 시스템 프롬프트를 그대로 옮긴다 — 프록시 배포 없이 같은 결과를 재현하기 위함.
-function buildSystemPrompt(menuCandidates) {
-  return (
-    "너는 KB 금융 앱의 실행형 에이전트다. 고객은 메뉴 용어를 모른다.\n" +
-    "1) 무엇을 하려는지 파악하고, 모호하면 한 번에 하나씩 되묻는다.\n" +
-    "2) 실행 가능한 도구가 있으면 호출한다. 없으면 아래 후보 메뉴 위치를 안내한다.\n" +
-    "3) 금액·계좌번호를 지어내지 않는다. 도구 결과에 있는 값만 말한다.\n\n" +
-    `후보 메뉴:\n${menuCandidates.map((m) => `- [${AFFILIATE_NAME[m.affiliate] ?? m.affiliate}] ${[...m.path, m.name].join(" > ")}`).join("\n")}`
-  );
-}
+// 프롬프트는 src/llm/system-prompt.js 하나만 쓴다.
+// 예전에는 여기에 복사해뒀는데, 본체가 바뀌어도 이 사본은 그대로여서
+// '실제와 다른 프롬프트'를 재고 있었다. 사본을 지운다.
 
 const llm = {
   async chat(payload) {
@@ -75,6 +68,7 @@ const llm = {
     return {
       message: msg.content ?? "",
       toolCalls: (msg.tool_calls ?? []).map((t) => ({
+        id: t.id,
         name: t.function.name,
         args: JSON.parse(t.function.arguments || "{}"),
       })),
@@ -84,7 +78,7 @@ const llm = {
 
 const orchestrator = createOrchestrator({
   router, llm, authGate: createAuthGate(),
-  tools: { ...QUERY_TOOLS, ...ACTION_TOOLS },
+  tools: { ...QUERY_TOOLS, ...ACTION_TOOLS, [CLARIFY]: CLARIFY_TOOL },
 });
 
 const report = await evaluateToolSelection({ cases, orchestrator });

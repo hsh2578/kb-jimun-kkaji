@@ -1,24 +1,23 @@
 {
   "model": "gpt-4o-mini",
   "total": 40,
-  "intentOk": 17,
-  "toolOk": 17,
+  "toolOk": 36,
   "byLevel": {
     "L1": {
       "total": 5,
-      "ok": 1
+      "ok": 4
     },
     "L2": {
       "total": 10,
-      "ok": 7
+      "ok": 9
     },
     "L3": {
       "total": 15,
-      "ok": 7
+      "ok": 13
     },
     "L4": {
       "total": 10,
-      "ok": 2
+      "ok": 10
     }
   }
 }
