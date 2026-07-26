@@ -48,7 +48,9 @@ const ui = createUI(document.getElementById("app"), {
   onSend: async (text) => {
     const r = await orchestrator.handle(text, history);
     history.push({ role: "user", content: text });
-    if (r.message) history.push({ role: "assistant", content: r.message });
+    // assistant 턴은 반드시 남긴다 — 도구만 호출하고 텍스트가 없어도 마찬가지다.
+    // 빠뜨리면 이력이 기형이 되고 모델이 첫 턴 의도에 고정된다.
+    history.push(orchestrator.historyTurn(r));
     ui.renderResult(r);
   },
   // 🔒 버튼이 부르는 지점. 발급(issue)과 소비(confirm) 사이에 실제 인증 세리머니가

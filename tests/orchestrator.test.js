@@ -129,3 +129,38 @@ test("영향 분석이 막으면 계획을 세우지 않는다", async () => {
   assert.equal(r.plan, undefined);
   assert.ok(/확인할 수 없/.test(r.message));
 });
+
+// --- 대화 이력 (다중 턴에서 첫 의도에 고정되던 버그) ---
+
+test("도구만 호출하고 텍스트가 없어도 assistant 턴을 남긴다", () => {
+  const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
+  const turn = o.historyTurn({
+    layer: "L2", message: "",
+    audit: { toolCalls: ["list_pensions"], blockedCalls: [] },
+  });
+  assert.equal(turn.role, "assistant");
+  assert.ok(turn.content.includes("list_pensions"), "무엇을 처리했는지 남아야 한다");
+  assert.ok(turn.content.length > 0);
+});
+
+test("인증 대기 중인 실행도 처리한 것으로 이력에 남긴다", () => {
+  const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
+  const turn = o.historyTurn({
+    layer: "L3", message: "",
+    audit: { toolCalls: [], blockedCalls: ["cancel_autopay"] },
+  });
+  assert.ok(turn.content.includes("cancel_autopay"));
+});
+
+test("텍스트가 있으면 그 텍스트를 그대로 쓴다", () => {
+  const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
+  const turn = o.historyTurn({ layer: "L1", message: "여기 있습니다", audit: { toolCalls: [], blockedCalls: [] } });
+  assert.equal(turn.content, "여기 있습니다");
+});
+
+test("도구도 텍스트도 없으면 안내했다는 사실을 남긴다", () => {
+  const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
+  const turn = o.historyTurn({ layer: "L1", message: "", audit: { toolCalls: [], blockedCalls: [] } });
+  assert.equal(turn.role, "assistant");
+  assert.ok(turn.content.length > 0, "빈 content 는 이력을 기형으로 만든다");
+});

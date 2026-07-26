@@ -97,6 +97,21 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     return { layer: "L3", message: res.message, plan, warnings: impact.warnings, menus, audit };
   }
 
+  // 대화 이력에 넣을 assistant 턴을 만든다.
+  //
+  // LLM이 도구를 호출할 때 content 는 비어 있다. 그걸 그대로 두면 이력이
+  // user 만 연속으로 쌓인 기형 대화가 되고, 모델은 첫 턴의 의도에 고정된다.
+  // (실측: 연금 조회 이후 카드·세금·자동이체 질문이 전부 list_pensions 로 갔다.)
+  // 그래서 텍스트가 없을 때는 "무엇을 처리했는지"를 대신 남긴다.
+  function historyTurn(r) {
+    if (r.message) return { role: "assistant", content: r.message };
+    const called = [...(r.audit?.toolCalls ?? []), ...(r.audit?.blockedCalls ?? [])];
+    if (called.length) {
+      return { role: "assistant", content: `(${called.join(", ")} 을(를) 실행해 결과를 사용자에게 이미 보여주었다. 이 요청은 처리 완료.)` };
+    }
+    return { role: "assistant", content: "(메뉴 위치를 안내했다. 이 요청은 처리 완료.)" };
+  }
+
   async function confirm(planId, token) {
     const data = await executor.execute(planId, token);
     // 실행된 것만 여기 온다 — execute()가 인증 실패나 중복 실행이면 위에서 throw로 끝난다.
@@ -105,7 +120,7 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     return { ...data, audit: entry };
   }
 
-  return { handle, confirm, executionAudit };
+  return { handle, confirm, executionAudit, historyTurn };
 }
 
 function describeMenus(menus) {
