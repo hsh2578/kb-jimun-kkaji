@@ -677,6 +677,9 @@ button.auth.is-calling {
 
 .audit pre {
   flex: 1;
+  /* flex 자식은 기본 min-height:auto 라 내용만큼 부풀어 스크롤이 생기지 않는다.
+     판단 로그가 쌓이기 시작하면서 필요해졌다 — 0 으로 눌러야 안에서 스크롤된다. */
+  min-height: 0;
   margin: 0;
   font-family: var(--mono);
   font-size: .76rem;

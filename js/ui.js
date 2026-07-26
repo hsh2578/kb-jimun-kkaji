@@ -169,11 +169,33 @@ export function createUI(root, { onSend, onConfirm }) {
     return div;
   }
 
-  // 인증 방식(WebAuthn 실제 인증 vs 데모 대체 인증)을 AI 판단 로그 패널에도 남긴다.
-  // renderResult가 매 턴마다 auditEl.textContent를 통째로 새로 쓰므로, 여기서는
-  // "이번 턴에 이미 그려진 내용 뒤에 덧붙이는" 방식으로만 손댄다.
+  // 판단 로그는 쌓인다.
+  //
+  // 예전에는 매 턴 통째로 덮어썼다. 그래서 4분짜리 시연 내내 오른쪽 절반이
+  // 거의 빈 검정 화면이었고, "AI가 스스로 판단한다"는 주장의 증거가 한 턴치만
+  // 남았다. 스무 번의 판단이 차곡차곡 쌓여야 그게 기록이다.
+  const AUDIT_MAX_LINES = 400; // 너무 길어지면 앞에서 버린다 — 브라우저가 느려진다
+  let auditLines = [];
+
+  function paintAudit() {
+    if (auditLines.length > AUDIT_MAX_LINES) {
+      auditLines = auditLines.slice(auditLines.length - AUDIT_MAX_LINES);
+    }
+    auditEl.textContent = auditLines.join("\n");
+    auditEl.scrollTop = auditEl.scrollHeight;
+  }
+
+  function pushAudit(lines) {
+    if (auditLines.length) auditLines.push(""); // 턴 사이 빈 줄
+    auditLines.push(...lines);
+    paintAudit();
+  }
+
+  // 인증 방식(WebAuthn 실제 인증 vs 데모 대체 인증)을 판단 로그에도 남긴다.
+  // 이번 턴 블록 바로 뒤에 붙는다 — 구분자 없이.
   function logAuthEvent(line) {
-    auditEl.textContent = auditEl.textContent ? `${auditEl.textContent}\n${line}` : line;
+    auditLines.push(line);
+    paintAudit();
   }
 
   function renderResult(r) {
@@ -267,7 +289,7 @@ export function createUI(root, { onSend, onConfirm }) {
       log.appendChild(btn);
     }
 
-    if (r.audit) auditEl.textContent = formatAuditLog(r.audit).join("\n");
+    if (r.audit) pushAudit(formatAuditLog(r.audit));
     log.scrollTop = log.scrollHeight;
   }
 
