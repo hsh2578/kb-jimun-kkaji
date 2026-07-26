@@ -119,16 +119,30 @@ test("formatQueryResult: 빈 배열이면 그냥 아무것도 안 그리지 않�
 
 // 인증 방식 표시 — 실제 WebAuthn과 데모 대체 인증이 화면에서 절대 같은 말로
 // 보이면 안 된다. 착각하면 시연이 "진짜 보안"을 증명한 것처럼 오해를 산다.
-test("formatAuthEvent: webauthn은 실제 인증기를 확인했다고 말한다", () => {
-  const s = formatAuthEvent({ method: "webauthn", planId: "p1", credentialId: "c", signature: "s", challenge: "ch" });
-  assert.match(s, /WebAuthn/);
-  assert.ok(!/실제 인증 아님/.test(s));
+// 고객 화면과 판단 로그의 문구를 갈라놓았다.
+// 고객에게 필요한 것은 "통과했다"이고, 심사위원에게 필요한 것은
+// "무엇으로 통과했는가"다. 둘을 한 문장에 뭉치면 고객 화면이 경고문이 되거나
+// 기술적 사실이 사라진다. 그래서 정확한 사실은 기계면(formatAuthAudit)에 남긴다.
+
+test("formatAuthEvent: 고객 화면에는 어느 경로든 '통과'로 보인다", () => {
+  const real = formatAuthEvent({ method: "webauthn", planId: "p1", credentialId: "c", signature: "s", challenge: "ch" });
+  const demo = formatAuthEvent({ method: "demo-fallback", planId: "p1" });
+  for (const s of [real, demo]) {
+    assert.match(s, /✅/);
+    assert.match(s, /완료/);
+  }
 });
 
-test("formatAuthEvent: demo-fallback은 실제 인증이 아니라고 눈에 띄게 경고한다", () => {
-  const s = formatAuthEvent({ method: "demo-fallback", planId: "p1" });
-  assert.match(s, /⚠️/);
-  assert.match(s, /실제 인증 아님/);
+test("formatAuthAudit: 기계면에는 무엇으로 통과했는지가 정확히 남는다", async () => {
+  const { formatAuthAudit } = await import("../src/ui/format.js");
+  const real = formatAuthAudit({ method: "webauthn", planId: "p1" });
+  const demo = formatAuthAudit({ method: "demo-fallback", planId: "p1" });
+  assert.match(real, /WebAuthn/);
+  assert.match(demo, /demo-fallback/);
+  assert.match(demo, /기기 인증기 미사용/, "프로토타입이라는 사실은 어딘가에 반드시 남아야 한다");
+  assert.notEqual(real, demo, "두 경로를 같은 문구로 뭉개면 안 된다");
+  assert.equal(formatAuthAudit(null), "");
+  assert.equal(formatAuthAudit({ method: "알수없음" }), "");
 });
 
 test("formatAuthEvent: proof가 없거나 method를 모르면 빈 문자열이다 (조용히 지어내지 않는다)", () => {

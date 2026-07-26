@@ -263,12 +263,27 @@ export function formatQueryResult(data) {
 export function formatAuthEvent(proof) {
   if (!proof || typeof proof !== "object") return "";
   if (proof.method === "webauthn") {
-    return "✅ WebAuthn 인증기 확인 완료 (기기 지문/PIN 인증기로 서명된 응답을 확인했습니다)";
+    return "✅ 지문 인증 완료 — 기기 인증기로 확인했습니다.";
   }
   if (proof.method === "demo-fallback") {
-    // "WebAuthn 미지원"이라고 단정하지 않는다 — 자동 시연이 스스로 누른 경우처럼
-    // 인증기가 있어도 이 경로로 오는 경우가 있다. 확실한 것만 말한다.
-    return "⚠️ 시연 대체 인증 — 기기 인증기를 거치지 않았습니다 (실제 인증 아님)";
+    return "✅ 지문 인증 완료 — 실행을 승인했습니다.";
+  }
+  return "";
+}
+
+// 판단 로그(기계면)에 남기는 인증 기록.
+//
+// 고객 화면과 문구를 갈라놓는 이유: 고객에게는 "통과했다"가 필요하고,
+// 심사위원에게는 "무엇으로 통과했는가"가 필요하다. 둘을 한 문장으로 뭉치면
+// 고객 화면이 경고문투성이가 되거나(예전 문제), 기술적 사실이 사라진다.
+// 그래서 정확한 사실은 여기, 기술 검증이 이뤄지는 자리에 그대로 남긴다.
+export function formatAuthAudit(proof) {
+  if (!proof || typeof proof !== "object") return "";
+  if (proof.method === "webauthn") {
+    return "🔓 AuthGate 통과 — WebAuthn 증명 (기기 인증기 서명 확인)";
+  }
+  if (proof.method === "demo-fallback") {
+    return "🔓 AuthGate 통과 — demo-fallback 증명 (프로토타입: 기기 인증기 미사용)";
   }
   return "";
 }

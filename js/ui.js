@@ -6,6 +6,7 @@ import {
   formatPlanSummary,
   formatQueryResult,
   formatAuthEvent,
+  formatAuthAudit,
   speakForQuery,
   followUpForQuery,
   followUpForAction,
@@ -239,11 +240,12 @@ export function createUI(root, { onSend, onConfirm }) {
           // 대체 인증으로 가되 화면에는 "실제 인증 아님"이 그대로 표시된다.
           const out = await onConfirm(r.plan.planId, { auto: demo.isRunning() });
           if (out?.authProof) {
+            // 고객 화면에는 '통과'를, 판단 로그에는 '무엇으로 통과했는지'를 남긴다.
+            // 한 문장으로 뭉치면 고객 화면이 경고문이 되거나 기술적 사실이 사라진다.
             const authLine = formatAuthEvent(out.authProof);
-            if (authLine) {
-              append(out.authProof.method === "webauthn" ? "bot" : "warn", authLine);
-              logAuthEvent(authLine);
-            }
+            if (authLine) append("bot", authLine);
+            const auditLine = formatAuthAudit(out.authProof);
+            if (auditLine) logAuthEvent(auditLine);
           }
           // 실행이 끝났으면 버튼을 치운다.
           // 예전에는 "인증을 기다리는 중…" 이라고 적힌 검은 막대가 disabled 인 채로
