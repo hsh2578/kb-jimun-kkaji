@@ -16,8 +16,11 @@ export const DEMO_STEPS = [
     note: "① 요청이 아니라 증상입니다. 검색어가 없으니 메뉴로는 못 찾습니다. AI가 '매달 빠져나가는 돈'으로 해석해 먼저 보여줍니다.",
   },
   {
-    say: "이번 달 카드값이랑 할부는 얼마야?",
-    note: "한 문장에 두 가지를 물었습니다. 카드 2장 합계와 이번 달 할부 청구액은 서로 다른 데이터입니다.",
+    // 한 턴에 두 가지를 묻지 않는다 — 오케스트레이터는 도구를 한 번에 하나만 실행하므로
+    // "카드값이랑 할부는?" 이라고 물으면 하나만 답한다. 화면이 보여주지 못하는 것을
+    // 자막이 주장하게 두면 그 순간 시연은 거짓말이 된다.
+    say: "이번 달 카드값 얼마야?",
+    note: "카드가 2장이면 어느 쪽을 말하는 걸까요. 지정하지 않으면 합산해서 답합니다.",
   },
   {
     say: "고유가 지원금 신청할 수 있어?",
@@ -75,10 +78,12 @@ export function createAutoDemo({ input, form, button, caption, onStop }) {
       // L3 — 인증이 걸린 계획이 화면에 있으면 여기서 멈춘다.
       const pending = document.querySelector("button.auth:not(:disabled)");
       if (step.stopForAuth && pending) {
-        setCaption("여기서 멈춥니다 — 실행은 사람이 인증해야 합니다. 🔒 버튼을 직접 눌러보세요.");
         pending.classList.add("is-calling");
         pending.scrollIntoView({ block: "nearest" });
-        stop();
+        // keepCaption 없이 stop()을 부르면 방금 띄운 자막이 곧바로 지워진다.
+        // 하필 이 문장이 시연 전체의 결론이다 — 반드시 남긴다.
+        stop({ keepCaption: true });
+        setCaption("여기서 멈춥니다 — 실행은 사람이 인증해야 합니다. 🔒 버튼을 직접 눌러보세요.");
         return;
       }
 
