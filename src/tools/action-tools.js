@@ -95,7 +95,9 @@ export const ACTION_TOOLS = {
 
   export_card_statement: a(
     "카드 이용명세서를 파일로 내보낸다. '엑셀로 뽑아줘', '명세서 파일로 보내줘', 'PDF로 받고 싶어' 처럼 말할 때 쓴다. " +
-      "format 은 들은 대로 'xlsx' 또는 'pdf' 로 넣는다. 목적지를 말하면 destination 에 넣는다(예: '메일', '카카오톡').",
+      "format 은 들은 대로 'xlsx' 또는 'pdf' 로 넣는다. 목적지를 말하면 destination 에 넣는다(예: '메일', '카카오톡'). " +
+      "카드를 지정하지 않으면 주카드가 자동으로 쓰인다 — 어느 카드인지 묻지 말고, " +
+      "list_cards 로 카드 목록을 먼저 보여주지도 마라. 바로 이 도구를 부른다.",
     { card_id: "string", month: "string", format: "string", destination: "string" },
     async ({ card_id, month, format = "xlsx", destination } = {}) => {
       const card = KB_DATA.card.cards.find((c) => c.id === card_id) ?? KB_DATA.card.cards[0];
