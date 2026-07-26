@@ -58,9 +58,15 @@ const ui = createUI(document.getElementById("app"), {
   // 끼어 있다 — 예전에는 이 한 줄이 발급과 소비를 동시에 해서 인증을 검사할 자리가
   // 아예 없었다. isAvailable()이 거짓이면(심사 노트북 등) 대체 인증으로 정직하게
   // 넘어간다 — src/auth/webauthn.js 상단 고지 참고.
-  onConfirm: async (planId) => {
-    // isAvailable()은 이제 '인증기가 실제로 있는가'까지 확인하므로 비동기다.
-    const proof = (await webauthn.isAvailable())
+  onConfirm: async (planId, { auto = false } = {}) => {
+    // auto === true 는 자동 시연이 스스로 누른 경우다. WebAuthn 인증기는
+    // '사람의 제스처'를 요구하므로 프로그램이 부르면 반드시 실패한다 —
+    // 시연이 자기 발에 걸려 넘어지지 않도록 대체 인증으로 간다.
+    // 대체 인증은 proof.method 가 "demo-fallback" 이라 화면과 판단 로그에
+    // "실제 인증 아님"이 그대로 남는다. 조용히 진짜인 척하지 않는다.
+    //
+    // isAvailable()은 '인증기가 실제로 있는가'까지 확인하므로 비동기다.
+    const proof = !auto && (await webauthn.isAvailable())
       ? await webauthn.authenticate(planId)
       : createFallbackProof(planId);
     const token = authGate.issue(planId, proof);

@@ -218,7 +218,11 @@ export function createUI(root, { onSend, onConfirm }) {
         // 보이지 않도록 진행 상태를 반드시 보여준다.
         btn.textContent = "인증을 기다리는 중…";
         try {
-          const out = await onConfirm(r.plan.planId);
+          // 자동 시연이 스스로 누른 경우에는 WebAuthn 세리머니를 시도하지 않는다.
+          // 브라우저 인증기는 '사람의 제스처'를 요구하므로 프로그램이 누르면
+          // 반드시 실패하고, 그 영어 예외가 시연 화면에 그대로 남는다.
+          // 대체 인증으로 가되 화면에는 "실제 인증 아님"이 그대로 표시된다.
+          const out = await onConfirm(r.plan.planId, { auto: demo.isRunning() });
           if (out?.authProof) {
             const authLine = formatAuthEvent(out.authProof);
             if (authLine) {

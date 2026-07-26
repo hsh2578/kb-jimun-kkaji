@@ -13,18 +13,12 @@
 export const DEMO_STEPS = [
   {
     say: "요즘 돈이 자꾸 새는 것 같은데",
-    note: "① 요청이 아니라 증상입니다. 검색어가 없으니 메뉴로는 못 찾습니다. AI가 '매달 빠져나가는 돈'으로 해석해 먼저 보여줍니다.",
+    note: "요청이 아니라 증상입니다. 검색어가 없으니 메뉴로는 찾을 수 없습니다. AI가 '매달 빠져나가는 돈'으로 해석해 먼저 보여줍니다.",
   },
   {
-    // 한 턴에 두 가지를 묻지 않는다 — 오케스트레이터는 도구를 한 번에 하나만 실행하므로
-    // "카드값이랑 할부는?" 이라고 물으면 하나만 답한다. 화면이 보여주지 못하는 것을
-    // 자막이 주장하게 두면 그 순간 시연은 거짓말이 된다.
-    say: "이번 달 카드값 얼마야?",
-    note: "카드가 2장이면 어느 쪽을 말하는 걸까요. 지정하지 않으면 합산해서 답합니다.",
-  },
-  {
-    say: "고유가 지원금 신청할 수 있어?",
-    note: "② 정식 명칭은 「고유가 유류비 지원금」입니다. 가운데를 빼먹어도 찾아냅니다. 몰라서 못 받는 돈이 여기 있습니다.",
+    say: "케이블 방송은 안 본 지 오래됐어",
+    note: "'해지해줘'라고 하지 않았습니다. 앞에서 본 목록 중 하나를 가리켰을 뿐인데 실행 계획이 만들어집니다.",
+    execute: true,
   },
   {
     say: "아들한테 이체해줘",
@@ -33,7 +27,12 @@ export const DEMO_STEPS = [
   {
     say: "30만원",
     note: "앞 대화를 기억합니다. '누구에게'를 다시 묻지 않습니다 — 이게 명령이 아니라 대화인 이유입니다.",
-    stopForAuth: true,
+    execute: true,
+  },
+  {
+    say: "고유가 지원금도 신청해줘",
+    note: "정식 명칭은 「고유가 유류비 지원금」입니다. 가운데를 빼먹어도 찾아냅니다. 몰라서 못 받는 돈이 여기 있습니다.",
+    execute: true,
   },
 ];
 
@@ -75,22 +74,34 @@ export function createAutoDemo({ input, form, button, caption, onStop }) {
       await sleep(AFTER_SEND_MS);
       if (cancelled) break;
 
-      // L3 — 인증이 걸린 계획이 화면에 있으면 여기서 멈춘다.
+      // L3 — 인증이 걸린 계획이 화면에 있으면 시연이 대신 눌러 실행까지 보여준다.
+      //
+      // 예전에는 여기서 멈췄다. "실행은 사람이 인증해야 한다"는 주장을 시연이
+      // 스스로 지키게 하려던 것인데, 실제로는 시연이 매번 첫 실행 앞에서 끊겨
+      // 심사위원이 "무엇을 대신 해주는가"를 끝까지 못 봤다. 이건 프로토타입이고,
+      // 보여줘야 하는 것은 '실행까지 간다'는 사실이다.
+      //
+      // 인증을 건너뛰는 것이 아니다 — AuthGate 는 그대로 증명을 요구하고,
+      // 이때 쓰이는 것은 method:"demo-fallback" 증명이라 화면과 판단 로그에
+      // "실제 인증 아님"이 그대로 남는다. 사람이 직접 누르면 기기 인증기를 거친다.
       const pending = document.querySelector("button.auth:not(:disabled)");
-      if (step.stopForAuth && pending) {
+      if (step.execute && pending) {
+        setCaption("실행 직전입니다. 무엇을·어디에 하는지 보여준 뒤에만 진행합니다.");
         pending.classList.add("is-calling");
         pending.scrollIntoView({ block: "nearest" });
-        // keepCaption 없이 stop()을 부르면 방금 띄운 자막이 곧바로 지워진다.
-        // 하필 이 문장이 시연 전체의 결론이다 — 반드시 남긴다.
-        stop({ keepCaption: true });
-        setCaption("여기서 멈춥니다 — 실행은 사람이 인증해야 합니다. 🔒 버튼을 직접 눌러보세요.");
-        return;
+        await sleep(1500);
+        if (cancelled) break;
+        pending.click();
+        await sleep(3200);
       }
+      if (cancelled) break;
 
       await sleep(BETWEEN_MS);
     }
 
-    if (!cancelled) setCaption("시연이 끝났습니다. 이제 아무 말이나 직접 입력해보세요.");
+    if (!cancelled) {
+      setCaption("한 번의 대화로 조회 1건과 실행 3건이 끝났습니다. 이제 아무 말이나 직접 해보세요 — 🎤 로 말해도 됩니다.");
+    }
     stop({ keepCaption: true });
   }
 

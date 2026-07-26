@@ -194,7 +194,9 @@ export function formatAuthEvent(proof) {
     return "✅ WebAuthn 인증기 확인 완료 (기기 지문/PIN 인증기로 서명된 응답을 확인했습니다)";
   }
   if (proof.method === "demo-fallback") {
-    return "⚠️ WebAuthn 미지원 — 시연 대체 인증 (실제 인증 아님)";
+    // "WebAuthn 미지원"이라고 단정하지 않는다 — 자동 시연이 스스로 누른 경우처럼
+    // 인증기가 있어도 이 경로로 오는 경우가 있다. 확실한 것만 말한다.
+    return "⚠️ 시연 대체 인증 — 기기 인증기를 거치지 않았습니다 (실제 인증 아님)";
   }
   return "";
 }
