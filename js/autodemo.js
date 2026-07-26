@@ -160,7 +160,21 @@ export function createAutoDemo({ input, form, button, setCaption, onStop }) {
       if (cancelled) break;
 
       // 화면을 실제로 연다. 경로를 읽어주기만 하면 챗봇이다.
-      if (step.openMenu) await clickLast(".menus__go", 3200);
+      //
+      // 방금 생긴 후보 묶음의 '첫' 버튼을 누른다. 마지막을 누르면 후보 3개 중
+      // 관련도가 가장 낮은 것이 열린다(실측: 환전신청 대신 해외주식시장안내가 열렸다).
+      if (step.openMenu) {
+        const groups = document.querySelectorAll(".menus");
+        const first = groups[groups.length - 1]?.querySelector(".menus__go");
+        if (first) {
+          first.scrollIntoView({ block: "nearest" });
+          await sleep(700);
+          if (!cancelled) {
+            first.click();
+            await sleep(3200);
+          }
+        }
+      }
       if (cancelled) break;
 
       await sleep(BETWEEN_MS);
