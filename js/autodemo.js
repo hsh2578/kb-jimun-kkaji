@@ -177,7 +177,7 @@ export function createAutoDemo({ input, form, button, caption, onStop }) {
         await sleep(1800);
         if (cancelled) break;
         pending.click(); // 지문 오버레이가 뜨고, 인증이 끝나면 스스로 닫힌다
-        await sleep(4200);
+        await sleep(5200); // 확인 1.5s + 통과 1.1s + 결과를 읽을 시간
       }
       if (cancelled) break;
 

@@ -269,7 +269,17 @@ export function createUI(root, { onSend, onConfirm }) {
   const fpBtn = root.querySelector("#fpBtn");
   const authTitle = root.querySelector("#authTitle");
 
+  // 대체 인증은 즉시 끝난다. 그대로 두면 오버레이가 한 프레임 스치고 사라져서
+  // 정작 이 제품의 이름이 걸린 장면을 아무도 못 본다(실측: 900ms 뒤 이미 닫혀 있었다).
+  // 실제 기기 인증이 걸리는 만큼은 화면에 머물게 한다.
+  const AUTH_MIN_MS = 1500; // 확인 중
+  const AUTH_DONE_MS = 1100; // 통과 표시
+  let authShownAt = 0;
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
   function showAuthOverlay() {
+    authShownAt = performance.now();
     overlay.hidden = false;
     fpBtn.classList.remove("is-done");
     fpBtn.classList.add("is-scanning");
@@ -277,11 +287,13 @@ export function createUI(root, { onSend, onConfirm }) {
   }
 
   async function hideAuthOverlay(ok) {
+    const left = AUTH_MIN_MS - (performance.now() - authShownAt);
+    if (left > 0) await wait(left);
     if (ok) {
       fpBtn.classList.remove("is-scanning");
       fpBtn.classList.add("is-done");
       authTitle.textContent = "인증되었습니다";
-      await new Promise((r) => setTimeout(r, 900));
+      await wait(AUTH_DONE_MS);
     }
     overlay.hidden = true;
     fpBtn.classList.remove("is-scanning", "is-done");
