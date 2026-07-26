@@ -72,7 +72,9 @@ export const ACTION_TOOLS = {
   transfer_money: a(
     "돈을 이체한다. 받는 사람을 '아들', '어머니', '관리비'처럼 관계나 별칭으로 부르면 recipient_hint에 그대로 넣는다. " +
       "'최근에 이체한 계좌에 보내줘', '지난번 거기로 또 보내줘' 처럼 지시대명사로 부르면 use_last_recipient를 true로 한다. " +
-      "금액을 못 들었으면 amount를 비운 채 호출하지 말고, 먼저 얼마를 보낼지 사용자에게 물어본다.",
+      "출금 계좌는 비워 두면 주거래 입출금 계좌가 자동으로 쓰인다 — 어느 계좌에서 뺄지 묻지 마라. " +
+      "list_accounts 로 계좌 목록을 보여줄 필요도 없다. " +
+      "금액을 못 들었다면 이 도구를 부르지 말고 ask_clarification 도구로 '얼마를 보낼까요?' 만 묻는다.",
     { recipient_hint: "string", contact_id: "string", use_last_recipient: "boolean", amount: "number", account_id: "string" },
     async (args) => {
       const to = resolveRecipient(args);
