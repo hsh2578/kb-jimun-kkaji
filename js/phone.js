@@ -6,6 +6,7 @@ import { createLLMAdapter } from "../src/llm/adapter.js";
 import { createAuthGate } from "../src/exec/auth-gate.js";
 import { QUERY_TOOLS } from "../src/tools/query-tools.js";
 import { ACTION_TOOLS } from "../src/tools/action-tools.js";
+import { resolveAutopay } from "../src/exec/impact.js";
 import { toSeniorSpeech, chunkOneAtATime, buildConfirmation, SILENCE_TOLERANCE_MS } from "../src/voice/senior-voice.js";
 
 const cfg = window.KB_CONFIG ?? { mode: "rules" };
@@ -62,9 +63,16 @@ async function handle(text) {
     }
 
     if (r.layer === "L3" && r.plan) {
+      // (M4) LLM이 넘긴 건 내부 id(autopay_id)나 힌트일 뿐, 고객이 알아들을 이름이 아니다.
+      // 실제 등록명은 여기서 resolveAutopay로 되찾아야 "케이블 방송을(를) 멈추실까요?"처럼 말할 수 있다.
+      const ap = resolveAutopay(r.plan.args ?? {});
+      if (!ap) {
+        speak("어떤 자동이체를 말씀하시는지 확인하지 못했습니다. 항목 이름을 다시 한번 말씀해 주시겠어요?");
+        return;
+      }
       speak(buildConfirmation({ // ⑤ 되풀이 확인
         verb: "멈추",
-        target: r.plan.args.autopay_id ?? "요청하신 항목",
+        target: ap.name,
         effect: r.warnings?.[0] ?? "다음 달부터 반영됩니다",
       }));
       speak("확인을 위해 문자로 보내드린 번호를 눌러주세요."); // ⑥ 기존 인증

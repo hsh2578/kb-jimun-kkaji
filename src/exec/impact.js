@@ -66,8 +66,15 @@ export async function analyzeImpact(toolName, args) {
     if (!ap) {
       return { warnings: [], blocked: true, reason: "해당 자동이체를 확인할 수 없어 진행하지 않습니다." };
     }
+    if (toolName === "cancel_autopay") {
+      return { warnings: [ap.impactIfCancelled], blocked: false };
+    }
+    // (M3) 계좌 변경도 해지 못지않게 부수효과가 있다 — 출금일에 새 계좌 잔액이
+    // 부족하면 같은 방식으로 납부가 실패한다. 스펙 §5-1②가 이 분기를 명시한다.
+    const acc = KB_DATA.bank.accounts.find((x) => x.id === args.account_id);
+    const accName = acc?.name ?? "새 계좌";
     return {
-      warnings: toolName === "cancel_autopay" ? [ap.impactIfCancelled] : [],
+      warnings: [`${accName}(으)로 변경하면, 출금일에 ${accName} 잔액이 부족할 경우 ${ap.name} 납부가 실패할 수 있습니다.`],
       blocked: false,
     };
   }

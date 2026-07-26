@@ -3,8 +3,6 @@ export const KB_DATA = {
   disclaimer: "본 데이터는 전부 가상이며 실제 KB 고객 정보가 아닙니다.",
   today: "2026-07-27",
 
-  user: { name: "홍길동", ageGroup: "20대", pin: "0000" },
-
   bank: {
     accounts: [
       { id: "b1", name: "KB My通장", number: "***-**-*23456", balance: 3_240_500, type: "입출금" },

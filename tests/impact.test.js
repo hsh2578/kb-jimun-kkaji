@@ -31,6 +31,20 @@ test("할부 변경은 수수료를 경고한다", async () => {
   assert.ok(r.warnings.some((w) => /수수료/.test(w)));
 });
 
+test("자동이체 계좌 변경은 새 계좌의 잔액 부족 위험을 경고한다", async () => {
+  const r = await analyzeImpact("change_autopay_account", { autopay_id: "ap1", account_id: "b2" });
+  assert.equal(r.blocked, false);
+  assert.equal(r.warnings.length, 1);
+  assert.ok(/KB Star 정기예금/.test(r.warnings[0]), "대상 계좌 이름이 경고에 포함돼야 한다");
+  assert.ok(/잔액/.test(r.warnings[0]));
+});
+
+test("자동이체 계좌 변경도 자동이체를 확인할 수 없으면 막는다", async () => {
+  const r = await analyzeImpact("change_autopay_account", { autopay_id: "없는아이디", account_id: "b2" });
+  assert.equal(r.blocked, true);
+  assert.ok(r.reason);
+});
+
 test("영향이 없는 도구는 경고 없이 통과한다", async () => {
   const r = await analyzeImpact("issue_certificate", { name: "예금잔액증명서" });
   assert.equal(r.blocked, false);
