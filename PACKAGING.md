@@ -22,7 +22,7 @@ ls -a submit/ | grep -E "^\.env$" && echo "⚠️ .env 있음 — 삭제" || ech
 ## 3. 압축
 
 ```bash
-cd submit && zip -r ../지문까지_황성혁.zip . && cd ..
+cd submit && zip -r ../지문까지_제출본.zip . && cd ..
 ```
 
 ## 4. 함께 넣을 것
