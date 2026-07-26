@@ -110,7 +110,9 @@ export const ACTION_TOOLS = {
       const card = KB_DATA.card.cards.find((c) => c.id === card_id) ?? KB_DATA.card.cards[0];
       if (!card) throw new Error("해당 카드를 확인할 수 없습니다");
       const stmt = KB_DATA.card.statements.find((s) => s.cardId === card.id);
-      const ext = String(format).toLowerCase() === "pdf" ? "pdf" : "xlsx";
+      // 실제로 만들어 내려주는 파일은 CSV 다(src/ui/artifact.js). 엑셀에서 바로
+      // 열리지만 확장자는 csv 이므로, 화면에 xlsx 라고 적으면 파일과 말이 어긋난다.
+      const ext = String(format).toLowerCase() === "pdf" ? "pdf" : "csv";
       const period = month ?? stmt?.month ?? KB_DATA.today.slice(0, 7);
       return {
         exported: {

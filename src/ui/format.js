@@ -46,7 +46,7 @@ export function formatPlanSummary(plan) {
     }
     case "export_card_statement": {
       const card = KB_DATA.card.cards.find((c) => c.id === args.card_id) ?? KB_DATA.card.cards[0];
-      const ext = String(args.format ?? "xlsx").toLowerCase() === "pdf" ? "PDF" : "엑셀";
+      const ext = String(args.format ?? "xlsx").toLowerCase() === "pdf" ? "PDF" : "엑셀(CSV)";
       const dest = args.destination ? ` ${args.destination}(으)로 보냅니다.` : " 파일로 내려받습니다.";
       return `${card?.name ?? "카드"} 이용명세서를 ${ext} 파일로 만들어${dest}`;
     }

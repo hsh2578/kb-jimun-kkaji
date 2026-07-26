@@ -104,9 +104,11 @@ test("transfer_money는 잔액을 넘으면 실행 자체가 실패한다", asyn
   );
 });
 
-test("export_card_statement는 요청한 확장자로 파일명을 만든다", async () => {
+test("export_card_statement: '엑셀로' 라고 하면 실제로 내려주는 CSV 이름을 쓴다", async () => {
+  // 엑셀에서 바로 열리지만 실제 파일은 CSV 다(src/ui/artifact.js).
+  // 화면에 xlsx 라고 적으면 준 파일과 말이 어긋난다.
   const xlsx = await ACTION_TOOLS.export_card_statement.run({ card_id: "c1", format: "xlsx" });
-  assert.match(xlsx.exported.fileName, /\.xlsx$/);
+  assert.match(xlsx.exported.fileName, /\.csv$/);
   const pdf = await ACTION_TOOLS.export_card_statement.run({ card_id: "c1", format: "pdf" });
   assert.match(pdf.exported.fileName, /\.pdf$/);
 });
@@ -504,4 +506,17 @@ test("긴 답변이 물음으로 끝나도 되묻기로 보지 않는다 — 화
   // menus 가 비워져 「열기」 버튼이 통째로 사라진다(실측).
   assert.equal(isQuestion("환전은 개인뱅킹 서비스 메뉴에서 하실 수 있습니다. 추가로 환전 신청이나 다른 도움이 필요하신가요?"), false);
   assert.equal(isQuestion("환율 우대는 KB국민은행의 환율동향정보를 통해 확인하거나, 환전신청 시 적용받을 수 있습니다. 더 궁금한 점이 있으신가요?"), false);
+});
+
+test("명세서: 화면에 적힌 확장자와 실제로 내려주는 파일이 같다", async () => {
+  const { buildArtifact } = await import("../src/ui/artifact.js");
+  const out = await ACTION_TOOLS.export_card_statement.run({ card_id: "c1", format: "xlsx" });
+  const file = buildArtifact("export_card_statement", out);
+  assert.equal(
+    out.exported.fileName.split(".").pop(),
+    file.name.split(".").pop(),
+    "말한 확장자와 준 파일이 다르면 그 순간 시연은 거짓말이 된다"
+  );
+  assert.match(file.body, /가맹점/, "실제 거래 내역이 들어 있어야 한다");
+  assert.ok(file.body.startsWith("\uFEFF"), "BOM 이 없으면 엑셀이 한글을 깨뜨린다");
 });
