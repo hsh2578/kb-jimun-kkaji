@@ -494,3 +494,14 @@ test("분실신고: 카드 이름으로 찾고, 못 찾으면 계획을 만들�
   assert.equal(ok.blocked, false);
   assert.ok(ok.warnings.some((w) => /자동납부/.test(w)), "카드를 막으면 자동납부도 막힌다는 것을 알려야 한다");
 });
+
+test("긴 답변이 물음으로 끝나도 되묻기로 보지 않는다 — 화면 여는 버튼이 사라진다", async () => {
+  const { isQuestion } = await import("../src/orchestrator.js");
+  // 실제 되묻기 — 짧다
+  assert.equal(isQuestion("어느 분께 보내드릴까요?"), true);
+  assert.equal(isQuestion("아드님 계좌로 보내드릴게요. 얼마를 보낼까요?"), true);
+  // 답을 하고 예의상 물음으로 닫은 것 — 길다. 이걸 되묻기로 보면
+  // menus 가 비워져 「열기」 버튼이 통째로 사라진다(실측).
+  assert.equal(isQuestion("환전은 개인뱅킹 서비스 메뉴에서 하실 수 있습니다. 추가로 환전 신청이나 다른 도움이 필요하신가요?"), false);
+  assert.equal(isQuestion("환율 우대는 KB국민은행의 환율동향정보를 통해 확인하거나, 환전신청 시 적용받을 수 있습니다. 더 궁금한 점이 있으신가요?"), false);
+});

@@ -225,7 +225,12 @@ export function wantsLocation(utterance) {
 //
 // 되묻기는 짧다("어느 분께 보내드릴까요?"). 설명은 길다. 길이로 가른다 —
 // 한국어 종결어미를 훑는 것보다 오탐이 적다.
-const CLARIFY_MAX_LEN = 60;
+//
+// 처음엔 60자로 뒀는데 헐렁했다. 실측:
+//   "환전은 개인뱅킹 서비스 메뉴에서 하실 수 있습니다. 추가로 …필요하신가요?" (55자)
+// 이 답변이 되묻기로 분류되어, 화면을 여는 버튼이 통째로 사라졌다.
+// 실제 되묻기는 25자를 넘지 않고 답변은 55자를 넘었다 — 그 사이로 긋는다.
+const CLARIFY_MAX_LEN = 35;
 
 export function isQuestion(text) {
   if (typeof text !== "string") return false;
