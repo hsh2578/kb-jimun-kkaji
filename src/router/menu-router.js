@@ -70,5 +70,10 @@ export function createRouter({ items, dim, embedFn, vectorWeight = DEFAULT_VECTO
     }));
   }
 
-  return { search, size: items.length };
+  // size 는 '아는 메뉴 수'다 — 벡터 수가 아니다.
+  // 생활사건 발화가 자기 벡터를 따로 가지면서 items.length 가 메뉴 수보다 커졌고,
+  // 화면에 "메뉴 2714건"이라는 틀린 숫자가 찍혔다(실제 메뉴는 2656개).
+  // 심사 화면에 틀린 숫자가 있으면 안 된다. 고유 메뉴 id 로 센다.
+  const size = new Set(items.map((it) => it.id)).size;
+  return { search, size };
 }

@@ -253,3 +253,10 @@ test("buildIndexText는 생활사건 발화를 전량 문서에 넣는다", () =
   assert.match(text, /해외 나가는데 뭐 준비해야 돼\?/);
   assert.match(text, /환전 어떻게 해요/);
 });
+
+test("router.size는 벡터 수가 아니라 아는 메뉴 수를 센다", async () => {
+  const { createRouter } = await import("../src/router/menu-router.js");
+  const one = { id: "bank:x", affiliate: "bank", name: "환전신청", path: [], keywords: [], q: [1], scale: 1 };
+  const r = createRouter({ items: [one, { ...one }, { ...one, id: "bank:y" }], dim: 1, embedFn: async () => null });
+  assert.equal(r.size, 2, "같은 메뉴가 벡터를 여러 개 가져도 메뉴는 하나로 센다");
+});
