@@ -407,3 +407,48 @@ test("제 계열사 서류는 그대로 통과한다", async () => {
   assert.equal((await analyzeImpact("issue_certificate", { name: "예금잔액증명서" })).blocked, false);
   assert.equal((await analyzeImpact("issue_sec_tax_document", { name: "잔고증명서" })).blocked, false);
 });
+
+// ── 아무 말에나 메뉴를 들이밀지 않는다 ──────────────────────────────────
+
+test("wantsLocation: 위치를 묻는 말과 뜻을 묻는 말을 가른다", async () => {
+  const { wantsLocation } = await import("../src/orchestrator.js");
+  // 무엇을 하려는 말 — 안내가 필요하다. 표현은 끝이 없으므로 기본이 '안내'다.
+  for (const q of ["환율 우대는 어디서 받아?", "해외 나가는데 뭐 준비해야 돼?",
+                   "공인인증서 어떻게 발급해?", "통신비 그만 나가게 해줘", "적금 하나 들고 싶은데"]) {
+    assert.equal(wantsLocation(q), true, `${q} 에는 위치 안내가 필요하다`);
+  }
+  // 뜻을 묻거나 그냥 대꾸한 말 — 메뉴를 붙이면 AI가 멍청해 보인다
+  for (const q of ["운용지시가 없다는 게 무슨 말이야?", "알겠어 고마워", "그건 놔둬", "안녕"]) {
+    assert.equal(wantsLocation(q), false, `${q} 에 메뉴를 붙이면 안 된다`);
+  }
+});
+
+test("뜻을 묻는 말에는 답만 하고 메뉴를 붙이지 않는다", async () => {
+  const explaining = {
+    chat: async () => ({ message: "운용지시가 없다는 것은 투자 방향을 정해두지 않았다는 뜻입니다.", toolCalls: [] }),
+  };
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: explaining,
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("운용지시가 없다는 게 무슨 말이야?");
+  assert.doesNotMatch(r.message, /있습니다\.$/, "설명 뒤에 메뉴 위치가 붙으면 안 된다");
+  assert.equal(r.menus.length, 0, "후보 메뉴 목록도 그리지 않는다");
+});
+
+test("어디서 하는지 묻는 말에는 위치를 반드시 붙인다 — L1의 약속이다", async () => {
+  const guiding = {
+    chat: async () => ({ message: "환율 우대는 외환 거래 시 적용됩니다.", toolCalls: [] }),
+  };
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: guiding,
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("환율 우대는 어디서 받아?");
+  assert.match(r.message, /있습니다/);
+  assert.ok(r.menus.length > 0);
+});

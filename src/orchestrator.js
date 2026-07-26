@@ -78,6 +78,14 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
         audit.askedBack = res.message;
         return { layer: "ASK", message: res.message, menus: [], audit };
       }
+      // 뜻을 묻거나 그냥 대꾸한 말에까지 메뉴 위치를 붙이면 AI가 멍청해 보인다.
+      // 실측: "운용지시가 없다는 게 무슨 말이야?" 의 설명 뒤에
+      // "KB국민은행 > 판매중지상품 에 있습니다." 가 붙었다.
+      // L1의 약속은 "무엇을 하려는지 알면 어디 있는지는 반드시 답한다"이지,
+      // 아무 말에나 메뉴를 들이미는 것이 아니다.
+      if (res.message && !wantsLocation(text)) {
+        return { layer: "L1", message: res.message, menus: [], audit };
+      }
       const location = describeMenus(menus);
       const message = res.message ? `${res.message} ${location}` : location;
       return { layer: "L1", message, menus, audit };
@@ -185,6 +193,28 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
 let callSeq = 0;
 function callId(call, _i) {
   return call.id || `call_local_${++callSeq}`;
+}
+
+// 이 말이 '어디서 하는지'를 알고 싶어하는 말인가.
+//
+// 라우터 점수로는 못 가른다 — 실측에서 안내가 필요한 "환율 우대는 어디서 받아?"(0.394)가
+// 필요 없는 "운용지시가 없다는 게 무슨 말이야?"(0.421)보다 낮았다. 겹친다.
+// 대신 질문의 성격을 본다. 뜻을 묻는 말과 그냥 대꾸하는 말에는 메뉴가 소용없다.
+// '무엇을 하려는 말'을 목록으로 잡으려다 실패했다 — "통신비 그만 나가게 해줘"
+// 같은 평범한 요청이 목록에서 빠졌다. 하려는 일의 표현은 끝이 없다.
+// 그래서 반대로 간다: 기본은 안내(L1의 약속)이고, 안내가 소용없는 두 경우만 뺀다.
+//   ① 뜻을 묻는 말 — 찾아갈 곳이 없다
+//   ② 그냥 대꾸하는 말 — 용건이 아니다
+const MEANING = /무슨 말|무슨 뜻|뜻이 (뭐|무엇)|이란 (뭐|무엇)|이 (뭐|무엇)(야|예요|인가)|왜 /;
+// 대꾸는 여러 마디가 붙는다("알겠어 고마워"). 낱말 하나로 끝난다고 보면 놓친다.
+const ACK =
+  /^\s*(?:(?:응|네|넵|어|아니|아니오|알겠어|알겠습니다|그래|그래요|고마워|고맙습니다|감사합니다|감사해요|괜찮아|괜찮습니다|됐어|됐습니다|놔둬|나중에|그건|그거|그것|이건|안녕|하이)[\s,.!~]*)+$/;
+
+export function wantsLocation(utterance) {
+  if (typeof utterance !== "string" || !utterance.trim()) return false;
+  if (MEANING.test(utterance)) return false;
+  if (ACK.test(utterance)) return false;
+  return true;
 }
 
 // 되묻기인지, 답을 하고 예의상 물음으로 닫은 것인지 가른다.
