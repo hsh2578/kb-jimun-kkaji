@@ -54,6 +54,14 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     }
 
     const call = res.toolCalls?.[0];
+    // 모델이 도구를 '부르는' 대신 호출 문법을 글로 적어 보내는 일이 있다
+    // (실측: 화면에 ask_clarification({question: '...'}) 가 그대로 찍혔다).
+    // 프롬프트로 막아도 확률적으로 새므로, 화면에 코드가 나가는 일만은 여기서 끊는다.
+    // 이 방어선이 걸렸다는 사실은 감사 로그에 남겨 조용히 숨기지 않는다.
+    if (looksLikeToolCall(res.message)) {
+      audit.suppressedToolText = res.message;
+      res = { ...res, message: "" };
+    }
 
     // L1 — 실행할 도구가 없다. 그래도 위치는 반드시 안내한다.
     // (C2) stub 어댑터는 res.message를 항상 비어있지 않게 채워 보낸다 — 예전에는 그 때문에
@@ -116,13 +124,20 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
   // user 만 연속으로 쌓인 기형 대화가 되고, 모델은 첫 턴의 의도에 고정된다.
   // (실측: 연금 조회 이후 카드·세금·자동이체 질문이 전부 list_pensions 로 갔다.)
   // 그래서 텍스트가 없을 때는 "무엇을 처리했는지"를 대신 남긴다.
+  // 이 문장은 '모델이 다음 턴에 보게 될 본보기'다.
+  //
+  // 예전에는 "(apply_subsidy 을(를) 실행해 결과를 이미 보여주었다. 처리 완료.)"
+  // 처럼 도구 이름이 든 메타 문장을 넣었다. 그러자 모델이 그 말투를 따라 해서,
+  // 도구를 호출하는 대신 똑같이 생긴 문장을 '답변'으로 뱉었다(실측: 고유가
+  // 지원금 신청이 실행되지 않고 그 문장만 화면에 찍혔다).
+  // 그래서 사람이 쓸 법한 평범한 문장만 남긴다 — 도구 이름도, 괄호 메타도 없다.
   function historyTurn(r) {
     if (r.message) return { role: "assistant", content: r.message };
     const called = [...(r.audit?.toolCalls ?? []), ...(r.audit?.blockedCalls ?? [])];
     if (called.length) {
-      return { role: "assistant", content: `(${called.join(", ")} 을(를) 실행해 결과를 사용자에게 이미 보여주었다. 이 요청은 처리 완료.)` };
+      return { role: "assistant", content: "말씀하신 내용을 처리해 결과를 보여드렸습니다." };
     }
-    return { role: "assistant", content: "(메뉴 위치를 안내했다. 이 요청은 처리 완료.)" };
+    return { role: "assistant", content: "메뉴 위치를 안내해 드렸습니다." };
   }
 
   async function confirm(planId, token) {
@@ -134,6 +149,13 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
   }
 
   return { handle, confirm, executionAudit, historyTurn };
+}
+
+// "ask_clarification({question: '...'})" 처럼 도구 호출을 글로 적은 것인지 본다.
+// 한국어 답변에는 나올 수 없는 모양이므로 오탐 위험이 낮다.
+export function looksLikeToolCall(text) {
+  if (typeof text !== "string") return false;
+  return /\b[a-z][a-z0-9_]{3,}\s*\(\s*[{"']/i.test(text);
 }
 
 function describeMenus(menus) {

@@ -139,8 +139,10 @@ test("도구만 호출하고 텍스트가 없어도 assistant 턴을 남긴다",
     audit: { toolCalls: ["list_pensions"], blockedCalls: [] },
   });
   assert.equal(turn.role, "assistant");
-  assert.ok(turn.content.includes("list_pensions"), "무엇을 처리했는지 남아야 한다");
-  assert.ok(turn.content.length > 0);
+  assert.ok(turn.content.length > 0, "빈 턴을 남기면 이력이 기형이 된다");
+  // 도구 이름을 넣었더니 모델이 그 말투를 따라 해서, 도구를 부르는 대신
+  // 똑같이 생긴 문장을 답변으로 뱉었다(실측). 이력은 사람 말이어야 한다.
+  assert.ok(!turn.content.includes("list_pensions"), "도구 이름이 이력에 남으면 모델이 그걸 답변으로 뱉는다");
 });
 
 test("인증 대기 중인 실행도 처리한 것으로 이력에 남긴다", () => {
@@ -149,7 +151,8 @@ test("인증 대기 중인 실행도 처리한 것으로 이력에 남긴다", (
     layer: "L3", message: "",
     audit: { toolCalls: [], blockedCalls: ["cancel_autopay"] },
   });
-  assert.ok(turn.content.includes("cancel_autopay"));
+  assert.ok(turn.content.length > 0);
+  assert.ok(!turn.content.includes("cancel_autopay"), "도구 이름은 이력에 남기지 않는다");
 });
 
 test("텍스트가 있으면 그 텍스트를 그대로 쓴다", () => {

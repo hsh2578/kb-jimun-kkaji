@@ -260,3 +260,47 @@ test("router.size는 벡터 수가 아니라 아는 메뉴 수를 센다", async
   const r = createRouter({ items: [one, { ...one }, { ...one, id: "bank:y" }], dim: 1, embedFn: async () => null });
   assert.equal(r.size, 2, "같은 메뉴가 벡터를 여러 개 가져도 메뉴는 하나로 센다");
 });
+
+// ── 모델이 자기 도구 호출을 '글'로 적어 보내는 사고 ─────────────────────
+
+test("looksLikeToolCall은 호출 문법을 잡고 평범한 한국어는 놓아준다", async () => {
+  const { looksLikeToolCall } = await import("../src/orchestrator.js");
+  assert.equal(looksLikeToolCall("ask_clarification({question: '얼마를 보낼까요?'})"), true);
+  assert.equal(looksLikeToolCall("transfer_money({recipient_hint: '아들'})"), true);
+  assert.equal(looksLikeToolCall("아드님 계좌로 보내드릴게요. 얼마를 보낼까요?"), false);
+  assert.equal(looksLikeToolCall("KB국민은행 > 개인뱅킹 서비스 메뉴 > 이체 에 있습니다."), false);
+  assert.equal(looksLikeToolCall("이번 달 420,000원(전월 대비) 사용하셨습니다."), false);
+});
+
+test("모델이 도구 호출을 글로 적어 보내면 화면에 내보내지 않는다", async () => {
+  const leaking = {
+    chat: async () => ({ message: "ask_clarification({question: '얼마를 보낼까요?'})", toolCalls: [] }),
+  };
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: leaking,
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("아들한테 이체해줘");
+  assert.doesNotMatch(r.message, /ask_clarification/, "화면에 코드가 나가면 안 된다");
+  assert.ok(r.message.length > 0, "대신 위치 안내라도 나와야 한다");
+  // 조용히 숨기지 않는다 — 걸렸다는 사실은 감사 로그에 남는다.
+  assert.match(r.audit.suppressedToolText, /ask_clarification/);
+});
+
+// ── 대화 이력에 넣는 문장은 '모델이 볼 본보기'다 ────────────────────────
+
+test("이력용 문장에는 도구 이름도 괄호 메타도 없다 — 모델이 따라 쓴다", async () => {
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: { chat: async () => ({ message: "", toolCalls: [{ name: "apply_subsidy", args: {} }] }) },
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("고유가 지원금도 신청해줘");
+  const turn = o.historyTurn(r);
+  assert.doesNotMatch(turn.content, /apply_subsidy/, "도구 이름이 이력에 남으면 모델이 그걸 답변으로 뱉는다");
+  assert.doesNotMatch(turn.content, /^\(/, "괄호 메타 문장은 모델이 따라 쓴다");
+  assert.ok(turn.content.length > 0);
+});
