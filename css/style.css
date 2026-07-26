@@ -448,11 +448,23 @@ button.auth.is-calling {
 }
 
 .welcome__lede {
-  margin: .35rem 0 1.15rem;
+  margin: .35rem 0 .5rem;
   font-size: .82rem;
   color: var(--ink-faint);
   text-align: center;
   line-height: 1.5;
+}
+
+/* 신뢰의 숫자. 예전에는 봇 말풍선으로 따로 인사했는데, 초대 화면이 이미
+   인사하고 있어서 인사가 두 번 났다. 숫자만 여기로 옮겼다. */
+.welcome__meta {
+  margin: 0 0 1.15rem;
+  font-family: var(--mono);
+  font-size: .66rem;
+  letter-spacing: .01em;
+  color: var(--ink-faint);
+  text-align: center;
+  opacity: .8;
 }
 
 /* 제안 카드 — 세로로 전부 보인다.

@@ -73,4 +73,4 @@ if (!indexReady) {
   ui.renderNotice("메뉴 인덱스가 아직 준비되지 않았습니다");
 }
 
-ui.append("bot", `안녕하세요. 무엇을 도와드릴까요? (메뉴 ${router.size}건을 알고 있습니다)`);
+ui.setMenuCount(router.size);
