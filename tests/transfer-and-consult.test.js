@@ -304,3 +304,46 @@ test("이력용 문장에는 도구 이름도 괄호 메타도 없다 — 모델
   assert.doesNotMatch(turn.content, /^\(/, "괄호 메타 문장은 모델이 따라 쓴다");
   assert.ok(turn.content.length > 0);
 });
+
+// ── 모델이 되묻기 도구를 안 쓰고 그냥 물을 때 ───────────────────────────
+
+test("isQuestion은 물음표로 끝나는 문장만 물음으로 본다", async () => {
+  const { isQuestion } = await import("../src/orchestrator.js");
+  assert.equal(isQuestion("얼마를 보낼까요?"), true);
+  assert.equal(isQuestion("아드님 계좌로 보내드릴게요. 얼마를 보낼까요?  "), true);
+  assert.equal(isQuestion("KB국민은행 > 개인뱅킹 > 이체 에 있습니다."), false);
+  assert.equal(isQuestion(""), false);
+  assert.equal(isQuestion(undefined), false);
+});
+
+test("도구 없이 질문만 와도 안내를 덧붙이지 않는다", async () => {
+  const asking = {
+    chat: async () => ({ message: "아드님 계좌로 보내드릴게요. 얼마를 보낼까요?", toolCalls: [] }),
+  };
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: asking,
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("아들한테 이체해줘");
+  assert.equal(r.layer, "ASK");
+  assert.doesNotMatch(r.message, /있습니다/, "질문 뒤에 메뉴 위치가 붙으면 질문도 안내도 아니게 된다");
+  assert.equal(r.menus.length, 0);
+  assert.match(formatAuditLog(r.audit).join("\n"), /되묻기/);
+});
+
+test("질문이 아닌 안내에는 메뉴 위치가 그대로 붙는다", async () => {
+  const guiding = {
+    chat: async () => ({ message: "환율 우대는 외환 메뉴에서 받으실 수 있습니다.", toolCalls: [] }),
+  };
+  const o = createOrchestrator({
+    router: stubRouter,
+    llm: guiding,
+    tools,
+    authGate: createAuthGate({ verifyProof: () => true }),
+  });
+  const r = await o.handle("환율 우대 어디서 받아?");
+  assert.equal(r.layer, "L1");
+  assert.match(r.message, /있습니다/);
+});

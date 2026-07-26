@@ -68,6 +68,14 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     // "|| describeMenus(menus)"가 한 번도 걸리지 않아 위치 안내(L1의 핵심)가 통째로 빠졌다.
     // LLM이 텍스트를 만들었든 안 만들었든 위치 한 줄은 항상 붙는다.
     if (!call) {
+      // 모델이 되묻기 도구를 쓰지 않고 그냥 질문 문장만 낼 때가 있다(실측 3/3회:
+      // "아드님 계좌로 보내드릴게요. 얼마를 보낼까요?" 를 텍스트로 냈다).
+      // 여기에 메뉴 위치를 이어붙이면 "얼마를 보낼까요? KB증권 > 이체 에 있습니다."
+      // 가 되어 질문도 안내도 아닌 문장이 된다. 질문이면 질문으로 끝낸다.
+      if (isQuestion(res.message)) {
+        audit.askedBack = res.message;
+        return { layer: "ASK", message: res.message, menus: [], audit };
+      }
       const location = describeMenus(menus);
       const message = res.message ? `${res.message} ${location}` : location;
       return { layer: "L1", message, menus, audit };
@@ -149,6 +157,12 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
   }
 
   return { handle, confirm, executionAudit, historyTurn };
+}
+
+// 답이 아니라 물음인지 본다. 물음표로 끝나면 물음이다 — 한국어 종결어미를
+// 훑는 것보다 이 편이 오탐이 적다. (조회 결과가 있는 턴은 애초에 여기 오지 않는다.)
+export function isQuestion(text) {
+  return typeof text === "string" && /\?\s*$/.test(text.trim());
 }
 
 // "ask_clarification({question: '...'})" 처럼 도구 호출을 글로 적은 것인지 본다.
