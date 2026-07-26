@@ -53,14 +53,45 @@ function toBase64(bytes) {
   return Buffer.from(arr).toString("base64"); // node --check 대상이지 실행 경로는 아니다
 }
 
+// 브라우저의 WebAuthn 예외는 전부 영어다. 사용자가 읽을 한국어로 옮긴다.
+// 원인을 뭉개지 않는다 — 취소한 것과 인증기가 없는 것은 다른 사건이다.
+export function describeAuthError(err) {
+  const name = err?.name ?? "";
+  const msg = String(err?.message ?? "");
+  if (name === "NotAllowedError") {
+    if (/focus/i.test(msg)) return "인증 창을 띄우려면 이 화면이 활성화되어 있어야 합니다. 화면을 클릭한 뒤 다시 시도해 주세요.";
+    return "인증이 취소되었거나 시간이 초과되었습니다.";
+  }
+  if (name === "InvalidStateError") return "이 기기에는 이미 등록된 인증 수단이 있습니다.";
+  if (name === "NotSupportedError") return "이 기기에서는 지문·얼굴 인증을 쓸 수 없습니다.";
+  if (name === "SecurityError") return "보안 정책상 이 위치에서는 인증할 수 없습니다.";
+  if (name === "AbortError") return "인증이 중단되었습니다.";
+  return "인증을 완료하지 못했습니다.";
+}
+
 // 브라우저에서 실제로 WebAuthn 세리머니를 수행하는 제공자.
 // 등록 정보는 인스턴스 안(클로저)에서만 산다 — 이 데모는 계정 시스템이 아니므로
 // 새로고침하면 잊는다. 그것으로 충분하다.
 export function createWebAuthnProvider() {
   let registeredCredentialId = null;
 
-  function isAvailable() {
-    return hasWebAuthn();
+  // API가 있다는 것과 이 기기에 지문·얼굴·PIN 인증기가 실제로 있다는 것은 다르다.
+  //
+  // 예전에는 hasWebAuthn()만 봤다. 크롬은 PublicKeyCredential을 항상 노출하므로
+  // 인증기가 없는 노트북에서도 true가 나왔고, credentials.create()가 그제서야
+  // 터지면서 브라우저의 영어 예외가 화면에 그대로 찍혔다(실측:
+  // "The operation is not allowed at this time because the page does not have focus.").
+  // 시연의 클라이맥스에서 심사위원이 영어 오류를 보게 되는 경로였다.
+  //
+  // 그래서 인증기 존재까지 확인한다. 없으면 애초에 시도하지 않고 대체 인증으로
+  // 간다 — 대체 인증은 화면에 "실제 인증 아님"이라고 정직하게 표시된다.
+  async function isAvailable() {
+    if (!hasWebAuthn()) return false;
+    try {
+      return await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    } catch {
+      return false; // 확인할 수 없으면 없는 쪽으로 — 터지는 것보다 낫다
+    }
   }
 
   async function ensureRegistered(planId) {
@@ -94,16 +125,23 @@ export function createWebAuthnProvider() {
     if (!hasWebAuthn()) {
       throw new Error("이 브라우저/기기는 WebAuthn을 지원하지 않습니다");
     }
-    await ensureRegistered(planId);
-    const challenge = await deriveChallenge(planId);
-    const assertion = await navigator.credentials.get({
-      publicKey: {
-        challenge,
-        userVerification: "required",
-        timeout: 60000,
-      },
-    });
+    let assertion;
+    try {
+      await ensureRegistered(planId);
+      const challenge = await deriveChallenge(planId);
+      assertion = await navigator.credentials.get({
+        publicKey: {
+          challenge,
+          userVerification: "required",
+          timeout: 60000,
+        },
+      });
+    } catch (err) {
+      // 브라우저 예외는 전부 영어다. 그대로 흘리면 화면에 영어가 찍힌다.
+      throw new Error(describeAuthError(err));
+    }
     if (!assertion) throw new Error("WebAuthn 인증이 취소되었습니다");
+    const challenge = await deriveChallenge(planId);
     return {
       planId,
       credentialId: assertion.id,

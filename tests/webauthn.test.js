@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   createWebAuthnProvider,
+  describeAuthError,
   verifyWebAuthnProof,
   createFallbackProof,
   verifyFallbackProof,
@@ -15,9 +16,46 @@ import { createAuthGate } from "../src/exec/auth-gate.js";
 // 계약대로 동작하는지를 확인한다. 세리머니 자체의 검증은 사람이 브라우저에서
 // 확인해야 한다.
 
-test("브라우저가 아닌 환경에서는 isAvailable()이 false를 정직하게 보고한다", () => {
+test("브라우저가 아닌 환경에서는 isAvailable()이 false를 정직하게 보고한다", async () => {
   const provider = createWebAuthnProvider();
-  assert.equal(provider.isAvailable(), false);
+  assert.equal(await provider.isAvailable(), false);
+});
+
+// API가 있다는 것과 인증기가 있다는 것은 다르다.
+// 크롬은 인증기 없는 노트북에서도 PublicKeyCredential 을 노출하므로, API 존재만
+// 보고 WebAuthn 경로로 들어가면 credentials.create() 가 그제서야 터진다. 실측으로
+// 브라우저의 영어 예외가 시연 화면에 그대로 찍혔다.
+test("API는 있지만 인증기가 없으면 isAvailable()은 false다", async () => {
+  // Node 24 의 globalThis.navigator 는 getter 전용이라 대입이 안 된다 — 속성을 갈아끼운다.
+  const savedWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const savedNav = Object.getOwnPropertyDescriptor(globalThis, "navigator");
+  Object.defineProperty(globalThis, "window", {
+    value: { PublicKeyCredential: { isUserVerifyingPlatformAuthenticatorAvailable: async () => false } },
+    configurable: true,
+  });
+  Object.defineProperty(globalThis, "navigator", { value: { credentials: {} }, configurable: true });
+  try {
+    assert.equal(await createWebAuthnProvider().isAvailable(), false);
+  } finally {
+    if (savedWindow) Object.defineProperty(globalThis, "window", savedWindow);
+    else delete globalThis.window;
+    if (savedNav) Object.defineProperty(globalThis, "navigator", savedNav);
+  }
+});
+
+test("describeAuthError는 브라우저 영어 예외를 한국어로 옮긴다", () => {
+  const focus = describeAuthError(
+    Object.assign(new Error("The operation is not allowed at this time because the page does not have focus."), {
+      name: "NotAllowedError",
+    })
+  );
+  assert.match(focus, /화면이 활성화/);
+  assert.doesNotMatch(focus, /[A-Za-z]{6,}/, "영어 원문이 남아 있으면 안 된다");
+
+  const cancelled = describeAuthError(Object.assign(new Error("timed out"), { name: "NotAllowedError" }));
+  assert.match(cancelled, /취소|초과/);
+  // 취소와 '인증기 없음'은 다른 사건이다 — 같은 문구로 뭉개면 안 된다.
+  assert.notEqual(cancelled, describeAuthError(Object.assign(new Error("x"), { name: "NotSupportedError" })));
 });
 
 test("isAvailable()이 false인데 authenticate()를 부르면 조용히 통과하지 않고 던진다", async () => {

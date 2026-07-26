@@ -59,7 +59,8 @@ const ui = createUI(document.getElementById("app"), {
   // 아예 없었다. isAvailable()이 거짓이면(심사 노트북 등) 대체 인증으로 정직하게
   // 넘어간다 — src/auth/webauthn.js 상단 고지 참고.
   onConfirm: async (planId) => {
-    const proof = webauthn.isAvailable()
+    // isAvailable()은 이제 '인증기가 실제로 있는가'까지 확인하므로 비동기다.
+    const proof = (await webauthn.isAvailable())
       ? await webauthn.authenticate(planId)
       : createFallbackProof(planId);
     const token = authGate.issue(planId, proof);

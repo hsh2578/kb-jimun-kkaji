@@ -28,7 +28,7 @@
   --sans: "IBM Plex Sans KR", -apple-system, "Malgun Gothic", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  --shell: min(1240px, 100% - 3rem);
+  --shell: min(1040px, 100% - 3rem);
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
 
@@ -95,7 +95,7 @@ body {
   position: relative;
   z-index: 1;
   width: var(--shell);
-  margin: clamp(2.5rem, 7vw, 5.5rem) auto clamp(2rem, 4vw, 3.25rem);
+  margin: clamp(1.75rem, 4vw, 3rem) auto clamp(1.4rem, 2.6vw, 2rem);
 }
 
 .brand {
@@ -121,10 +121,10 @@ body {
 .masthead__title {
   font-family: var(--serif);
   font-weight: 700;
-  font-size: clamp(2.5rem, 7.2vw, 5.25rem);
-  line-height: 1.12;
+  font-size: clamp(2.1rem, 5vw, 3.5rem);
+  line-height: 1.14;
   letter-spacing: -.035em;
-  margin: 0 0 1.25rem;
+  margin: 0 0 .9rem;
   animation: rise .8s var(--ease) .08s both;
 }
 
@@ -204,7 +204,8 @@ body {
   width: var(--shell);
   margin: 0 auto clamp(3rem, 6vw, 5rem);
   display: grid;
-  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 392px) minmax(0, 1fr);
+  max-width: 100%;
   gap: clamp(1.25rem, 3vw, 2.5rem);
   align-items: start;
   animation: rise .9s var(--ease) .32s both;
@@ -418,33 +419,85 @@ button.auth.is-calling {
   60%      { box-shadow: 0 0 0 9px rgba(255, 188, 0, 0); }
 }
 
-/* 제안 칩 */
+/* ── 초대 화면 ────────────────────────────────────────────
+   빈 대화창은 "무엇을 물어야 하지?"를 묻게 만든다. 그 순간 사용자는
+   메뉴를 찾을 때와 똑같은 막막함에 빠진다 — 우리가 없애겠다고 한 바로 그것이다.
+   그래서 첫 화면은 비워두지 않고 무엇을 할 수 있는지 가르친다.            */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.6rem .2rem .4rem;
+  animation: rise .6s var(--ease) both;
+}
+
+.welcome__mark {
+  width: 40px;
+  height: 30px;
+  fill: var(--kb-yellow);
+  margin-bottom: .85rem;
+}
+
+.welcome__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.32rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.welcome__lede {
+  margin: .35rem 0 1.15rem;
+  font-size: .82rem;
+  color: var(--ink-faint);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* 제안 카드 — 세로로 전부 보인다.
+   예전에는 가로 스크롤 칩이라 8개 중 2.5개만 보였다. 3사 2,656개 메뉴를
+   다룬다는 주장이 화면에서 전혀 읽히지 않았다. */
 .suggest {
   display: flex;
+  flex-direction: column;
   gap: .4rem;
-  padding: 0 1rem .7rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  /* 오른쪽에 더 있다는 신호 */
-  mask-image: linear-gradient(to right, #000 88%, transparent);
+  width: 100%;
 }
-.suggest::-webkit-scrollbar { display: none; }
-.suggest button { flex: none; white-space: nowrap; }
 
-.suggest button {
+.suggest__card {
+  display: flex;
+  flex-direction: column;
+  gap: .12rem;
+  width: 100%;
+  text-align: left;
   border: 1px solid var(--rule);
   background: var(--paper);
-  color: var(--ink-soft);
-  border-radius: 999px;
-  padding: .34rem .7rem;
+  border-radius: 12px;
+  padding: .55rem .8rem .62rem;
   font-family: var(--sans);
-  font-size: .76rem;
   cursor: pointer;
-  transition: border-color .16s var(--ease), background .16s var(--ease), color .16s var(--ease);
+  transition: border-color .16s var(--ease), background .16s var(--ease), transform .16s var(--ease);
 }
 
-.suggest button:hover { border-color: var(--kb-yellow); background: #fffbef; color: var(--ink); }
+.suggest__card:hover {
+  border-color: var(--kb-yellow);
+  background: #fffdf6;
+  transform: translateX(2px);
+}
+
+.suggest__label {
+  font-size: .68rem;
+  color: var(--ink-faint);
+  letter-spacing: .01em;
+}
+
+.suggest__say {
+  font-size: .84rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
 
 /* 입력 */
 #composer {
@@ -492,6 +545,37 @@ button.auth.is-calling {
 
 #composer button:hover { background: var(--kb-yellow-deep); }
 
+/* 마이크 — 타이핑이 장벽인 사람을 위한 입구.
+   '보내기'와 같은 노란색을 주지 않는다. 주 동작은 하나여야 한다. */
+#composer button.mic {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  padding: 0;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+#composer button.mic svg { width: 19px; height: 19px; fill: currentColor; }
+#composer button.mic:hover { background: #fffdf6; border-color: var(--kb-yellow); color: var(--ink); }
+
+/* 듣는 중 — 소리는 안 보이므로 화면이 대신 말해야 한다. */
+#composer button.mic.is-listening {
+  background: var(--kb-yellow);
+  border-color: var(--kb-yellow);
+  color: #2a2016;
+  animation: listening 1.4s ease-in-out infinite;
+}
+
+@keyframes listening {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 188, 0, .55); }
+  60%      { box-shadow: 0 0 0 8px rgba(255, 188, 0, 0); }
+}
+
+/* 미지원 브라우저 — 숨기지 않는다. 눌러야 이유를 알 수 있다. */
+#composer button.mic.is-off { opacity: .42; }
+
 /* ── 판단 로그: 기계면 ───────────────────────────────────── */
 
 .audit {
@@ -522,23 +606,26 @@ button.auth.is-calling {
 }
 
 /* 자동 시연 버튼 — 발표자가 타이핑하지 않아도 시나리오가 돈다 */
+/* 심사위원이 이 화면에서 가장 먼저 눌러야 하는 버튼이다.
+   예전에는 검은 패널 안의 검은 버튼이라 눈에 띄지 않았다 — 시연을 못 보고
+   지나갈 수 있다는 뜻이고, 그건 이 프로젝트에서 제일 비싼 실패다. */
 .autodemo {
   margin-left: auto;
   flex: none;
-  border: 1px solid #3a332b;
-  background: #1c1916;
+  border: 1px solid var(--kb-yellow);
+  background: rgba(255, 188, 0, .12);
   color: var(--kb-yellow);
   border-radius: 999px;
-  padding: .3rem .8rem;
+  padding: .38rem .95rem;
   font-family: var(--mono);
-  font-size: .7rem;
+  font-size: .74rem;
   font-weight: 500;
   letter-spacing: .04em;
   cursor: pointer;
   transition: background .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease);
 }
 
-.autodemo:hover { border-color: var(--kb-yellow); background: #241f19; }
+.autodemo:hover { background: var(--kb-yellow); color: #2a2016; }
 
 .autodemo.is-running {
   background: var(--kb-yellow);
