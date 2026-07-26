@@ -6,6 +6,7 @@ import { createAuthGate } from "../src/exec/auth-gate.js";
 import { createWebAuthnProvider, verifyAuthProof, createFallbackProof } from "../src/auth/webauthn.js";
 import { QUERY_TOOLS } from "../src/tools/query-tools.js";
 import { ACTION_TOOLS } from "../src/tools/action-tools.js";
+import { CLARIFY, CLARIFY_TOOL } from "../src/tools/clarify.js";
 import { createUI } from "./ui.js";
 
 const cfg = window.KB_CONFIG ?? { mode: "rules" };
@@ -40,7 +41,7 @@ const authGate = createAuthGate({ verifyProof: verifyAuthProof });
 const webauthn = createWebAuthnProvider();
 const orchestrator = createOrchestrator({
   router, llm, authGate,
-  tools: { ...QUERY_TOOLS, ...ACTION_TOOLS },
+  tools: { ...QUERY_TOOLS, ...ACTION_TOOLS, [CLARIFY]: CLARIFY_TOOL },
 });
 
 const history = [];

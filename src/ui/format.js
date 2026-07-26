@@ -1,7 +1,7 @@
 // 화면 포맷터. 값 자체는 여기서 만들지만, DOM에 꽂는 책임은 js/ui.js에 있다.
 // (거기서는 반드시 textContent로만 꽂는다 — innerHTML 금지.)
 import { KB_DATA } from "../data/kb-data.js";
-import { resolveAutopay } from "../exec/impact.js";
+import { resolveAutopay, resolveRecipient, resolveSubsidy, fromAccount } from "../exec/impact.js";
 import { AFFILIATE_NAME } from "../menu/utterance.js";
 
 export function formatMoney(n) {
@@ -33,6 +33,27 @@ export function formatPlanSummary(plan) {
         ? `${inst.merchant} 할부를 ${args.months}개월로 변경합니다.`
         : "할부 기간 변경을 진행합니다.";
     }
+    // 이체는 되돌릴 수 없다 — 받는 분·계좌·금액·출금계좌를 전부 눈으로 확인시킨 뒤
+    // 지문을 받는다. 한 줄이라도 빠지면 "누군지 모르고 눌렀다"가 성립한다.
+    case "transfer_money": {
+      const to = resolveRecipient(args);
+      const from = fromAccount(args.account_id);
+      if (!to) return "이체를 진행합니다.";
+      const amount = Number(args.amount);
+      const money = Number.isFinite(amount) && amount > 0 ? formatMoney(amount) : "요청하신 금액";
+      const where = `${to.holder} · ${to.bank} ${to.number}`;
+      return `${to.label}(${where}) 앞으로 ${money}을 보냅니다.` + (from ? ` 출금: ${from.name}` : "");
+    }
+    case "export_card_statement": {
+      const card = KB_DATA.card.cards.find((c) => c.id === args.card_id) ?? KB_DATA.card.cards[0];
+      const ext = String(args.format ?? "xlsx").toLowerCase() === "pdf" ? "PDF" : "엑셀";
+      const dest = args.destination ? ` ${args.destination}(으)로 보냅니다.` : " 파일로 내려받습니다.";
+      return `${card?.name ?? "카드"} 이용명세서를 ${ext} 파일로 만들어${dest}`;
+    }
+    case "apply_subsidy": {
+      const sb = resolveSubsidy(args);
+      return sb ? `${sb.name} ${formatMoney(sb.amount)} 신청을 접수합니다.` : "지원금 신청을 진행합니다.";
+    }
     case "change_transfer_limit":
       return `이체한도를 ${formatMoney(args.amount)}(으)로 변경합니다.`;
     case "issue_certificate":
@@ -61,6 +82,21 @@ export function formatActionResult(plan, out) {
       return `${val.name} 자동이체 출금계좌를 ${val.to}(으)로 변경했습니다.`;
     case "change_installment":
       return `${val.merchant} 할부를 ${val.months}개월로 변경했습니다.`;
+    case "transfer_money":
+      return (
+        `${val.to}(${val.holder} · ${val.bank} ${val.number}) 앞으로 ${formatMoney(val.amount)}을 보냈습니다. ` +
+        `${val.from} 잔액 ${formatMoney(val.balanceAfter)}.`
+      );
+    case "export_card_statement":
+      return (
+        `${val.card} ${val.month} 이용명세서를 만들었습니다. (${val.fileName})` +
+        (val.destination ? ` ${val.destination}(으)로 보냈습니다.` : "")
+      );
+    case "apply_subsidy":
+      return (
+        `${val.name} ${formatMoney(val.amount)} 신청을 접수했습니다.` +
+        (val.requires ? ` ${val.requires} 제출이 남았습니다.` : "")
+      );
     case "change_transfer_limit":
       return `이체한도를 ${formatMoney(val.transferLimit)}로 변경했습니다.`;
     case "issue_certificate":
@@ -175,6 +211,8 @@ export function formatAuditLog(audit) {
       : "⚠ 주민번호·계좌번호·카드번호·전화번호 패턴 검사: 검출 0건 (성명 등은 정규식 검사 대상 아님)"
   );
   if (audit.candidates.length) lines.push(`후보 메뉴 ${audit.candidates.length}건`);
+  // 되묻기도 판단이다 — 추측해서 실행하지 않고 멈춰 물었다는 사실을 로그에 남긴다.
+  if (audit.askedBack) lines.push(`↩ 되묻기: "${audit.askedBack}" (실행 정보 부족 — 추측하지 않음)`);
   for (const t of audit.toolCalls) lines.push(`도구 호출: ${t}()`);
   for (const t of audit.blockedCalls) lines.push(`⛔ ${t}() — AuthGate 미통과, 호출 불가`);
   return lines;

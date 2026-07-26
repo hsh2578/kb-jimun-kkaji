@@ -8,6 +8,7 @@ import { verifyAuthProof, createFallbackProof } from "../src/auth/webauthn.js";
 import { formatActionResult, formatAuthEvent } from "../src/ui/format.js";
 import { QUERY_TOOLS } from "../src/tools/query-tools.js";
 import { ACTION_TOOLS } from "../src/tools/action-tools.js";
+import { CLARIFY, CLARIFY_TOOL } from "../src/tools/clarify.js";
 import { resolveAutopay } from "../src/exec/impact.js";
 import { toSeniorSpeech, chunkOneAtATime, buildConfirmation, SILENCE_TOLERANCE_MS } from "../src/voice/senior-voice.js";
 
@@ -29,7 +30,7 @@ const router = createRouter({ items: index.items ?? [], dim: index.dim, embedFn:
 // 브라우저 인증기가 없으므로 항상 대체 인증(demo-fallback) 경로를 쓴다 — js/main.js와
 // 달리 webauthn.isAvailable()을 확인할 이유조차 없다.
 const authGate = createAuthGate({ verifyProof: verifyAuthProof });
-const orch = createOrchestrator({ router, llm, authGate, tools: { ...QUERY_TOOLS, ...ACTION_TOOLS } });
+const orch = createOrchestrator({ router, llm, authGate, tools: { ...QUERY_TOOLS, ...ACTION_TOOLS, [CLARIFY]: CLARIFY_TOOL } });
 
 const transcript = document.getElementById("transcript");
 const sayInput = document.getElementById("say");

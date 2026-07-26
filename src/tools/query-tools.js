@@ -103,6 +103,74 @@ export const QUERY_TOOLS = {
   list_certificates: q("발급 가능한 은행 제증명 목록을 조회한다", {}, async () => ({
     items: KB_DATA.bank.certificates,
   })),
+
+  // 계좌번호는 이미 마스킹된 값만 데이터에 존재한다. 예금주도 마스킹된 채로 나간다.
+  list_transfer_contacts: q(
+    "자주 이체하는 상대 목록을 조회한다. '누구한테 보낼 수 있어?', '등록된 계좌 뭐 있어?' 처럼 물을 때 쓴다.",
+    {},
+    async () => ({
+      items: KB_DATA.bank.contacts.map((c) => ({ name: c.label, note: `${c.holder} · ${c.bank} ${c.number}` })),
+    })
+  ),
+
+  list_recent_transfers: q(
+    "최근 이체 내역을 최신순으로 조회한다. '최근에 어디로 보냈지?', '지난번에 얼마 보냈더라' 처럼 물을 때 쓴다.",
+    {},
+    async () => ({
+      items: KB_DATA.bank.transfers.map((t) => {
+        const c = KB_DATA.bank.contacts.find((x) => x.id === t.contactId);
+        return { name: c?.label ?? "받는 분", amount: t.amount, note: `${t.at} · ${c?.bank ?? ""} ${c?.number ?? ""}`.trim() };
+      }),
+    })
+  ),
+
+  // '이번 달 카드값'은 카드 한 장이 아니라 전 카드 합계를 묻는 말이다.
+  // get_card_statement(카드 1장)와 이 도구를 설명으로 갈라 놓는다.
+  get_card_bill_total: q(
+    "이번 달 결제예정 카드대금을 보유 카드 전체 합계로 조회한다. " +
+      "'이번 달 카드값 얼마야', '카드 얼마 나가?', '이번 달 카드 대금 알려줘' 처럼 카드를 지정하지 않고 물을 때 쓴다.",
+    {},
+    async () => {
+      const items = KB_DATA.card.statements.map((s) => {
+        const card = KB_DATA.card.cards.find((c) => c.id === s.cardId);
+        return { affiliate: "card", name: card?.name ?? s.cardId, amount: s.amount, dueDate: s.dueDate };
+      });
+      return { items, total: items.reduce((sum, i) => sum + i.amount, 0) };
+    }
+  ),
+
+  get_monthly_installment: q(
+    "이번 달 청구되는 할부금 합계를 조회한다. " +
+      "'이번 달 할부값 얼마야', '할부로 나가는 돈 얼마나 돼' 처럼 물을 때 쓴다. " +
+      "총 할부원금이 아니라 이번 달 청구액을 돌려준다.",
+    {},
+    async () => {
+      const items = KB_DATA.card.installments.map((i) => ({
+        affiliate: "card",
+        name: i.merchant,
+        amount: i.monthlyAmount,
+        months: i.months,
+        remaining: i.remaining,
+        feeRate: i.feeRate,
+      }));
+      return { items, total: items.reduce((s, i) => s + i.amount, 0) };
+    }
+  ),
+
+  list_subsidies: q(
+    "신청 가능한 지원금·환급·캐시백을 조회한다. " +
+      "'받을 수 있는 지원금 있어?', '고유가 지원금 되나', '나 뭐 환급받을 거 없어?' 처럼 물을 때 쓴다.",
+    {},
+    async () => ({
+      items: KB_DATA.card.subsidies.map((s) => ({
+        affiliate: "card",
+        name: s.name,
+        amount: s.eligible ? s.amount : null,
+        deadline: s.eligible ? s.deadline : undefined,
+        note: s.eligible ? s.basis : `신청 대상 아님 — ${s.basis}`,
+      })),
+    })
+  ),
 };
 
 export function toOpenAITools(toolMap) {

@@ -46,7 +46,20 @@ export function createRouter({ items, dim, embedFn, vectorWeight = DEFAULT_VECTO
     });
 
     scored.sort((a, b) => b.score - a.score);
-    return scored.slice(0, topK).map(({ it, score, why }) => ({
+
+    // 한 메뉴가 벡터를 여러 개 가질 수 있다(생활사건 발화는 자기 벡터를 따로 갖는다).
+    // 같은 메뉴가 후보 목록을 두세 칸 차지하면 사용자가 볼 선택지가 그만큼 줄어든다.
+    // 점수가 가장 높은 것만 남긴다 — 정렬이 끝난 뒤라 먼저 만나는 것이 최고점이다.
+    const seen = new Set();
+    const unique = [];
+    for (const s of scored) {
+      if (seen.has(s.it.id)) continue;
+      seen.add(s.it.id);
+      unique.push(s);
+      if (unique.length === topK) break;
+    }
+
+    return unique.map(({ it, score, why }) => ({
       id: it.id,
       name: it.name,
       path: it.path,

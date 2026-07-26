@@ -1,7 +1,6 @@
 # ⚠️ 비밀 — 절대 배포에 포함되면 안 된다
 .env
 .env.*
-config.local.js
 
 # 배포에 불필요한 것
 .git

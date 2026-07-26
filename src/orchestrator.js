@@ -6,6 +6,7 @@ import { scrubPII } from "./llm/pii.js";
 import { createExecutor } from "./exec/auth-gate.js";
 import { analyzeImpact as defaultImpact } from "./exec/impact.js";
 import { toOpenAITools } from "./tools/query-tools.js";
+import { CLARIFY } from "./tools/clarify.js";
 import { AFFILIATE_NAME } from "./menu/utterance.js";
 
 export function createOrchestrator({ router, llm, tools, authGate, impactFn = defaultImpact }) {
@@ -62,6 +63,18 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
       const location = describeMenus(menus);
       const message = res.message ? `${res.message} ${location}` : location;
       return { layer: "L1", message, menus, audit };
+    }
+
+    // 되묻기 — 상담이 성립하는 지점이다.
+    // 여기서 메뉴 위치를 덧붙이면 안 된다. "얼마를 보낼까요? ○○ > ○○ 에 있습니다"는
+    // 질문이 아니라 안내로 읽히고, 고객은 대답 대신 대화를 끝낸다.
+    // menus를 비워 보내 화면에도 후보 목록이 그려지지 않게 한다.
+    if (call.name === CLARIFY) {
+      const question = call.args?.question;
+      audit.askedBack = question ?? "";
+      if (question) return { layer: "ASK", message: question, menus: [], audit };
+      // 질문 없이 되묻기를 부른 건 모델의 실수다 — 대화를 끊지 말고 위치라도 안내한다.
+      return { layer: "L1", message: describeMenus(menus), menus, audit };
     }
 
     const tool = tools[call.name];
