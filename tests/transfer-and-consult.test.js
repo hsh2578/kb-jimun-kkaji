@@ -212,7 +212,7 @@ test("되묻기 응답도 대화 이력에 assistant 턴으로 남는다", async
     authGate: createAuthGate({ verifyProof: () => true }),
   });
   const r = await o.handle("아들한테 이체해줘");
-  const turn = o.historyTurn(r);
+  const [turn] = o.historyTurns(r);
   assert.equal(turn.role, "assistant");
   assert.equal(turn.content, "얼마를 보낼까요?");
 });
@@ -291,18 +291,21 @@ test("모델이 도구 호출을 글로 적어 보내면 화면에 내보내지 
 
 // ── 대화 이력에 넣는 문장은 '모델이 볼 본보기'다 ────────────────────────
 
-test("이력용 문장에는 도구 이름도 괄호 메타도 없다 — 모델이 따라 쓴다", async () => {
+test("이력에 답변처럼 생긴 문장을 넣지 않는다 — 모델이 그걸 베낀다", async () => {
   const o = createOrchestrator({
     router: stubRouter,
-    llm: { chat: async () => ({ message: "", toolCalls: [{ name: "apply_subsidy", args: {} }] }) },
+    llm: { chat: async () => ({ message: "", toolCalls: [{ id: "c1", name: "list_pensions", args: {} }] }) },
     tools,
     authGate: createAuthGate({ verifyProof: () => true }),
   });
-  const r = await o.handle("고유가 지원금도 신청해줘");
-  const turn = o.historyTurn(r);
-  assert.doesNotMatch(turn.content, /apply_subsidy/, "도구 이름이 이력에 남으면 모델이 그걸 답변으로 뱉는다");
-  assert.doesNotMatch(turn.content, /^\(/, "괄호 메타 문장은 모델이 따라 쓴다");
-  assert.ok(turn.content.length > 0);
+  const r = await o.handle("내 연금 어디 들어가 있지?");
+  const turns = o.historyTurns(r);
+  // 도구를 부른 턴의 content 는 비어 있어야 한다. 호출 사실은 tool_calls 로 남는다.
+  // 문장으로 남기면 모델이 그 말투를 베껴 도구 대신 문장을 뱉는다(실측 2회).
+  assert.equal(turns[0].content, null);
+  assert.equal(turns[0].tool_calls[0].function.name, "list_pensions");
+  assert.equal(turns[1].role, "tool");
+  assert.equal(turns[1].tool_call_id, "c1");
 });
 
 // ── 모델이 되묻기 도구를 안 쓰고 그냥 물을 때 ───────────────────────────
@@ -377,4 +380,30 @@ test("관찰과 제안이 같은 말을 하지 않는다 — 같으면 화면에
     // 뒷문장이 앞문장을 통째로 되풀이하는 경우도 막는다.
     assert.ok(!said.includes(next) && !next.includes(said), `${name}: 한쪽이 다른 쪽을 그대로 품고 있다`);
   }
+});
+
+// ── 서류 발급: 대상이 없으면 계획을 만들지 않는다 ───────────────────────
+
+test("서류 이름이 없으면 발급 계획을 만들지 않는다", async () => {
+  const r = await analyzeImpact("issue_certificate", {});
+  assert.equal(r.blocked, true);
+  assert.match(r.reason, /어떤 서류/);
+});
+
+test("다른 계열사 서류면 어디서 발급하는지 알려주고 멈춘다", async () => {
+  // 잔고증명서는 KB증권 서류다. 은행 도구로 부르면 막되, 어디인지 알려준다.
+  const r = await analyzeImpact("issue_certificate", { name: "잔고증명서" });
+  assert.equal(r.blocked, true);
+  assert.match(r.reason, /KB증권/);
+});
+
+test("목록에 없는 서류는 지어내지 않고 되묻는다", async () => {
+  const r = await analyzeImpact("issue_certificate", { name: "없는증명서xyz" });
+  assert.equal(r.blocked, true);
+  assert.match(r.reason, /찾지 못했/);
+});
+
+test("제 계열사 서류는 그대로 통과한다", async () => {
+  assert.equal((await analyzeImpact("issue_certificate", { name: "예금잔액증명서" })).blocked, false);
+  assert.equal((await analyzeImpact("issue_sec_tax_document", { name: "잔고증명서" })).blocked, false);
 });

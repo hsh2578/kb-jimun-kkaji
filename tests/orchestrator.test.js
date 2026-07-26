@@ -132,38 +132,48 @@ test("영향 분석이 막으면 계획을 세우지 않는다", async () => {
 
 // --- 대화 이력 (다중 턴에서 첫 의도에 고정되던 버그) ---
 
-test("도구만 호출하고 텍스트가 없어도 assistant 턴을 남긴다", () => {
+test("도구를 부른 턴은 OpenAI 프로토콜대로 assistant+tool 한 쌍으로 남는다", () => {
   const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
-  const turn = o.historyTurn({
+  const turns = o.historyTurns({
     layer: "L2", message: "",
-    audit: { toolCalls: ["list_pensions"], blockedCalls: [] },
+    audit: { toolCalls: ["list_pensions"], blockedCalls: [], calls: [{ id: "c1", name: "list_pensions", args: {} }] },
   });
-  assert.equal(turn.role, "assistant");
-  assert.ok(turn.content.length > 0, "빈 턴을 남기면 이력이 기형이 된다");
-  // 도구 이름을 넣었더니 모델이 그 말투를 따라 해서, 도구를 부르는 대신
-  // 똑같이 생긴 문장을 답변으로 뱉었다(실측). 이력은 사람 말이어야 한다.
-  assert.ok(!turn.content.includes("list_pensions"), "도구 이름이 이력에 남으면 모델이 그걸 답변으로 뱉는다");
+  assert.equal(turns.length, 2);
+  assert.equal(turns[0].role, "assistant");
+  assert.equal(turns[0].content, null, "도구를 부른 턴에 답변 문장을 지어 넣으면 모델이 그걸 베낀다");
+  assert.equal(turns[0].tool_calls[0].function.name, "list_pensions");
+  assert.equal(turns[1].role, "tool");
+  assert.equal(turns[1].tool_call_id, "c1");
 });
 
-test("인증 대기 중인 실행도 처리한 것으로 이력에 남긴다", () => {
+test("이력의 tool 결과에는 수치가 담기지 않는다", () => {
   const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
-  const turn = o.historyTurn({
-    layer: "L3", message: "",
-    audit: { toolCalls: [], blockedCalls: ["cancel_autopay"] },
+  const turns = o.historyTurns({
+    layer: "L2", message: "",
+    audit: { toolCalls: ["list_accounts"], blockedCalls: [], calls: [{ id: "c1", name: "list_accounts", args: {} }] },
   });
-  assert.ok(turn.content.length > 0);
-  assert.ok(!turn.content.includes("cancel_autopay"), "도구 이름은 이력에 남기지 않는다");
+  assert.doesNotMatch(turns[1].content, /\d{3,}/, "잔액이 LLM으로 나가면 안 된다");
+});
+
+test("인증 대기 중인 실행도 이력에 남는다", () => {
+  const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
+  const turns = o.historyTurns({
+    layer: "L3", message: "",
+    audit: { toolCalls: [], blockedCalls: ["cancel_autopay"], calls: [{ id: "c9", name: "cancel_autopay", args: { name_hint: "케이블" } }] },
+  });
+  assert.equal(turns[0].tool_calls[0].function.name, "cancel_autopay");
+  assert.equal(turns[1].role, "tool");
 });
 
 test("텍스트가 있으면 그 텍스트를 그대로 쓴다", () => {
   const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
-  const turn = o.historyTurn({ layer: "L1", message: "여기 있습니다", audit: { toolCalls: [], blockedCalls: [] } });
+  const [turn] = o.historyTurns({ layer: "L1", message: "여기 있습니다", audit: { toolCalls: [], blockedCalls: [], calls: [] } });
   assert.equal(turn.content, "여기 있습니다");
 });
 
 test("도구도 텍스트도 없으면 안내했다는 사실을 남긴다", () => {
   const o = createOrchestrator({ router, llm: llmWith([]), tools, authGate: createAuthGate() });
-  const turn = o.historyTurn({ layer: "L1", message: "", audit: { toolCalls: [], blockedCalls: [] } });
+  const [turn] = o.historyTurns({ layer: "L1", message: "", audit: { toolCalls: [], blockedCalls: [], calls: [] } });
   assert.equal(turn.role, "assistant");
   assert.ok(turn.content.length > 0, "빈 content 는 이력을 기형으로 만든다");
 });

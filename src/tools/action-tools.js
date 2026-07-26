@@ -31,7 +31,10 @@ export const ACTION_TOOLS = {
   ),
 
   issue_certificate: a(
-    "은행 제증명을 발급한다",
+    "KB국민은행 제증명을 발급한다. name 에는 반드시 다음 중 하나를 정확히 넣는다: " +
+      "예금잔액증명서, 부채증명서, 금융거래확인서, 연말정산증명서, 원천징수영수증. " +
+      "'잔고증명서'는 KB증권 서류이므로 issue_sec_tax_document 를 쓴다. " +
+      "어떤 서류인지 못 들었으면 이 도구를 부르지 말고 ask_clarification 으로 묻는다.",
     { name: "string", english: "boolean" },
     async ({ name, english = false }) => {
       const c = KB_DATA.bank.certificates.find((x) => x.name === name);
@@ -42,7 +45,10 @@ export const ACTION_TOOLS = {
   ),
 
   issue_sec_tax_document: a(
-    "KB증권 세금 관련 서류를 발급한다",
+    "KB증권 서류를 발급한다. name 에는 반드시 다음 중 하나를 정확히 넣는다: " +
+      "잔고증명서, 금융소득증명서, 해외주식양도소득내역. " +
+      "'예금잔액증명서'는 KB국민은행 서류이므로 issue_certificate 를 쓴다. " +
+      "어떤 서류인지 못 들었으면 이 도구를 부르지 말고 ask_clarification 으로 묻는다.",
     { name: "string" },
     async ({ name }) => {
       const d = KB_DATA.sec.taxDocs.find((x) => x.name === name);
@@ -95,7 +101,8 @@ export const ACTION_TOOLS = {
 
   export_card_statement: a(
     "카드 이용명세서를 파일로 내보낸다. '엑셀로 뽑아줘', '명세서 파일로 보내줘', 'PDF로 받고 싶어' 처럼 말할 때 쓴다. " +
-      "format 은 들은 대로 'xlsx' 또는 'pdf' 로 넣는다. 목적지를 말하면 destination 에 넣는다(예: '메일', '카카오톡'). " +
+      "format 은 들은 대로 'xlsx' 또는 'pdf' 로 넣는다. " +
+      "destination 은 고객이 보낼 곳을 직접 말했을 때만 채운다 — 말하지 않았으면 비워 둔다. '메일' 같은 목적지를 지어내지 마라. " +
       "카드를 지정하지 않으면 주카드가 자동으로 쓰인다 — 어느 카드인지 묻지 말고, " +
       "list_cards 로 카드 목록을 먼저 보여주지도 마라. 바로 이 도구를 부른다.",
     { card_id: "string", month: "string", format: "string", destination: "string" },

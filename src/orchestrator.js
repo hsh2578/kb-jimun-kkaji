@@ -38,6 +38,8 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
       candidates: menus.map((m) => m.id),
       toolCalls: [],
       blockedCalls: [],
+      // 이력 복원용 원본 호출(id·인자 포함). 화면 표시는 toolCalls/blockedCalls 가 맡는다.
+      calls: [],
     };
 
     // LLM이 죽어도 위치 안내(L1)까지는 반드시 낸다.
@@ -102,6 +104,7 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     if (!tool.requiresAuth) {
       try {
         audit.toolCalls.push(call.name);
+        audit.calls.push({ id: callId(call, 0), name: call.name, args: call.args });
         const plan = await executor.prepare(call.name, call.args);
         const data = await executor.execute(plan.planId, null);
         return { layer: "L2", message: res.message, data, menus, audit };
@@ -123,29 +126,47 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     const plan = await executor.prepare(call.name, call.args);
     planTools.set(plan.planId, call.name);
     audit.blockedCalls.push(call.name); // 인증 전이라 아직 호출되지 않았음을 남긴다
+    audit.calls.push({ id: callId(call, 0), name: call.name, args: call.args });
     return { layer: "L3", message: res.message, plan, warnings: impact.warnings, menus, audit };
   }
 
-  // 대화 이력에 넣을 assistant 턴을 만든다.
+  // 대화 이력에 넣을 턴들을 만든다. 반환값은 배열이다 — 도구를 호출한 턴은
+  // assistant(tool_calls) + tool(결과) 두 개가 한 쌍이기 때문이다.
   //
-  // LLM이 도구를 호출할 때 content 는 비어 있다. 그걸 그대로 두면 이력이
-  // user 만 연속으로 쌓인 기형 대화가 되고, 모델은 첫 턴의 의도에 고정된다.
-  // (실측: 연금 조회 이후 카드·세금·자동이체 질문이 전부 list_pensions 로 갔다.)
-  // 그래서 텍스트가 없을 때는 "무엇을 처리했는지"를 대신 남긴다.
-  // 이 문장은 '모델이 다음 턴에 보게 될 본보기'다.
+  // 왜 이렇게까지 하는가 — 두 번 당했다.
+  //   1차: "(apply_subsidy 을(를) 실행해 결과를 이미 보여주었다.)" 라는 메타 문장을
+  //        넣었더니, 모델이 그 말투를 베껴서 도구를 부르는 대신 똑같이 생긴 문장을
+  //        답변으로 뱉었다. 지원금 신청이 실행되지 않았다.
+  //   2차: 사람 말투로 바꿔 "말씀하신 내용을 처리해 결과를 보여드렸습니다." 를
+  //        넣었더니, 이번엔 "연금 현황을 조회해 결과를 보여드렸습니다." 라고 베꼈다.
+  //        연금·대출·지원금 조회가 전부 텍스트 답변으로 새 나갔다.
+  // 문장을 고르는 문제가 아니었다. 이력에 '답변처럼 생긴 문장'이 있는 한 모델은
+  // 그것을 흉내 낸다. 그래서 흉내 낼 본보기 자체를 없앤다 — OpenAI 도구
+  // 프로토콜 그대로, 도구를 부른 사실을 구조로 남긴다.
   //
-  // 예전에는 "(apply_subsidy 을(를) 실행해 결과를 이미 보여주었다. 처리 완료.)"
-  // 처럼 도구 이름이 든 메타 문장을 넣었다. 그러자 모델이 그 말투를 따라 해서,
-  // 도구를 호출하는 대신 똑같이 생긴 문장을 '답변'으로 뱉었다(실측: 고유가
-  // 지원금 신청이 실행되지 않고 그 문장만 화면에 찍혔다).
-  // 그래서 사람이 쓸 법한 평범한 문장만 남긴다 — 도구 이름도, 괄호 메타도 없다.
-  function historyTurn(r) {
-    if (r.message) return { role: "assistant", content: r.message };
-    const called = [...(r.audit?.toolCalls ?? []), ...(r.audit?.blockedCalls ?? [])];
-    if (called.length) {
-      return { role: "assistant", content: "말씀하신 내용을 처리해 결과를 보여드렸습니다." };
+  // tool 결과에는 수치를 담지 않는다. 잔액·계좌번호가 LLM으로 나가면 이 제품이
+  // 하지 않겠다고 한 일을 하는 것이다. 결과는 화면에만 있다.
+  const TOOL_DONE = "실행됨. 결과는 사용자 화면에 표시함. 수치는 비공개.";
+
+  function historyTurns(r) {
+    if (r.message) return [{ role: "assistant", content: r.message }];
+
+    const calls = r.audit?.calls ?? [];
+    if (calls.length) {
+      return [
+        {
+          role: "assistant",
+          content: null,
+          tool_calls: calls.map((c) => ({
+            id: c.id,
+            type: "function",
+            function: { name: c.name, arguments: JSON.stringify(c.args ?? {}) },
+          })),
+        },
+        ...calls.map((c) => ({ role: "tool", tool_call_id: c.id, content: TOOL_DONE })),
+      ];
     }
-    return { role: "assistant", content: "메뉴 위치를 안내해 드렸습니다." };
+    return [{ role: "assistant", content: "메뉴 위치를 안내해 드렸습니다." }];
   }
 
   async function confirm(planId, token) {
@@ -156,13 +177,30 @@ export function createOrchestrator({ router, llm, tools, authGate, impactFn = de
     return { ...data, audit: entry };
   }
 
-  return { handle, confirm, executionAudit, historyTurn };
+  return { handle, confirm, executionAudit, historyTurns };
 }
 
-// 답이 아니라 물음인지 본다. 물음표로 끝나면 물음이다 — 한국어 종결어미를
-// 훑는 것보다 이 편이 오탐이 적다. (조회 결과가 있는 턴은 애초에 여기 오지 않는다.)
+// 도구 호출 id. 프록시가 넘겨주면 그것을 쓰고, 없으면(stub 어댑터 등) 자리표를 만든다.
+// id 가 비면 assistant.tool_calls 와 tool 메시지가 짝을 이루지 못해 업스트림이 400을 낸다.
+let callSeq = 0;
+function callId(call, _i) {
+  return call.id || `call_local_${++callSeq}`;
+}
+
+// 되묻기인지, 답을 하고 예의상 물음으로 닫은 것인지 가른다.
+//
+// 물음표만 보면 너무 넓다. 실측: "환율 우대는 ... 혜택이 제공됩니다. 더 궁금한
+// 점이 있으신가요?" 가 되묻기로 분류되어, 도구가 없을 때 반드시 붙어야 할
+// 메뉴 위치 안내가 통째로 사라졌다. L1의 최소 약속이 깨진 것이다.
+//
+// 되묻기는 짧다("어느 분께 보내드릴까요?"). 설명은 길다. 길이로 가른다 —
+// 한국어 종결어미를 훑는 것보다 오탐이 적다.
+const CLARIFY_MAX_LEN = 60;
+
 export function isQuestion(text) {
-  return typeof text === "string" && /\?\s*$/.test(text.trim());
+  if (typeof text !== "string") return false;
+  const t = text.trim();
+  return /\?$/.test(t) && t.length <= CLARIFY_MAX_LEN;
 }
 
 // "ask_clarification({question: '...'})" 처럼 도구 호출을 글로 적은 것인지 본다.

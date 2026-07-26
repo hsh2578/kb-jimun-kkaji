@@ -142,7 +142,7 @@ test(
         choices: [{
           message: {
             content: "안녕하세요",
-            tool_calls: [{ function: { name: "cancel_autopay", arguments: '{"autopay_id":"ap1"}' } }],
+            tool_calls: [{ id: "call_1", function: { name: "cancel_autopay", arguments: '{"autopay_id":"ap1"}' } }],
           },
         }],
       }),
@@ -153,7 +153,8 @@ test(
       await handler({ method: "POST", body: { utterance: "통신비 해지", menuCandidates: [] } }, res);
       assert.equal(res.statusCode, 200);
       assert.equal(res.body.message, "안녕하세요");
-      assert.deepEqual(res.body.toolCalls, [{ name: "cancel_autopay", args: { autopay_id: "ap1" } }]);
+      // id 를 함께 넘겨야 대화 이력을 OpenAI 도구 프로토콜대로 복원할 수 있다.
+      assert.deepEqual(res.body.toolCalls, [{ id: "call_1", name: "cancel_autopay", args: { autopay_id: "ap1" } }]);
     } finally {
       globalThis.fetch = originalFetch;
     }

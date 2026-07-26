@@ -51,7 +51,11 @@ export default async function handler(req, res) {
 
   let toolCalls;
   try {
+    // id 를 함께 넘긴다. 대화 이력을 OpenAI 도구 프로토콜대로(assistant.tool_calls +
+    // tool 결과) 복원하려면 tool_call_id 가 있어야 한다. 이력을 사람 말투 문장으로
+    // 흉내 내면 모델이 그 문장을 답변으로 베껴 쓴다 — 실측으로 두 번 당했다.
     toolCalls = (msg.tool_calls ?? []).map((t) => ({
+      id: t.id,
       name: t.function.name,
       args: JSON.parse(t.function.arguments || "{}"),
     }));

@@ -211,6 +211,32 @@ export async function analyzeImpact(toolName, args) {
     return { warnings, blocked: false };
   }
 
+  // 서류 발급. 여기에 분기가 없어서 name 이 비어 있어도 계획이 만들어졌고,
+  // "undefined 발급을 진행합니다." 라는 계획이 지문 버튼까지 갔다가 실행에서
+  // 터졌다(실측). "모르면 진행하지 않는다"가 이 도구에만 빠져 있었다.
+  if (toolName === "issue_certificate" || toolName === "issue_sec_tax_document") {
+    const wanted = args?.name;
+    if (!wanted) {
+      return { warnings: [], blocked: true, reason: "어떤 서류가 필요하신지 말씀해 주세요." };
+    }
+    const here = toolName === "issue_certificate" ? KB_DATA.bank.certificates : KB_DATA.sec.taxDocs;
+    if (here.some((d) => d.name === wanted)) return { warnings: [], blocked: false };
+
+    // 같은 서류가 계열사마다 이름이 다르다. 다른 쪽에 있으면 어디인지 알려준다 —
+    // "발급할 수 없습니다"로 끝내면 고객은 다시 헤맨다.
+    const elsewhere =
+      toolName === "issue_certificate"
+        ? KB_DATA.sec.taxDocs.find((d) => d.name === wanted) && "KB증권"
+        : KB_DATA.bank.certificates.find((d) => d.name === wanted) && "KB국민은행";
+    return {
+      warnings: [],
+      blocked: true,
+      reason: elsewhere
+        ? `${wanted}은(는) ${elsewhere}에서 발급하는 서류입니다. 그쪽으로 신청해 드릴까요?`
+        : `${wanted}은(는) 발급 목록에서 찾지 못했습니다. 어떤 서류인지 다시 말씀해 주세요.`,
+    };
+  }
+
   if (toolName === "change_transfer_limit") {
     return {
       warnings: ["이체한도 증액은 보이스피싱 피해 규모를 키울 수 있습니다. 필요한 만큼만 올리세요."],
