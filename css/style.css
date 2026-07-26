@@ -1,31 +1,576 @@
-:root { color-scheme: light dark; }
-body { font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; margin: 0; }
-header { padding: 1rem; }
-main { padding: 1rem; }
-footer { padding: 1rem; opacity: .7; }
+/* ============================================================
+   「지문까지」 — KB Future Finance A.I. Challenge
+   컨셉: AI가 메뉴 미로를 대신 걷고, 사용자는 지문 하나만 누른다.
+        고객이 보는 따뜻한 종이면과, 심사위원이 보는 차가운 기계면.
+        그 대비 자체가 이 제품의 구조다.
+   ============================================================ */
 
-main { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; }
-.log { min-height: 50vh; max-height: 60vh; overflow-y: auto; border: 1px solid #8884; border-radius: 8px; padding: .75rem; }
-.msg { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; max-width: 80%; }
-.msg.user { background: #ffd54f33; margin-left: auto; }
-.msg.bot { background: #8884; }
-.msg.warn { background: #ff525233; }
-.notice { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; background: #42a5f533; font-size: .9rem; }
-.menus, .data { margin: .3rem 0 .3rem 1rem; }
-.plan-summary { margin: .4rem 0; padding: .5rem .7rem; border-radius: 8px; background: #42a5f51a; font-weight: 600; }
-button.auth { display: block; margin: .5rem 0; padding: .6rem 1rem; font-size: 1rem; cursor: pointer; }
-#composer { display: flex; gap: .5rem; margin-top: .5rem; }
-#composer input { flex: 1; padding: .6rem; font-size: 1rem; }
-.audit { border: 1px solid #8884; border-radius: 8px; padding: .75rem; font-size: .85rem; }
-.audit pre { white-space: pre-wrap; word-break: break-all; }
-@media (max-width: 840px) { main { grid-template-columns: 1fr; } }
+:root {
+  /* KB 브랜드 */
+  --kb-yellow: #ffbc00;
+  --kb-yellow-deep: #f0a500;
+  --kb-gray: #7c7366;
 
-.phone { max-width: 420px; margin: 2rem auto; border: 1px solid #8886; border-radius: 16px; overflow: hidden; }
-.phone-head { padding: 1rem; background: #ffd54f33; display: grid; gap: .2rem; }
-.phone-head small { opacity: .7; }
-.transcript { min-height: 50vh; max-height: 60vh; overflow-y: auto; padding: 1rem; font-size: 1.15rem; line-height: 1.7; }
-.transcript p { margin: .5rem 0; }
-.transcript .user { text-align: right; opacity: .8; }
-.phone-controls { display: flex; gap: .5rem; padding: 1rem; }
-.phone-controls input { flex: 1; padding: .7rem; font-size: 1.05rem; }
-#mic { padding: .7rem 1rem; font-size: 1.05rem; }
+  /* 따뜻한 종이면 */
+  --paper: #f7f3ec;
+  --paper-raised: #fffdf8;
+  --ink: #191512;
+  --ink-soft: #5c534a;
+  --ink-faint: #a89d8f;
+  --rule: #e3dbcd;
+
+  /* 기계면 */
+  --machine: #12100e;
+  --machine-ink: #cfc6b8;
+  --machine-faint: #6b6357;
+
+  --serif: "Noto Serif KR", serif;
+  --sans: "IBM Plex Sans KR", -apple-system, "Malgun Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --shell: min(1240px, 100% - 3rem);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.65;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(255, 188, 0, .09), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(124, 115, 102, .08), transparent 46%);
+  background-attachment: fixed;
+}
+
+/* ── 배경: AI가 대신 걷는 메뉴 미로 ─────────────────────────── */
+
+.maze {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 74%, transparent);
+}
+
+.maze::before,
+.maze::after {
+  content:
+    "개인뱅킹 › 이체 › 자동이체 › 자동이체내역 조회/해지/변경    "
+    "KB국민카드 › 카드이용 › 이용실적·혜택 › 나의카드할인한도조회    "
+    "개인뱅킹 › 뱅킹관리 › 제증명발급 › 예금잔액증명서    "
+    "KB증권 › 증명서 › 해외주식양도소득내역발급    "
+    "개인뱅킹 › 조회 › 계좌조회 › 국민은행 계좌조회 › 예금    "
+    "KB국민카드 › 분할납부·할부관리 › 할부기간 변경    "
+    "개인뱅킹 › 이체 › 자동납부 › 자동납부 등록/해지    "
+    "KB증권 › IRP/개인연금저축 › 연금계좌 절세활용법    ";
+  position: absolute;
+  left: -12%;
+  width: 124%;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  color: var(--kb-gray);
+  opacity: .16;
+  white-space: nowrap;
+  line-height: 3.4;
+  word-spacing: .2em;
+}
+
+.maze::before { top: 4%;  transform: rotate(-1.4deg); animation: drift 90s linear infinite; }
+.maze::after  { top: 46%; transform: rotate(1.1deg);  animation: drift 120s linear infinite reverse; }
+
+@keyframes drift { from { translate: 0 0; } to { translate: -34% 0; } }
+
+/* ── 마스트헤드 ──────────────────────────────────────────── */
+
+.masthead {
+  position: relative;
+  z-index: 1;
+  width: var(--shell);
+  margin: clamp(2.5rem, 7vw, 5.5rem) auto clamp(2rem, 4vw, 3.25rem);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.75rem);
+  animation: rise .8s var(--ease) both;
+}
+
+.brand__mark { width: 32px; height: 24px; fill: var(--kb-yellow); flex: none; }
+.brand__name { font-weight: 600; font-size: .95rem; letter-spacing: -.01em; }
+.brand__divider { width: 1px; height: 14px; background: var(--rule); }
+
+.brand__tag {
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.masthead__title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 7.2vw, 5.25rem);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+  margin: 0 0 1.25rem;
+  animation: rise .8s var(--ease) .08s both;
+}
+
+/* '대신 합니다' — 이 문장이 제품 전체의 주장이다. 노란 밑줄로 못 박는다. */
+.masthead__title em { font-style: normal; position: relative; display: inline-block; }
+
+.masthead__title em::after {
+  content: "";
+  position: absolute;
+  left: -.06em; right: -.06em; bottom: .1em;
+  height: .32em;
+  background: var(--kb-yellow);
+  z-index: -1;
+  transform-origin: left;
+  animation: swipe .7s var(--ease) .7s both;
+}
+
+@keyframes swipe { from { scale: 0 1; } to { scale: 1 1; } }
+
+.masthead__lede {
+  max-width: 46ch;
+  margin: 0 0 clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(.98rem, 1.4vw, 1.1rem);
+  font-weight: 300;
+  color: var(--ink-soft);
+  animation: rise .8s var(--ease) .16s both;
+}
+
+.masthead__lede strong { font-weight: 600; color: var(--ink); }
+
+.mark {
+  background: linear-gradient(transparent 62%, rgba(255, 188, 0, .55) 62%);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+  animation: rise .8s var(--ease) .24s both;
+}
+
+.stat {
+  flex: 1 1 8rem;
+  padding: .9rem 1.1rem .9rem 0;
+  border-right: 1px solid var(--rule);
+}
+.stat:last-child { border-right: 0; }
+.stat:not(:first-child) { padding-left: 1.1rem; }
+
+.stat dt { font-size: .74rem; color: var(--ink-faint); margin-bottom: .15rem; }
+
+.stat dd {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.stat dd small {
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+  margin-left: .15rem;
+}
+
+/* ── 작업대: 폰 + 판단 로그 ──────────────────────────────── */
+
+#app {
+  position: relative;
+  z-index: 1;
+  width: var(--shell);
+  margin: 0 auto clamp(3rem, 6vw, 5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+  animation: rise .9s var(--ease) .32s both;
+}
+
+/* 폰 — 이 서비스는 KB스타뱅킹 앱 안의 웹뷰 모듈로 들어간다 */
+.phone {
+  background: #211d19;
+  border-radius: 34px;
+  padding: 9px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .14) inset,
+    0 30px 60px -22px rgba(25, 21, 18, .5),
+    0 4px 14px -4px rgba(25, 21, 18, .22);
+}
+
+.phone__screen {
+  background: var(--paper-raised);
+  border-radius: 26px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 620px;
+}
+
+.phone__bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .8rem 1rem .75rem;
+  background: linear-gradient(100deg, var(--kb-yellow) 0%, #ffd24d 58%, var(--kb-yellow-deep) 100%);
+  color: #2a2016;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.phone__bar svg { width: 22px; height: 17px; fill: #2a2016; flex: none; }
+.phone__bar .sep { opacity: .45; }
+
+.phone__bar .env {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .62rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .12rem .42rem;
+  border: 1px solid rgba(42, 32, 22, .3);
+  border-radius: 3px;
+}
+
+.log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.15rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  scroll-behavior: smooth;
+}
+
+.log::-webkit-scrollbar { width: 5px; }
+.log::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+.msg {
+  max-width: 86%;
+  padding: .62rem .85rem;
+  border-radius: 15px;
+  font-size: .9rem;
+  line-height: 1.6;
+  animation: pop .32s var(--ease) both;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: var(--kb-yellow);
+  color: #2a2016;
+  border-bottom-right-radius: 5px;
+  font-weight: 500;
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: #f1ece2;
+  color: var(--ink);
+  border-bottom-left-radius: 5px;
+}
+
+.msg.warn {
+  align-self: flex-start;
+  background: #fff4e5;
+  border: 1px solid #f5d9a8;
+  color: #7a4b09;
+  font-size: .85rem;
+  max-width: 94%;
+}
+
+.notice {
+  align-self: stretch;
+  background: #eef4fb;
+  border: 1px solid #cfe0f0;
+  border-radius: 10px;
+  padding: .55rem .75rem;
+  font-size: .82rem;
+  color: #2b4d6f;
+}
+
+/* L1 메뉴 위치 · L2 조회 결과 */
+.menus, .data {
+  align-self: stretch;
+  margin: -.1rem 0 .25rem;
+  padding: .7rem .85rem;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  font-size: .84rem;
+  display: grid;
+  gap: .42rem;
+  animation: pop .34s var(--ease) both;
+}
+
+.menus li { color: var(--ink-soft); font-family: var(--mono); font-size: .78rem; letter-spacing: -.01em; }
+.menus li::before { content: "📍 "; }
+
+.data li { color: var(--ink); position: relative; padding-left: .85rem; }
+.data li::before {
+  content: "";
+  position: absolute; left: 0; top: .62em;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--kb-yellow);
+}
+
+/* L3 실행 계획 — 지문을 누르기 전에 무엇을 하는지 반드시 보인다 */
+.plan-summary {
+  align-self: stretch;
+  padding: .8rem .9rem;
+  background: linear-gradient(180deg, #fffaef, #fff6e2);
+  border: 1px solid #f2dfae;
+  border-left: 3px solid var(--kb-yellow);
+  border-radius: 12px;
+  font-size: .89rem;
+  font-weight: 500;
+  animation: pop .34s var(--ease) both;
+}
+
+/* 지문 버튼 — 이 화면에서 가장 강한 순간 */
+button.auth {
+  align-self: stretch;
+  margin-top: .1rem;
+  padding: .85rem 1rem;
+  border: 0;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--paper-raised);
+  font-family: var(--sans);
+  font-size: .94rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s var(--ease), background .18s var(--ease);
+}
+
+button.auth::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 188, 0, .35) 50%, transparent 62%);
+  translate: -110% 0;
+}
+
+button.auth:hover:not(:disabled) { transform: translateY(-1px); background: #241f1a; }
+button.auth:active:not(:disabled) { transform: translateY(0); }
+button.auth:disabled { cursor: progress; background: #3a332c; }
+button.auth:disabled::after { animation: scan 1.15s linear infinite; }
+
+@keyframes scan { to { translate: 110% 0; } }
+
+/* 제안 칩 */
+.suggest {
+  display: flex;
+  gap: .4rem;
+  padding: 0 1rem .7rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* 오른쪽에 더 있다는 신호 */
+  mask-image: linear-gradient(to right, #000 88%, transparent);
+}
+.suggest::-webkit-scrollbar { display: none; }
+.suggest button { flex: none; white-space: nowrap; }
+
+.suggest button {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: .34rem .7rem;
+  font-family: var(--sans);
+  font-size: .76rem;
+  cursor: pointer;
+  transition: border-color .16s var(--ease), background .16s var(--ease), color .16s var(--ease);
+}
+
+.suggest button:hover { border-color: var(--kb-yellow); background: #fffbef; color: var(--ink); }
+
+/* 입력 */
+#composer {
+  display: flex;
+  gap: .5rem;
+  padding: .8rem 1rem 1rem;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-raised);
+}
+
+#composer input {
+  flex: 1;
+  min-width: 0;
+  padding: .68rem .85rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: .88rem;
+  color: var(--ink);
+  transition: border-color .16s var(--ease), box-shadow .16s var(--ease);
+}
+
+#composer input::placeholder { color: var(--ink-faint); }
+
+#composer input:focus {
+  outline: none;
+  border-color: var(--kb-yellow);
+  box-shadow: 0 0 0 3px rgba(255, 188, 0, .2);
+}
+
+#composer button {
+  flex: none;
+  padding: .68rem 1.05rem;
+  border: 0;
+  border-radius: 12px;
+  background: var(--kb-yellow);
+  color: #2a2016;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: background .16s var(--ease);
+}
+
+#composer button:hover { background: var(--kb-yellow-deep); }
+
+/* ── 판단 로그: 기계면 ───────────────────────────────────── */
+
+.audit {
+  min-width: 0;
+  background: var(--machine);
+  border-radius: 18px;
+  padding: 1.35rem 1.4rem 1.5rem;
+  color: var(--machine-ink);
+  min-height: 620px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 기계면에도 KB가 있다 */
+.audit::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--kb-yellow), transparent 72%);
+}
+
+.audit h2 {
+  margin: 0 0 .4rem;
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--kb-yellow);
+}
+
+.audit__lede {
+  min-width: 0;
+  margin: 0 0 1.1rem;
+  font-size: .82rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--machine-faint);
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #29241f;
+}
+
+.audit__lede b { color: var(--machine-ink); font-weight: 500; }
+
+.audit pre {
+  flex: 1;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: .76rem;
+  line-height: 1.95;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--machine-ink);
+  overflow-y: auto;
+}
+
+/* CSS content 안의 줄바꿈은 \n 이 아니라 \A 다. white-space 가 pre 계열이어야 반영된다. */
+.audit pre:empty::before {
+  content: "대화를 시작하면\A AI가 무엇을 판단하고 무엇을 전송했는지\A 여기에 실시간으로 기록됩니다.";
+  color: #4a433a;
+  white-space: pre-wrap;
+}
+
+.audit pre::-webkit-scrollbar { width: 5px; }
+.audit pre::-webkit-scrollbar-thumb { background: #322c26; border-radius: 3px; }
+
+/* ── 콜로폰 ──────────────────────────────────────────────── */
+
+.colophon {
+  position: relative;
+  z-index: 1;
+  width: var(--shell);
+  margin: 0 auto clamp(2.5rem, 5vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  font-size: .78rem;
+  color: var(--ink-faint);
+}
+
+.colophon p { margin: 0 0 .3rem; }
+.colophon b { color: var(--ink-soft); font-weight: 500; }
+.colophon__meta { font-family: var(--mono); font-size: .7rem; letter-spacing: .02em; }
+
+/* ── 모션 ────────────────────────────────────────────────── */
+
+@keyframes rise { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes pop  { from { opacity: 0; translate: 0 6px; scale: .985; } to { opacity: 1; translate: 0 0; scale: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .masthead__title em::after { scale: 1 1; }
+}
+
+/* ── 반응형 ──────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  :root { --shell: min(560px, 100% - 2rem); }
+  #app { grid-template-columns: 1fr; }
+  .audit { min-height: 320px; }
+  .phone__screen { min-height: 540px; }
+  .stat { flex-basis: 44%; border-bottom: 1px solid var(--rule); }
+}
+
+@media (max-width: 480px) {
+  .phone { border-radius: 24px; padding: 6px; }
+  .phone__screen { border-radius: 19px; }
+  .stat { flex-basis: 100%; border-right: 0; padding-left: 0 !important; }
+}
