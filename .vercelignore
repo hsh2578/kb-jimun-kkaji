@@ -1,6 +1,11 @@
 # ⚠️ 비밀 — 절대 배포에 포함되면 안 된다
 .env
 .env.*
+# .vercel/.env.production.local 에 배포용 키가 들어 있다.
+# 그리고 .vercel/output 은 Build Output API v3 산출물이라, 이게 함께 올라가면
+# Vercel이 그것을 '이미 빌드된 결과'로 취급해 소스 변경을 통째로 무시한다.
+# (실측: js/main.js를 고쳐 배포해도 배포본은 며칠 전 파일 그대로였다.)
+.vercel
 
 # 배포에 불필요한 것
 .git
