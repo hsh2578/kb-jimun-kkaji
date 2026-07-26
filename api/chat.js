@@ -4,6 +4,8 @@
 // 내보낸다 — 브라우저는 이 헤더가 없으면 교차 출처 응답을 거부한다(fail closed).
 // 배포 시 Vercel 프로젝트 환경변수에 ALLOW_ORIGIN=https://<프론트엔드 도메인> 을 반드시 설정할 것.
 // (README.md "LLM을 붙여서 실행하기" 절 참고)
+import { checkRateLimit } from "./_rate-limit.js";
+
 const ALLOW_ORIGIN = process.env.ALLOW_ORIGIN ?? "";
 
 export default async function handler(req, res) {
@@ -12,6 +14,9 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
+
+  const limited = checkRateLimit(req);
+  if (limited) return res.status(limited.status).json({ error: limited.error });
 
   const key = process.env.OPENAI_KEY;
   if (!key) return res.status(500).json({ error: "OPENAI_KEY 미설정" });

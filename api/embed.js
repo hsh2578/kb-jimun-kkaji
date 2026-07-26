@@ -2,6 +2,8 @@
 // (M2) chat.js와 동일한 이유로 ALLOW_ORIGIN 기본값을 닫힌 쪽("")으로 둔다 — 미설정 시
 // CORS 헤더를 내지 않아 브라우저의 교차 출처 호출을 막는다(fail closed).
 // 배포 시 Vercel 프로젝트 환경변수에 ALLOW_ORIGIN=https://<프론트엔드 도메인> 을 반드시 설정할 것.
+import { checkRateLimit } from "./_rate-limit.js";
+
 const ALLOW_ORIGIN = process.env.ALLOW_ORIGIN ?? "";
 
 export default async function handler(req, res) {
@@ -10,6 +12,9 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
+
+  const limited = checkRateLimit(req);
+  if (limited) return res.status(limited.status).json({ error: limited.error });
 
   const key = process.env.OPENAI_KEY;
   if (!key) return res.status(500).json({ error: "OPENAI_KEY 미설정" });
