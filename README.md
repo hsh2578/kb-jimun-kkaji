@@ -25,8 +25,12 @@ python -m http.server 8000
 이 파일이 없으므로 **자동으로 오프라인(stub) 모드로 떨어집니다** — 아래 "오프라인 모드" 절을 보세요.
 L2 조회·L3 실행 데모(카드 혜택, 연금 통합 조회, 자동이체 해지 등)를 보여주려면 반드시 다음을 설정해야 합니다.
 
-1. `api/`(Vercel 서버리스 프록시)를 배포하고 `OPENAI_KEY` 환경변수를 설정합니다.
-   (`.env`의 `OPENAI_KEY`를 Vercel 프로젝트의 환경변수로 등록 — 절대 커밋하지 않습니다.)
+1. `api/`(Vercel 서버리스 프록시)를 배포하고 환경변수 두 개를 설정합니다.
+   - `OPENAI_KEY` — `.env`의 값을 Vercel 프로젝트 환경변수로 등록합니다(절대 커밋하지 않습니다).
+   - `ALLOW_ORIGIN` — 프록시를 호출할 프론트엔드 출처(예: `https://<your-username>.github.io`).
+     **필수입니다.** 설정하지 않으면 CORS 허용 헤더가 나가지 않아 브라우저에서 프록시 호출이
+     막힙니다(의도된 동작 — 기본값이 `"*"`였다면 누구든 이 URL을 알아내 팀의 OpenAI 키로
+     요청을 태울 수 있었습니다. `api/chat.js`, `api/embed.js` 참고).
 2. `config.example.js`를 `config.local.js`로 복사합니다.
    ```
    cp config.example.js config.local.js
