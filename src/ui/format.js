@@ -69,6 +69,85 @@ export function formatPlanSummary(plan) {
   }
 }
 
+// L3 — 지문을 누르기 전에 보여주는 '확인 카드'.
+//
+// 한 줄 문장으로도 정보는 다 들어가지만, 되돌릴 수 없는 실행 앞에서 고객이
+// 실제로 눈으로 훑는 것은 항목별로 끊어진 카드다. 은행 이체 확인 화면이
+// 전부 그렇게 생긴 데는 이유가 있다.
+// 값이 없는 줄은 넣지 않는다 — 빈 칸이 보이면 확인이 아니라 불안이 된다.
+export function formatPlanCard(plan) {
+  if (!plan) return null;
+  const { tool, args = {} } = plan;
+
+  if (tool === "transfer_money") {
+    const to = resolveRecipient(args);
+    if (!to) return null;
+    const from = fromAccount(args.account_id);
+    const amount = Number(args.amount);
+    const rows = [
+      { k: "받는 분", v: `${to.label} · ${to.holder}` },
+      { k: "은행", v: to.bank },
+      { k: "계좌", v: to.number },
+    ];
+    if (Number.isFinite(amount) && amount > 0) rows.push({ k: "보낼 금액", v: formatMoney(amount), strong: true });
+    if (from) rows.push({ k: "출금 계좌", v: from.name });
+    return {
+      head: "받는 분 확인",
+      rows,
+      note: "계좌번호를 몰라도 됩니다. 관계만 말씀하시면 AI가 찾습니다.",
+    };
+  }
+
+  if (tool === "apply_subsidy") {
+    const sb = resolveSubsidy(args);
+    if (!sb) return null;
+    const rows = [
+      { k: "지원금", v: sb.name },
+      { k: "받으실 금액", v: formatMoney(sb.amount), strong: true },
+    ];
+    if (sb.deadline) rows.push({ k: "신청 마감", v: sb.deadline });
+    if (sb.basis) rows.push({ k: "산정 근거", v: sb.basis });
+    return { head: "신청 내용 확인", rows, note: "물어보지 않으셨다면 그냥 지나갔을 돈입니다." };
+  }
+
+  if (tool === "cancel_autopay") {
+    const ap = resolveAutopay(args);
+    if (!ap) return null;
+    return {
+      head: "해지 대상 확인",
+      rows: [
+        { k: "항목", v: ap.name },
+        { k: "매달 금액", v: formatMoney(ap.amount), strong: true },
+        { k: "출금일", v: `매월 ${ap.day}일` },
+      ],
+      note: "해지하면 다음 청구분부터 빠져나가지 않습니다.",
+    };
+  }
+
+  return null; // 카드가 없으면 화면은 한 줄 요약(formatPlanSummary)으로 간다
+}
+
+// 실행·조회 뒤에 띄우는 빠른 답장. 고객이 다음에 무엇을 말할 수 있는지 보여준다.
+// 타이핑이 장벽인 사람에게는 이게 대화를 잇는 실질적인 손잡이다.
+const QUICK = {
+  transfer_money: ["또 보내기", "보낸 내역 보기", "이체한도 확인"],
+  cancel_autopay: ["다른 자동이체 정리", "이번 달 나가는 돈"],
+  apply_subsidy: ["다른 지원금 보기", "신청 내역 확인"],
+  export_card_statement: ["지난달 것도", "PDF로 다시"],
+  issue_certificate: ["다른 서류 발급", "발급 내역 확인"],
+  issue_sec_tax_document: ["다른 서류 발급", "발급 내역 확인"],
+  list_autopays: ["안 쓰는 거 정리", "이번 달 카드값"],
+  list_pensions: ["운용지시가 뭐야?", "연금 더 넣으려면"],
+  list_subsidies: ["고유가 지원금 신청해줘", "이건 왜 안 돼?"],
+  get_card_bill_total: ["할부는 얼마야?", "혜택 얼마 남았어?"],
+  get_monthly_installment: ["할부 기간 늘려줘", "이번 달 카드값"],
+  find_tax_documents: ["종합소득세", "연말정산"],
+};
+
+export function quickReplies(toolName) {
+  return QUICK[toolName] ?? [];
+}
+
 // L3 — 인증 후 실행 결과. 원시 JSON 대신 사람이 읽는 문장으로 바꾼다.
 export function formatActionResult(plan, out) {
   const tool = plan?.tool;

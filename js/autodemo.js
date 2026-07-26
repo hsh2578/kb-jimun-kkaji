@@ -174,10 +174,10 @@ export function createAutoDemo({ input, form, button, caption, onStop }) {
         setCaption("실행 직전입니다. 무엇을·어디에 하는지 보여준 뒤에만 진행합니다.");
         pending.classList.add("is-calling");
         pending.scrollIntoView({ block: "nearest" });
-        await sleep(1500);
+        await sleep(1800);
         if (cancelled) break;
-        pending.click();
-        await sleep(3200);
+        pending.click(); // 지문 오버레이가 뜨고, 인증이 끝나면 스스로 닫힌다
+        await sleep(4200);
       }
       if (cancelled) break;
 

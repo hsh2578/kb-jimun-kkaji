@@ -227,6 +227,7 @@ body {
    화면이 계속 아래로 흘러내렸다. 진짜 폰은 커지지 않는다. 대화가 쌓이면
    .log 안에서 스크롤되어야 한다. */
 .phone__screen {
+  position: relative; /* 지문 오버레이가 이 화면만 덮게 하는 기준점 */
   background: var(--paper-raised);
   border-radius: 26px;
   overflow: hidden;
@@ -563,6 +564,151 @@ button.auth.is-calling {
 }
 
 #composer button:hover { background: var(--kb-yellow-deep); }
+
+/* ── 실행 확인 카드 ───────────────────────────────────────
+   되돌릴 수 없는 실행 앞에서 고객이 실제로 눈으로 훑는 것은 한 줄 문장이 아니라
+   항목별로 끊어진 카드다. 은행 이체 확인 화면이 전부 그렇게 생긴 데는 이유가 있다. */
+.plan-card {
+  align-self: stretch;
+  border: 1px solid var(--kb-yellow);
+  background: linear-gradient(180deg, #fffdf5, var(--paper-raised));
+  border-radius: 14px;
+  padding: .75rem .9rem .8rem;
+  animation: pop .32s var(--ease) both;
+}
+
+.plan-card__head {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--ink-faint);
+  padding-bottom: .5rem;
+  margin-bottom: .5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.plan-card__row {
+  display: flex;
+  align-items: baseline;
+  gap: .8rem;
+  padding: .16rem 0;
+  font-size: .84rem;
+}
+
+.plan-card__k { flex: none; width: 4.6rem; color: var(--ink-faint); font-size: .78rem; }
+.plan-card__v { flex: 1; min-width: 0; color: var(--ink); word-break: break-all; }
+
+.plan-card__row.is-strong .plan-card__v {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.plan-card__note {
+  margin: .6rem 0 0;
+  font-size: .73rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  background: #fff8e4;
+  border-radius: 8px;
+  padding: .4rem .55rem;
+}
+
+/* ── 빠른 답장 ────────────────────────────────────────────
+   다음에 무엇을 말할 수 있는지 보여준다. 타이핑이 장벽인 사람에게는
+   이게 대화를 잇는 실질적인 손잡이다. */
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  padding-top: .1rem;
+  animation: pop .32s var(--ease) both;
+}
+
+.quick button {
+  border: 1px solid var(--kb-yellow);
+  background: #fffdf5;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: .3rem .7rem;
+  font-family: var(--sans);
+  font-size: .78rem;
+  cursor: pointer;
+  transition: background .16s var(--ease);
+}
+
+.quick button:hover { background: var(--kb-yellow); }
+
+/* ── 지문 인증 오버레이 ───────────────────────────────────
+   실행 직전의 이 순간이 이 제품의 이름이다. 대화 흐름 안의 작은 버튼이 아니라
+   화면을 덮는 하나의 장면으로 만든다. */
+.auth-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 17, 14, .76);
+  backdrop-filter: blur(3px);
+  animation: fade .24s var(--ease) both;
+}
+
+.auth-overlay[hidden] { display: none; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.auth-box { text-align: center; padding: 0 1.6rem; }
+
+.auth-box h3 {
+  margin: 1.05rem 0 .45rem;
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  font-weight: 700;
+  color: #fffdf8;
+  letter-spacing: -.02em;
+}
+
+.auth-box p {
+  margin: 0;
+  font-size: .78rem;
+  line-height: 1.6;
+  color: #b9b0a2;
+}
+
+.fp {
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px solid var(--kb-yellow);
+  background: rgba(255, 188, 0, .1);
+  color: var(--kb-yellow);
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+
+.fp svg { width: 42px; height: 42px; fill: currentColor; }
+
+/* 확인 중 — 지문 위를 스캔선이 지나간다 */
+.fp.is-scanning { animation: fp-pulse 1.1s ease-in-out infinite; }
+
+@keyframes fp-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 188, 0, .5); }
+  55%      { box-shadow: 0 0 0 14px rgba(255, 188, 0, 0); }
+}
+
+/* 통과 */
+.fp.is-done {
+  background: var(--kb-yellow);
+  border-color: var(--kb-yellow);
+  color: #2a2016;
+  animation: fp-ok .4s var(--ease) both;
+}
+
+@keyframes fp-ok { from { scale: .86; } to { scale: 1; } }
 
 /* 마이크 — 타이핑이 장벽인 사람을 위한 입구.
    '보내기'와 같은 노란색을 주지 않는다. 주 동작은 하나여야 한다. */

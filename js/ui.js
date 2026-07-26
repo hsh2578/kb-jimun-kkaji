@@ -10,6 +10,8 @@ import {
   speakForQuery,
   followUpForQuery,
   followUpForAction,
+  formatPlanCard,
+  quickReplies,
 } from "../src/ui/format.js";
 import { createAutoDemo } from "./autodemo.js";
 import { createVoiceInput } from "./voice.js";
@@ -59,6 +61,17 @@ export function createUI(root, { onSend, onConfirm }) {
           <input id="input" autocomplete="off" placeholder="말씀하세요. 메뉴는 제가 찾습니다." />
           <button type="submit">보내기</button>
         </form>
+
+        <!-- 지문 인증 — 폰 화면을 덮는다. 실행 직전의 이 순간이 이 제품의 이름이다. -->
+        <div id="authOverlay" class="auth-overlay" hidden>
+          <div class="auth-box">
+            <button type="button" id="fpBtn" class="fp" aria-label="지문으로 실행">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a11 11 0 0 0-6.2 20.08.75.75 0 1 0 .84-1.24A9.5 9.5 0 1 1 21.5 12a.75.75 0 0 0 1.5 0A11 11 0 0 0 12 1Z"/><path d="M12 4.5a7.5 7.5 0 0 0-7.5 7.5v3.25a.75.75 0 0 0 1.5 0V12a6 6 0 0 1 12 0c0 2.7-.5 4.9-1.5 6.9a.75.75 0 0 0 1.34.67c1.1-2.2 1.66-4.66 1.66-7.57A7.5 7.5 0 0 0 12 4.5Z"/><path d="M12 8a4 4 0 0 0-4 4v7.25a.75.75 0 0 0 1.5 0V12a2.5 2.5 0 0 1 5 0c0 3.2-.6 5.9-1.8 8.3a.75.75 0 1 0 1.34.67C15.34 18.4 16 15.44 16 12a4 4 0 0 0-4-4Z"/><path d="M12 11.25a.75.75 0 0 0-.75.75c0 3.1-.42 5.7-1.3 7.9a.75.75 0 0 0 1.4.55c.96-2.42 1.4-5.24 1.4-8.45a.75.75 0 0 0-.75-.75Z"/></svg>
+            </button>
+            <h3 id="authTitle">지문을 눌러주세요</h3>
+            <p id="authNote">실행은 KB가 이미 쓰는 인증 그대로입니다.<br />AI는 준비까지만, 최종 실행은 본인이.</p>
+          </div>
+        </div>
       </div>
     </div>
     <aside class="audit">
@@ -198,7 +211,86 @@ export function createUI(root, { onSend, onConfirm }) {
     paintAudit();
   }
 
+  // 확인 카드 — 항목별로 끊어서 보여준다. 값은 전부 textContent 로만 꽂는다.
+  function buildPlanCard(card) {
+    const box = document.createElement("div");
+    box.className = "plan-card";
+
+    const head = document.createElement("div");
+    head.className = "plan-card__head";
+    head.textContent = card.head;
+    box.appendChild(head);
+
+    for (const row of card.rows) {
+      const line = document.createElement("div");
+      line.className = row.strong ? "plan-card__row is-strong" : "plan-card__row";
+      const k = document.createElement("span");
+      k.className = "plan-card__k";
+      k.textContent = row.k;
+      const v = document.createElement("span");
+      v.className = "plan-card__v";
+      v.textContent = row.v;
+      line.append(k, v);
+      box.appendChild(line);
+    }
+
+    if (card.note) {
+      const note = document.createElement("p");
+      note.className = "plan-card__note";
+      note.textContent = `💡 ${card.note}`;
+      box.appendChild(note);
+    }
+    return box;
+  }
+
+  // 빠른 답장 — 다음에 무엇을 말할 수 있는지 보여준다.
+  // 타이핑이 장벽인 사람에게는 이게 대화를 잇는 실질적인 손잡이다.
+  function renderQuickReplies(items) {
+    root.querySelector(".quick")?.remove();
+    if (!items?.length) return;
+    const wrap = document.createElement("div");
+    wrap.className = "quick";
+    for (const text of items) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = text;
+      b.addEventListener("click", () => {
+        input.value = text;
+        root.querySelector("#composer").requestSubmit();
+      });
+      wrap.appendChild(b);
+    }
+    log.appendChild(wrap);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  // 지문 오버레이. 실제 인증에 걸리는 시간을 화면이 대신 말해준다.
+  const overlay = root.querySelector("#authOverlay");
+  const fpBtn = root.querySelector("#fpBtn");
+  const authTitle = root.querySelector("#authTitle");
+
+  function showAuthOverlay() {
+    overlay.hidden = false;
+    fpBtn.classList.remove("is-done");
+    fpBtn.classList.add("is-scanning");
+    authTitle.textContent = "지문을 확인하고 있습니다";
+  }
+
+  async function hideAuthOverlay(ok) {
+    if (ok) {
+      fpBtn.classList.remove("is-scanning");
+      fpBtn.classList.add("is-done");
+      authTitle.textContent = "인증되었습니다";
+      await new Promise((r) => setTimeout(r, 900));
+    }
+    overlay.hidden = true;
+    fpBtn.classList.remove("is-scanning", "is-done");
+    authTitle.textContent = "지문을 눌러주세요";
+  }
+
   function renderResult(r) {
+    // 새 턴이 시작되면 지난 턴의 빠른 답장은 걷어낸다.
+    root.querySelector(".quick")?.remove();
     if (r.message) append("bot", r.message);
 
     if (r.layer === "L1" && r.menus?.length) {
@@ -236,14 +328,20 @@ export function createUI(root, { onSend, onConfirm }) {
         const next = followUpForQuery(r.audit?.toolCalls?.[0]);
         if (next) append("bot", next);
       }
+      renderQuickReplies(quickReplies(r.audit?.toolCalls?.[0]));
     }
 
     if (r.layer === "L3" && r.plan) {
       // (C4) 인증 버튼을 누르기 전에 무엇을, 어디에 할 것인지 반드시 보여준다.
-      const summary = document.createElement("div");
-      summary.className = "plan-summary";
-      summary.textContent = formatPlanSummary(r.plan);
-      log.appendChild(summary);
+      // 항목별로 끊은 확인 카드가 있으면 그걸 쓰고, 없으면 한 줄 요약으로 간다.
+      const card = formatPlanCard(r.plan);
+      if (card) log.appendChild(buildPlanCard(card));
+      else {
+        const summary = document.createElement("div");
+        summary.className = "plan-summary";
+        summary.textContent = formatPlanSummary(r.plan);
+        log.appendChild(summary);
+      }
 
       for (const w of r.warnings ?? []) append("warn", `⚠️ ${w}`);
       const btn = document.createElement("button");
@@ -252,9 +350,9 @@ export function createUI(root, { onSend, onConfirm }) {
       btn.textContent = idleLabel;
       btn.addEventListener("click", async () => {
         btn.disabled = true;
-        // (I6과 동일한 원칙) 인증 세리머니는 실제 시간이 걸린다 — 버튼이 죽은 것처럼
-        // 보이지 않도록 진행 상태를 반드시 보여준다.
-        btn.textContent = "인증을 기다리는 중…";
+        btn.textContent = "인증 중…";
+        // 폰 화면을 덮는 지문 오버레이. 실행 직전의 이 순간이 이 제품의 이름이다.
+        showAuthOverlay();
         try {
           // 자동 시연이 스스로 누른 경우에는 WebAuthn 세리머니를 시도하지 않는다.
           // 브라우저 인증기는 '사람의 제스처'를 요구하므로 프로그램이 누르면
@@ -274,13 +372,16 @@ export function createUI(root, { onSend, onConfirm }) {
           // 대화 한가운데 영구히 남았다. 실행은 이미 끝났는데 화면은 아직 기다리는
           // 것처럼 보여서, 인증이 실패한 줄 알게 된다(실측 지적).
           btn.remove();
+          await hideAuthOverlay(true);
           append("bot", formatActionResult(r.plan, out));
           // 실행 하나로 대화가 끝나면 안 된다 — 다음 걸음을 열어둔다.
           const next = followUpForAction(r.plan.tool);
           if (next) append("bot", next);
+          renderQuickReplies(quickReplies(r.plan.tool));
         } catch (err) {
           // 실패했을 때 조용히 원래 상태로 돌아가지 않는다 — 무엇이 왜 실패했는지
           // 화면에 남기고, 다시 시도할 수 있게 버튼을 되살린다.
+          await hideAuthOverlay(false);
           append("warn", `인증에 실패했습니다: ${err?.message ?? "알 수 없는 오류"}`);
           btn.disabled = false;
           btn.textContent = idleLabel;
