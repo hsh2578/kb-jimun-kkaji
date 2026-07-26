@@ -23,7 +23,7 @@ SHOTS = r"C:\Users\hsh\Desktop\공모전"
 if len(sys.argv) > 1:
     DECK = sys.argv[1]
 else:
-    _c = glob.glob(os.path.join(SHOTS, "KB_기술설명서_지문까지_황성혁*.pptx"))
+    _c = glob.glob(os.path.join(SHOTS, "KB_기술설명서*.pptx"))
     if not _c:
         raise SystemExit("기술설명서를 찾을 수 없습니다")
     DECK = max(_c, key=os.path.getmtime)
@@ -44,7 +44,9 @@ def to_kb(src: str, dst: str) -> None:
     w, ht = im.size
     for y in range(ht):
         for x in range(w):
-            if GREEN_LO <= hp[x, y] <= GREEN_HI and sp[x, y] > 12:
+            # 채도 12 로 잘랐더니 아주 연한 청록 배경이 그대로 남았다(실측 8쪽 오른쪽).
+            # 옅은 색일수록 눈에는 '초록기'로 보이므로 4 까지 내린다.
+            if GREEN_LO <= hp[x, y] <= GREEN_HI and sp[x, y] > 4:
                 hp[x, y] = KB_HUE
     out = Image.merge("HSV", (h, s, v)).convert("RGB")
     if alpha is not None:
