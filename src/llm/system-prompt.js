@@ -3,7 +3,9 @@
 // api/chat.js 안에 문자열로 박아두면 테스트에서 정규식으로 뜯어내야 하고,
 // 그러다 조용히 깨진다(실측: 뜯어낸 프롬프트가 빈 문자열이 되어 모델이
 // 도구를 한 번도 부르지 않았다). 프롬프트는 검증 대상이므로 따로 둔다.
-export function buildSystemPrompt(menuCandidates = []) {
+import { buildConsultBlock, buildPriorityBlock } from "./consult-examples.js";
+
+export function buildSystemPrompt(menuCandidates = [], consultScenarios = [], slotPriority = {}) {
   // 고객이 ARS 상담원을 찾는 이유는 두 가지다.
   //   ① 원하는 게 뭔지 모른다 — "돈이 자꾸 새는 것 같아" 처럼 증상만 있다.
   //   ② 원하는 걸 알아도 어디서 어떻게 하는지 모른다 — 정식 명칭을 모른다.
@@ -64,6 +66,11 @@ export function buildSystemPrompt(menuCandidates = []) {
     "[말투]\n" +
     "존댓말. 한두 문장으로 짧게. 전문용어 대신 고객이 쓴 말로 답한다.\n" +
     "'~하시겠어요?', '~해 드릴까요?' 처럼 사람이 응대하듯 말한다. 목록만 던지지 않는다.\n\n" +
+    // 규칙만으로는 '무엇을 먼저 묻는가'가 잡히지 않는다. 사례로 순서를 보인다.
+    // 데이터가 없으면 빈 문자열이라 기존 동작 그대로다.
+    // 실제 상담에서 집계한 순서. 문장이 아니라 규칙이라 도구 호출을 방해하지 않는다.
+    buildPriorityBlock(slotPriority) +
+    buildConsultBlock(consultScenarios) +
     `후보 메뉴:\n${menuCandidates.map((m) => `- [${m.affiliate}] ${[...m.path, m.name].join(" > ")}`).join("\n")}`
   );
 }

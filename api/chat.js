@@ -6,8 +6,19 @@
 // (README.md "LLM을 붙여서 실행하기" 절 참고)
 import { checkRateLimit } from "./_rate-limit.js";
 import { buildSystemPrompt } from "../src/llm/system-prompt.js";
+import CONSULT from "../data/consult-scenarios.json" with { type: "json" };
 
 const ALLOW_ORIGIN = process.env.ALLOW_ORIGIN ?? "";
+
+// 되묻기 사례. 지금은 합성이고, KB 적용 시 상담 이력에서 뽑은 것으로 갈아끼운다.
+// 갈아끼우는 대상은 이 JSON 하나뿐이라 코드는 손대지 않는다.
+const CONSULT_SCENARIOS = CONSULT.scenarios ?? [];
+
+// 실제 상담 데이터(AI Hub)로 두 가지를 시험했고 둘 다 도움이 되지 않아 넣지 않는다.
+//   · 문장 300건 주입      → 되묻기 38.5% → 0%   (전화 상담 문장이 도구 호출을 가림)
+//   · 순서 통계만 주입      → 30.8%              (합성 사례 단독보다 낮음)
+// 실험 코드와 데이터는 남겨 둔다(scripts/extract-consult.js, data/slot-priority.json) —
+// KB 상담 이력이 들어오면 같은 파이프라인으로 다시 재야 한다.
 
 export default async function handler(req, res) {
   if (ALLOW_ORIGIN) res.setHeader("Access-Control-Allow-Origin", ALLOW_ORIGIN);
@@ -32,7 +43,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "요청 본문이 올바른 JSON이 아닙니다" });
   }
 
-  const system = buildSystemPrompt(menuCandidates);
+  const system = buildSystemPrompt(menuCandidates, CONSULT_SCENARIOS);
 
   const r = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
