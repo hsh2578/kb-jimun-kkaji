@@ -317,7 +317,7 @@ def fig_metrics():
         center(d, sub, x + bw / 2, base + 96, f(23), INK_SOFT)
     d.line((120, base, 1480, base), fill=INK_FAINT, width=3)
 
-    d.text((120, 640), "숫자를 좋게 만들려고 지표를 바꾸지 않았다 — 처음 잰 메뉴 커버리지 22.8%는 '한 발화에 정답이 여럿'이라는 측정 설계 결함이었고, 두 수치를 모두 남긴다.",
+    d.text((120, 640), "숫자를 좋게 만들려고 지표를 바꾸지 않았다 — 처음 잰 메뉴 커버리지 27.6%는 '한 발화에 정답이 여럿'이라는 측정 설계 결함이었고, 두 수치를 모두 남긴다.",
            font=f(23), fill=INK_SOFT)
 
     im.save(os.path.join(OUT, "fig-metrics.png"))
@@ -358,6 +358,53 @@ def fig_apply():
     print("  fig-apply.png")
 
 
+# ── ⑨ 챗봇은 왜 못 하나 ─────────────────────────────────────
+# 카드사 AI 콜센터 운영자의 기고(요즘IT)를 근거로 삼는다. 우리 짐작이 아니라
+# 실제로 챗봇을 운영하는 사람이 쓴 글이라는 점이 이 슬라이드의 힘이다.
+def fig_chatbot_limit():
+    W, H = 1600, 780
+    im, d = new(W, H)
+    center(d, "챗봇은 왜 못 하나 — 운영자가 직접 밝힌 구조", W / 2, 36, f(40, True))
+    center(d, "카드사 AI 콜센터 운영자 기고 (요즘IT, 2024)", W / 2, 92, f(25), INK_SOFT)
+
+    # 챗봇의 동작 구조
+    box(d, (60, 160, 1540, 400), PAPER_DIM, RULE, 18)
+    d.text((100, 186), "지금 챗봇이 답하는 방식", font=f(28, True), fill=INK_SOFT)
+    flow = [
+        (["고객 질문"], PAPER),
+        (["사전 학습된", "의도(intent)로 분류"], PAPER),
+        (["준비된 답변", "꺼내기"], PAPER),
+        (["분류 실패"], RED),
+    ]
+    x, w = 110, 300
+    for i, (t, col) in enumerate(flow):
+        fill = col if col != RED else RED
+        tc = INK if col != RED else PAPER
+        d.rounded_rectangle((x, 248, x + w, 358), radius=12, fill=fill,
+                            outline=RED if col == RED else RULE, width=2)
+        for j, ln in enumerate(t):
+            center(d, ln, x + w / 2, 275 + j * 36, f(26, True) if col == RED else f(26), tc)
+        if i < len(flow) - 1:
+            d.polygon([(x + w + 4, 293), (x + w + 4, 313), (x + w + 26, 303)], fill=INK_FAINT)
+        x += w + 30
+
+    # 인용
+    box(d, (60, 430, 1540, 700), MACHINE, YELLOW, 18)
+    quotes = [
+        ("“학습시키지 않은 의도는 인식하지 못한다.”", "→ “문의한 내용을 찾을 수 없어요” 를 반복한다"),
+        ("“신상품·약관이 바뀔 때마다 답변을 손으로 고쳐야 한다.”", "→ “밑 빠진 독에 물을 붓는 기분”"),
+        ("“결국 상담사 연결로 이어진다.”", "→ 콜센터 뺑뺑이가 더 심해진다"),
+    ]
+    y = 466
+    for q, res in quotes:
+        d.text((100, y), q, font=f(27), fill=PAPER)
+        d.text((100, y + 38), res, font=f(25), fill=YELLOW)
+        y += 82
+
+    im.save(os.path.join(OUT, "fig-chatbot-limit.png"))
+    print("  fig-chatbot-limit.png")
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     print("그림 생성:")
@@ -369,6 +416,7 @@ def main():
     fig_boundary()
     fig_metrics()
     fig_apply()
+    fig_chatbot_limit()
     print(f"→ {OUT}")
 
 

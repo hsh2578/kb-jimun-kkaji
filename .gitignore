@@ -7,3 +7,10 @@ data/raw/
 
 .vercel
 .env*
+
+# 파이썬 캐시 — 기획서 생성 스크립트가 만든다
+scripts/__pycache__/
+
+# 추출 원본(14MB). 배포에 필요 없고, scripts/extract-consult.js 로 언제든 다시 만든다.
+# 원본 데이터는 AI Hub 에서 각자 내려받아야 하므로 저장소에 두지 않는다.
+data/consult-extracted.json

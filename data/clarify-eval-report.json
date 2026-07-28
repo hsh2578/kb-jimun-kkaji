@@ -1,0 +1,2981 @@
+{
+  "model": "gpt-4o-mini",
+  "injected": {
+    "synth": 24,
+    "real": 16
+  },
+  "tested": {
+    "synth": 40,
+    "real": 40
+  },
+  "results": [
+    {
+      "set": "합성 시험 40건",
+      "arm": "① 없음 (규칙만)",
+      "judgeOk": 27,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 13,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "card",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "② 합성 64건",
+      "judgeOk": 32,
+      "total": 40,
+      "askedCount": 5,
+      "shouldTotal": 13,
+      "slotOk": 4,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "month",
+          "got": "month",
+          "asked": "어느 달의 명세서를 엑셀로 뽑아드릴까요?"
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 자동이체를 해지해 드릴까요?"
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "card",
+          "got": "card",
+          "asked": "어느 카드를 정지해 드릴까요?"
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": null,
+          "asked": "어떤 한도를 바꿔드릴까요?"
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 결제 건의 할부를 바꿔드릴까요?"
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "③ 실제 문장 300건",
+      "judgeOk": 27,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 13,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "card",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "④ 합성 + 실제 순서통계",
+      "judgeOk": 31,
+      "total": 40,
+      "askedCount": 4,
+      "shouldTotal": 13,
+      "slotOk": 4,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 자동이체를 해지해 드릴까요?"
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "card",
+          "got": "card",
+          "asked": "어느 카드를 정지해 드릴까요?"
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "amount",
+          "asked": "얼마로 바꿔드릴까요?"
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 결제 건의 할부를 바꿔드릴까요?"
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "① 없음 (규칙만)",
+      "judgeOk": 1,
+      "total": 40,
+      "askedCount": 1,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": "제가 지금지 이거 맞는데요. 정확히 어떤 부분을 확인하고 싶으신지 알려주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": "그 출금 내역 중에 어떤 출금 내역 있는지 확인하고 싶은 게 있어요. 최근에 발생한 거래가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": "한번 확인해서 한번만 더 물어볼게요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": "네, 현재 제 계좌의 잔액을 조회하고 싶습니다. 가능한 절차를 알려주시겠어요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": "저는 현재 몇 가지 궁금한 점이 있어서 전화드렸습니다. 가능하시면 차례대로 설명해 주시면 좋겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": "네 안녕하세요. 다름이 아니고 그 ★★카드에서 ★★해서요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": "어 저기 그거 뭐지? 고객님 어디로 빠져나갔는지 어디 거기가 어딘지를 모르겠네요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": "통장 거래내역 좀 확인해 보려구요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": "어떤 그런가 하는 거예요. 자세히 설명해 주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": "폰뱅킹으로 이체를 시도했어요. 그런데 문제가 생겼습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": "네 고객님네 이체내역 중에 있어요. ●월● OO 내 통장에서 출금이 되겠네. 예 제가 여기가 어딘지 모르겠어 가지와요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": "며칠 전에 주택연금 연금에 ●●원씩 넣던 것을 해지하고 돈을 찾았는데 ●●원 오늘 빠져있더라고요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": "네 안녕하세요. 안녕하세요, 저는 오늘 입금 내역을 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": "제가 그 입금을 했다고 그렇게 두건이나 나왔는데, 요거는 뭐 지점에서? 입금하신 거래에 대해 자세히 설명해 주시면 확인에 도움이 됩니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": "마산 단지 관리 사무실입니다 예 백만 삼 단지 관리 사무소라고도 부릅니다 네 현재 상황을 설명드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": "입금 확인 요청을 드리고 싶습니다. 중계 요청도 가능한가요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": "최근에 ★★은행에서 모르는 입금이 들어와서 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": "최근 제 계좌에 예상치 못한 입금이 발생했는데, 입금자 정보가 명확하지 않아 문의드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": "연간 착오 송금 건에 대한 진행 상황을 지금 바로 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": "입금자 확인을 요청드리려고 합니다. 최근 ○○은행을 통해 입금받은 금액이 있는데, 입금자 명이 정확히 누구인지 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": "저는 현재 입금자 중계 요청을 진행하고 싶어서 전화드렸습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": "네, 중계 요청을 하려고 전화드렸습니다. 입금 관련해서 몇 가지 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": "저는 타행으로 잘못 송금한 건에 대해 자금 반환 신청을 하고 싶습니다. 안내 부탁드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": "이제 중계 요청을 하려고 하는데요. 제가 입금을 받았는데 절차가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": "저는 현재 ○○은행 ○○지점에 있는 고객인데요. 최근에 이체가 진행된 건에 대해 문의드리고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": "네, 중계 요청을 진행하고 싶은데 절차와 필요한 서류가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": "저는 다른 은행에서 모르는 금액이 제 계좌로 입금된 상황이라 확인을 요청드리고 싶습니다. 입금 내역과 관련된 정보를 알려주시면 감사하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": "OOO아세요. 중계요청 하나 드릴려고 전화 드렸어요. 현재 진행 중인 거래에 대한 중계 절차를 안내받고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": "저희는 국내에 있는 관리 사무소이며, 현재 해당 사무소와 관련된 문의를 드리고 있습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": "●월 ●일 ● 제가 돈을 잘못 보내가지구요. 그 반환 신청했는데 연락이 없어서요. 상황이 급해서 빠른 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": "제가 은행이 되지 않아요. 일 ● 적금. ●●일 날 여섯 시쯤에.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": "중계요청 좀 할려고 하는데요. 최근에 입금된 금액에 대해 중계를 진행하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": "중계요청 부탁 드립니다. 고객님의 요청을 확인했으며, 관련 부서와 연결해 드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": "지금 전화 연결해 주셔서 감사합니다.",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "when",
+          "got": null,
+          "asked": "감사합니다. 어떤 도움을 드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": "저는 최근 입금된 금액에 대해 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": "중계요청 좀 할께요. 확인 후 바로 진행하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": "혹시 입금은행 주택청약 계좌 번호를 가지고 방문 가능할까요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": "예 제가 되구요 쓰고 있는데요 모르는 돈을 입금을 받았어요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": "아, 네 안녕하세요. 다른 은행에서 계좌이체 이력으로 반환 신청을 해놨습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": "청을 했는데요, 그 포인트에 대한 메세지를 받았습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "② 합성 64건",
+      "judgeOk": 2,
+      "total": 40,
+      "askedCount": 2,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": "제가 지금지 이거 맞는데요. 정확히 어떤 부분을 확인하고 싶으신지 알려주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": "그 출금 내역 중에 어떤 출금 내역 있는지 확인하고 싶은 게 있어요. 최근에 발생한 거래가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": "한번 확인해서 한번만 더 물어볼게요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": "네, 현재 제 계좌의 잔액을 조회하고 싶습니다. 가능한 절차를 알려주시겠어요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": "저는 현재 몇 가지 궁금한 점이 있어서 전화드렸습니다. 가능하시면 차례대로 설명해 주시면 좋겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": "네 안녕하세요. 다름이 아니고 그 ★★카드에서 ★★해서요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": "어 저기 그거 뭐지? 고객님 어디로 빠져나갔는지 어디 거기가 어딘지를 모르겠네요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": "통장 거래내역 좀 확인해 보려구요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": "어떤 그런가 하는 거예요. 자세히 설명해 주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": "폰뱅킹으로 이체를 시도했어요. 그런데 문제가 생겼습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": "네 고객님네 이체내역 중에 있어요. ●월● OO 내 통장에서 출금이 되겠네. 예 제가 여기가 어딘지 모르겠어 가지와요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": "며칠 전에 주택연금 연금에 ●●원씩 넣던 것을 해지하고 돈을 찾았는데 ●●원 오늘 빠져있더라고요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": "네 안녕하세요. 안녕하세요, 저는 오늘 입금 내역을 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": "제가 그 입금을 했다고 그렇게 두건이나 나왔는데, 요거는 뭐 지점에서? 입금하신 거래에 대해 자세히 설명해 주시면 확인에 도움이 됩니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": "마산 단지 관리 사무실입니다 예 백만 삼 단지 관리 사무소라고도 부릅니다 네 현재 상황을 설명드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": "입금 확인 요청을 드리고 싶습니다. 중계 요청도 가능한가요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": "최근에 ★★은행에서 모르는 입금이 들어와서 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": "최근 제 계좌에 예상치 못한 입금이 발생했는데, 입금자 정보가 명확하지 않아 문의드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": "연간 착오 송금 건에 대한 진행 상황을 지금 바로 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": "입금자 확인을 요청드리려고 합니다. 최근 ○○은행을 통해 입금받은 금액이 있는데, 입금자 명이 정확히 누구인지 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": "저는 현재 입금자 중계 요청을 진행하고 싶어서 전화드렸습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": "네, 중계 요청을 하려고 전화드렸습니다. 입금 관련해서 몇 가지 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": "저는 타행으로 잘못 송금한 건에 대해 자금 반환 신청을 하고 싶습니다. 안내 부탁드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": "이제 중계 요청을 하려고 하는데요. 제가 입금을 받았는데 절차가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": "저는 현재 ○○은행 ○○지점에 있는 고객인데요. 최근에 이체가 진행된 건에 대해 문의드리고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": "네, 중계 요청을 진행하고 싶은데 절차와 필요한 서류가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": "저는 다른 은행에서 모르는 금액이 제 계좌로 입금된 상황이라 확인을 요청드리고 싶습니다. 입금 내역과 관련된 정보를 알려주시면 감사하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": "OOO아세요. 중계요청 하나 드릴려고 전화 드렸어요. 현재 진행 중인 거래에 대한 중계 절차를 안내받고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": "저희는 국내에 있는 관리 사무소이며, 현재 해당 사무소와 관련된 문의를 드리고 있습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": "●월 ●일 ● 제가 돈을 잘못 보내가지구요. 그 반환 신청했는데 연락이 없어서요. 상황이 급해서 빠른 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": "제가 은행이 되지 않아요. 일 ● 적금. ●●일 날 여섯 시쯤에.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": "중계요청 좀 할려고 하는데요. 최근에 입금된 금액에 대해 중계를 진행하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": "중계요청 부탁 드립니다. 고객님의 요청을 확인했으며, 관련 부서와 연결해 드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": "지금 전화 연결해 주셔서 감사합니다.",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "when",
+          "got": "item",
+          "asked": "감사합니다. 무엇을 도와드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": "저는 최근 입금된 금액에 대해 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": "중계요청 좀 할께요. 확인 후 바로 진행하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": "혹시 입금은행 주택청약 계좌 번호를 가지고 방문 가능할까요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": "예 제가 되구요 쓰고 있는데요 모르는 돈을 입금을 받았어요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": "아, 네 안녕하세요. 다른 은행에서 계좌이체 이력으로 반환 신청을 해놨습니다.",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "account",
+          "asked": "어떤 계좌의 이체 이력을 조회해 드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": "청을 했는데요, 그 포인트에 대한 메세지를 받았습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "③ 실제 문장 300건",
+      "judgeOk": 2,
+      "total": 40,
+      "askedCount": 2,
+      "shouldTotal": 40,
+      "slotOk": 1,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": "제가 지금지 이거 맞는데요. 정확히 어떤 부분을 확인하고 싶으신지 알려주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": "그 출금 내역 중에 어떤 출금 내역 있는지 확인하고 싶은 게 있어요. 최근에 발생한 거래가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": "한번 확인해서 한번만 더 물어볼게요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": "네, 현재 제 계좌의 잔액을 조회하고 싶습니다. 가능한 절차를 알려주시겠어요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": "저는 현재 몇 가지 궁금한 점이 있어서 전화드렸습니다. 가능하시면 차례대로 설명해 주시면 좋겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": "네 안녕하세요. 다름이 아니고 그 ★★카드에서 ★★해서요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": "어 저기 그거 뭐지? 고객님 어디로 빠져나갔는지 어디 거기가 어딘지를 모르겠네요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": "통장 거래내역 좀 확인해 보려구요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": "어떤 그런가 하는 거예요. 자세히 설명해 주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": "폰뱅킹으로 이체를 시도했어요. 그런데 문제가 생겼습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": "네 고객님네 이체내역 중에 있어요. ●월● OO 내 통장에서 출금이 되겠네. 예 제가 여기가 어딘지 모르겠어 가지와요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": "며칠 전에 주택연금 연금에 ●●원씩 넣던 것을 해지하고 돈을 찾았는데 ●●원 오늘 빠져있더라고요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": "네 안녕하세요. 안녕하세요, 저는 오늘 입금 내역을 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": "제가 그 입금을 했다고 그렇게 두건이나 나왔는데, 요거는 뭐 지점에서? 입금하신 거래에 대해 자세히 설명해 주시면 확인에 도움이 됩니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": "마산 단지 관리 사무실입니다 예 백만 삼 단지 관리 사무소라고도 부릅니다 네 현재 상황을 설명드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": "입금 확인 요청을 드리고 싶습니다. 중계 요청도 가능한가요?",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "when",
+          "asked": "입금 확인을 위해 입금된 날짜와 금액을 알려주실 수 있으신가요?"
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": "최근에 ★★은행에서 모르는 입금이 들어와서 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": "최근 제 계좌에 예상치 못한 입금이 발생했는데, 입금자 정보가 명확하지 않아 문의드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": "연간 착오 송금 건에 대한 진행 상황을 지금 바로 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": "입금자 확인을 요청드리려고 합니다. 최근 ○○은행을 통해 입금받은 금액이 있는데, 입금자 명이 정확히 누구인지 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": "저는 현재 입금자 중계 요청을 진행하고 싶어서 전화드렸습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": "네, 중계 요청을 하려고 전화드렸습니다. 입금 관련해서 몇 가지 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": "저는 타행으로 잘못 송금한 건에 대해 자금 반환 신청을 하고 싶습니다. 안내 부탁드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": "이제 중계 요청을 하려고 하는데요. 제가 입금을 받았는데 절차가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": "저는 현재 ○○은행 ○○지점에 있는 고객인데요. 최근에 이체가 진행된 건에 대해 문의드리고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": "네, 중계 요청을 진행하고 싶은데 절차와 필요한 서류가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": "저는 다른 은행에서 모르는 금액이 제 계좌로 입금된 상황이라 확인을 요청드리고 싶습니다. 입금 내역과 관련된 정보를 알려주시면 감사하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": "OOO아세요. 중계요청 하나 드릴려고 전화 드렸어요. 현재 진행 중인 거래에 대한 중계 절차를 안내받고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": "저희는 국내에 있는 관리 사무소이며, 현재 해당 사무소와 관련된 문의를 드리고 있습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": "●월 ●일 ● 제가 돈을 잘못 보내가지구요. 그 반환 신청했는데 연락이 없어서요. 상황이 급해서 빠른 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": "제가 은행이 되지 않아요. 일 ● 적금. ●●일 날 여섯 시쯤에.",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "amount",
+          "asked": "입금이 된 금액을 알려주시면 보다 정확한 확인이 가능합니다."
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": "중계요청 좀 할려고 하는데요. 최근에 입금된 금액에 대해 중계를 진행하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": "중계요청 부탁 드립니다. 고객님의 요청을 확인했으며, 관련 부서와 연결해 드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": "지금 전화 연결해 주셔서 감사합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": "저는 최근 입금된 금액에 대해 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": "중계요청 좀 할께요. 확인 후 바로 진행하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": "혹시 입금은행 주택청약 계좌 번호를 가지고 방문 가능할까요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": "예 제가 되구요 쓰고 있는데요 모르는 돈을 입금을 받았어요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": "아, 네 안녕하세요. 다른 은행에서 계좌이체 이력으로 반환 신청을 해놨습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": "청을 했는데요, 그 포인트에 대한 메세지를 받았습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "④ 합성 + 실제 순서통계",
+      "judgeOk": 0,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": "제가 지금지 이거 맞는데요. 정확히 어떤 부분을 확인하고 싶으신지 알려주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": "그 출금 내역 중에 어떤 출금 내역 있는지 확인하고 싶은 게 있어요. 최근에 발생한 거래가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": "한번 확인해서 한번만 더 물어볼게요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": "네, 현재 제 계좌의 잔액을 조회하고 싶습니다. 가능한 절차를 알려주시겠어요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": "저는 현재 몇 가지 궁금한 점이 있어서 전화드렸습니다. 가능하시면 차례대로 설명해 주시면 좋겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": "네 안녕하세요. 다름이 아니고 그 ★★카드에서 ★★해서요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": "어 저기 그거 뭐지? 고객님 어디로 빠져나갔는지 어디 거기가 어딘지를 모르겠네요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": "통장 거래내역 좀 확인해 보려구요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": "어떤 그런가 하는 거예요. 자세히 설명해 주시면 도와드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": "폰뱅킹으로 이체를 시도했어요. 그런데 문제가 생겼습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": "네 고객님네 이체내역 중에 있어요. ●월● OO 내 통장에서 출금이 되겠네. 예 제가 여기가 어딘지 모르겠어 가지와요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": "며칠 전에 주택연금 연금에 ●●원씩 넣던 것을 해지하고 돈을 찾았는데 ●●원 오늘 빠져있더라고요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": "네 안녕하세요. 안녕하세요, 저는 오늘 입금 내역을 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": "제가 그 입금을 했다고 그렇게 두건이나 나왔는데, 요거는 뭐 지점에서? 입금하신 거래에 대해 자세히 설명해 주시면 확인에 도움이 됩니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": "마산 단지 관리 사무실입니다 예 백만 삼 단지 관리 사무소라고도 부릅니다 네 현재 상황을 설명드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": "입금 확인 요청을 드리고 싶습니다. 중계 요청도 가능한가요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": "최근에 ★★은행에서 모르는 입금이 들어와서 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": "최근 제 계좌에 예상치 못한 입금이 발생했는데, 입금자 정보가 명확하지 않아 문의드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": "연간 착오 송금 건에 대한 진행 상황을 지금 바로 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": "입금자 확인을 요청드리려고 합니다. 최근 ○○은행을 통해 입금받은 금액이 있는데, 입금자 명이 정확히 누구인지 확인하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": "저는 현재 입금자 중계 요청을 진행하고 싶어서 전화드렸습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": "네, 중계 요청을 하려고 전화드렸습니다. 입금 관련해서 몇 가지 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": "저는 타행으로 잘못 송금한 건에 대해 자금 반환 신청을 하고 싶습니다. 안내 부탁드립니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": "이제 중계 요청을 하려고 하는데요. 제가 입금을 받았는데 절차가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": "저는 현재 ○○은행 ○○지점에 있는 고객인데요. 최근에 이체가 진행된 건에 대해 문의드리고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": "네, 중계 요청을 진행하고 싶은데 절차와 필요한 서류가 궁금합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": "저는 다른 은행에서 모르는 금액이 제 계좌로 입금된 상황이라 확인을 요청드리고 싶습니다. 입금 내역과 관련된 정보를 알려주시면 감사하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": "OOO아세요. 중계요청 하나 드릴려고 전화 드렸어요. 현재 진행 중인 거래에 대한 중계 절차를 안내받고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": "저희는 국내에 있는 관리 사무소이며, 현재 해당 사무소와 관련된 문의를 드리고 있습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": "●월 ●일 ● 제가 돈을 잘못 보내가지구요. 그 반환 신청했는데 연락이 없어서요. 상황이 급해서 빠른 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": "제가 은행이 되지 않아요. 일 ● 적금. ●●일 날 여섯 시쯤에.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": "중계요청 좀 할려고 하는데요. 최근에 입금된 금액에 대해 중계를 진행하고 싶습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": "중계요청 부탁 드립니다. 고객님의 요청을 확인했으며, 관련 부서와 연결해 드리겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": "지금 전화 연결해 주셔서 감사합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": "저는 최근 입금된 금액에 대해 확인이 필요합니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": "중계요청 좀 할께요. 확인 후 바로 진행하겠습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": "혹시 입금은행 주택청약 계좌 번호를 가지고 방문 가능할까요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": "예 제가 되구요 쓰고 있는데요 모르는 돈을 입금을 받았어요.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": "아, 네 안녕하세요. 다른 은행에서 계좌이체 이력으로 반환 신청을 해놨습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": "청을 했는데요, 그 포인트에 대한 메세지를 받았습니다.",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    }
+  ]
+}
