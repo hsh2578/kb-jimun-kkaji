@@ -1,0 +1,2982 @@
+{
+  "model": "gpt-4o-mini",
+  "injected": {
+    "synth": 24,
+    "real": 16
+  },
+  "tested": {
+    "synth": 40,
+    "real": 40
+  },
+  "results": [
+    {
+      "set": "합성 시험 40건",
+      "arm": "① 없음 (규칙만)",
+      "judgeOk": 27,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 13,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "card",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "② 합성 64건",
+      "judgeOk": 32,
+      "total": 40,
+      "askedCount": 5,
+      "shouldTotal": 13,
+      "slotOk": 4,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "month",
+          "got": "month",
+          "asked": "어느 달의 명세서를 엑셀로 뽑아드릴까요?"
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 자동이체를 해지해 드릴까요?"
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "card",
+          "got": "card",
+          "asked": "어느 카드를 정지해 드릴까요?"
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": null,
+          "asked": "어떤 한도를 바꿔드릴까요?"
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 결제 건의 할부를 바꿔드릴까요?"
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "③ 실제 문장 300건",
+      "judgeOk": 27,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 13,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "card",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "합성 시험 40건",
+      "arm": "④ 합성 + 실제 순서통계",
+      "judgeOk": 31,
+      "total": 40,
+      "askedCount": 4,
+      "shouldTotal": 13,
+      "slotOk": 4,
+      "rows": [
+        {
+          "id": "c18",
+          "opening": "넷플릭스 자동이체 해지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c20",
+          "opening": "이번달에 얼마나 나갔어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c22",
+          "opening": "내 통장 뭐뭐 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c23",
+          "opening": "곧 만기되는 거 있나",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c24",
+          "opening": "주거래 계좌 잔액증명서 떼줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c25",
+          "opening": "내 대출 어떻게 되고 있지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c26",
+          "opening": "이자 얼마나 내고 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c27",
+          "opening": "해외 나가는데 뭐 준비해야 돼?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c28",
+          "opening": "달러 환율 얼마야",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c29",
+          "opening": "내 연금 어디 있는지 모르겠어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c30",
+          "opening": "노후 준비 얼마나 됐나 보고 싶어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c31",
+          "opening": "연말정산 해야 하는데 뭘 떼야 할지 모르겠어요",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c33",
+          "opening": "내가 뭐 사놨더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c34",
+          "opening": "해외주식 판 거 세금 신고해야 하는데",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c35",
+          "opening": "나 받을 수 있는 지원금 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c36",
+          "opening": "고유가 지원금 신청해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c38",
+          "opening": "자주 보내는 데 어디였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c39",
+          "opening": "지난번에 누구한테 보냈더라",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c40",
+          "opening": "뗄 수 있는 서류 뭐가 있어?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c44",
+          "opening": "카드 쓴 내역 좀 받아볼 수 있나",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c45",
+          "opening": "명세서 엑셀로 뽑아줘",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "month",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c46",
+          "opening": "잔액증명서 하나 떼야 하는데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c47",
+          "opening": "통장 잔고 증명해달래",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c48",
+          "opening": "이체한 거 확인증 다시 뽑을 수 있어?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c49",
+          "opening": "서류 좀 떼주세요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c50",
+          "opening": "제출할 게 있는데 뭐 떼야 해요?",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "kind",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c51",
+          "opening": "지원금 받고 싶어요",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "subsidy",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c52",
+          "opening": "자동이체 하나 끊어줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 자동이체를 해지해 드릴까요?"
+        },
+        {
+          "id": "c53",
+          "opening": "마이너스통장 약정 해지하고 싶은데",
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "item",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c54",
+          "opening": "카드 정지해줘",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "card",
+          "got": "card",
+          "asked": "어느 카드를 정지해 드릴까요?"
+        },
+        {
+          "id": "c55",
+          "opening": "한도 좀 바꿔주세요",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "amount",
+          "asked": "얼마로 바꿔드릴까요?"
+        },
+        {
+          "id": "c56",
+          "opening": "할부 개월 수 조정하고 싶어",
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "item",
+          "got": "item",
+          "asked": "어떤 결제 건의 할부를 바꿔드릴까요?"
+        },
+        {
+          "id": "c57",
+          "opening": "해외출국 예정인데 뭐 해둬야 하나요?",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c58",
+          "opening": "내 계좌 다 보여줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c59",
+          "opening": "다음달에 카드값 얼마 나가",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c60",
+          "opening": "퇴직연금 얼마나 쌓였지",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c61",
+          "opening": "매달 빠져나가는 거 뭐뭐 있어",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c62",
+          "opening": "아내한테 20만원 보내줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c63",
+          "opening": "국민카드 분실했어 정지해줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "c64",
+          "opening": "이체한도 1000만원으로 올려줘",
+          "shouldAsk": false,
+          "didAsk": false,
+          "want": null,
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "① 없음 (규칙만)",
+      "judgeOk": 1,
+      "total": 40,
+      "askedCount": 1,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "when",
+          "got": null,
+          "asked": "감사합니다. 어떤 도움을 드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "② 합성 64건",
+      "judgeOk": 2,
+      "total": 40,
+      "askedCount": 2,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "when",
+          "got": "item",
+          "asked": "감사합니다. 무엇을 도와드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "account",
+          "asked": "어떤 계좌의 이체 이력을 조회해 드릴까요?"
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "③ 실제 문장 300건",
+      "judgeOk": 2,
+      "total": 40,
+      "askedCount": 2,
+      "shouldTotal": 40,
+      "slotOk": 1,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "when",
+          "asked": "입금 확인을 위해 입금된 날짜와 금액을 알려주실 수 있으신가요?"
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": true,
+          "want": "amount",
+          "got": "amount",
+          "asked": "입금이 된 금액을 알려주시면 보다 정확한 확인이 가능합니다."
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    },
+    {
+      "set": "실제 시험 40건",
+      "arm": "④ 합성 + 실제 순서통계",
+      "judgeOk": 0,
+      "total": 40,
+      "askedCount": 0,
+      "shouldTotal": 40,
+      "slotOk": 0,
+      "rows": [
+        {
+          "id": "21-1_bk_01_003254",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003291",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003292",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003326",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003401",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003428",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003430",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003452",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003497",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003557",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003637",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003715",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_01_003753",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000169",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000418",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000524",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000578",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_000950",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001197",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001538",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001597",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_001668",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002046",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002598",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002675",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_002914",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003059",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003098",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "account",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003232",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003411",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003457",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_003616",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004320",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004533",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "when",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_004836",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005511",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005735",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005807",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        },
+        {
+          "id": "21-1_bk_02_005830",
+          "opening": null,
+          "shouldAsk": true,
+          "didAsk": false,
+          "want": "amount",
+          "got": null,
+          "asked": null
+        }
+      ]
+    }
+  ],
+  "_주의": "실제 시험 40건의 고객 발화 원문(AI Hub 「금융분야 고객상담 데이터」)은 재배포하지 않아 비웠다. id 로 원본과 대조할 수 있다."
+}
